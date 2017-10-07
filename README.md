@@ -1,6 +1,6 @@
 ![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)
 
-# ZEimUS
+# ZEtmUS
 
 The *Zero-Effort ticket management Unimol System* (ZEtmUS) allows to easily manage
 tickets in a GitHub repositories. The main features are:
