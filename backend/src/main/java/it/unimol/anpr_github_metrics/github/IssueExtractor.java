@@ -6,6 +6,7 @@ import it.unimol.anpr_github_metrics.beans.User;
 
 import it.unimol.anpr_github_metrics.beans.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IssueExtractor {
@@ -15,14 +16,14 @@ public interface IssueExtractor {
      * @param repository the repository
      * @return a list of User
      */
-    public List<User> getContributors(Repository repository);
+    public Collection<User> getContributors(Repository repository) throws GithubException;
 
     /**
      * Get the list of all the fixed issues in a repository
      * @param repository the repository
      * @return a list of fixed issues
      */
-    public List<Issue> getFixedIssues(Repository repository);
+    public Collection<Issue> getFixedIssues(Repository repository) throws GithubException;
 
     /**
      * Get the list of all the fixed issues in a repository by a given user
@@ -30,14 +31,14 @@ public interface IssueExtractor {
      * @param repository the repository
      * @return a list of fixed issues
      */
-    public List<Issue> getFixedIssues(User user, Repository repository);
+    public Collection<Issue> getFixedIssues(User user, Repository repository) throws GithubException;
 
     /**
      * Get the list of all the opened issues in a repository
      * @param repository
      * @return
      */
-    public List<Issue> getOpenIssues(Repository repository);
+    public Collection<Issue> getOpenIssues(Repository repository) throws GithubException;
 
 
     /**
@@ -46,12 +47,12 @@ public interface IssueExtractor {
      * @param repository
      * @return
      */
-    public List<Issue> getOpenIssues(User user, Repository repository);
+    public Collection<Issue> getOpenIssues(User user, Repository repository) throws GithubException;
 
     /**
      * Gets the list of all the commits involved in an issue
      * @param issue Issue
      * @return List of all the involved commits
      */
-    public List<Commit> getCommitsInvolvedInIssue(Issue issue);
+    public Collection<Commit> getCommitsInvolvedInIssue(Issue issue) throws GithubException;
 }
