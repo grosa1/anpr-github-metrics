@@ -84,30 +84,29 @@ public class IssueExtractorImpl implements IssueExtractor {
                 if (event.json().getString("event").equals("closed")) {
                     String commitId = event.json().getString("commit_id");
 
-                    JsonObject commitJson = remoteRepository.commits().get(commitId).json();
-                    Commit commit = new Commit();
-                    commit.setMessage(commitJson.getString("message"));
+                    Commit commit = this.loadCommit(remoteRepository, commitId);
+                    commits.add(commit);
                 }
             }
         } catch (IOException e) {
             throw new GithubException();
         }
 
+        return commits;
+    }
+
+    private Issue loadIssue(Repo remoteRepository, int number) throws IOException {
         //TODO implement
         throw new RuntimeException();
     }
 
-    private Issue loadIssue(int number) {
+    private Commit loadCommit(Repo remoteRepository, String commitId) throws IOException {
+        JsonObject commitJson = remoteRepository.commits().get(commitId).json();
         //TODO implement
         throw new RuntimeException();
     }
 
-    private Commit loadCommit(String sha) {
-        //TODO implement
-        throw new RuntimeException();
-    }
-
-    private User loadUser(String login) {
+    private User loadUser(String userLogin) throws IOException {
         //TODO implement
         throw new RuntimeException();
     }

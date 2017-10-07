@@ -28,8 +28,7 @@ public class Authenticator {
      * @param password Password
      */
     public void authenticate(String username, String password) {
-        //TODO implement
-        throw new RuntimeException();
+        this.github = new RtGithub(username, password);
     }
 
     /**
