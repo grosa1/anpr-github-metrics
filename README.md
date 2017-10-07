@@ -1,8 +1,8 @@
 ![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)
 
-# ZEtmUS
+# ZE&trade;US
 
-The *Zero-Effort ticket management Unimol System* (ZEtmUS) allows to easily manage
+The *Zero-Effort ticket management Unimol System* (ZE&trade;US, pronounced "zeus") allows to easily manage
 tickets in a GitHub repositories. The main features are:
 
 - Analytics on past (closed) tickets
