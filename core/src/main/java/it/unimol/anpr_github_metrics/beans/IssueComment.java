@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author Simone Scalabrino.
  */
-public class IssueComment {
+public class IssueComment implements Comparable {
     private Issue issue;
     private String url;
     private String body;
@@ -60,5 +60,9 @@ public class IssueComment {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public int compareTo(Object o) {
+        return this.createdTime.compareTo(((IssueComment)o).createdTime);
     }
 }
