@@ -11,7 +11,7 @@ public class Authenticator {
 
     /**
      * Returns an authenticator instance
-     * @return
+     * @return Instance of the authenticator
      */
     public static Authenticator getInstance() {
         if (instance == null)
@@ -21,22 +21,30 @@ public class Authenticator {
     }
 
     /**
-     * Returns an authenticate
+     * Authenticates the user
      * @param username Username
      * @param password Password
-     * @return a Github object
      */
-    public Github authenticate(String username, String password) {
+    public void authenticate(String username, String password) {
         //TODO implement
         throw new RuntimeException();
     }
 
     /**
-     * Returns an authenticate
+     * Authenticates the user
      * @param oauth Authentication token
      * @return A Github object
      */
-    public Github authenticate(String oauth) {
+    public void authenticate(String oauth) {
+        //TODO implement
+        throw new RuntimeException();
+    }
+
+    /**
+     * Returns the Github object for queries
+     * @return Github object
+     */
+    public Github getGitHub() {
         //TODO implement
         throw new RuntimeException();
     }

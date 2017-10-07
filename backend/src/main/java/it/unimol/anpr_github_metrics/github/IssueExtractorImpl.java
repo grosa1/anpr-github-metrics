@@ -1,6 +1,7 @@
 package it.unimol.anpr_github_metrics.github;
 
 
+import it.unimol.anpr_github_metrics.beans.Commit;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.beans.User;
@@ -32,6 +33,11 @@ public class IssueExtractorImpl implements IssueExtractor {
     }
 
     public List<Issue> getOpenIssues(User user, Repository repository) {
+        //TODO implement
+        throw new RuntimeException();
+    }
+
+    public List<Commit> getCommitsInvolvedInIssue(Issue issue) {
         //TODO implement
         throw new RuntimeException();
     }
