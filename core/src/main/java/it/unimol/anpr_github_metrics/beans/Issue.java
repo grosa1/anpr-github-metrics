@@ -7,6 +7,22 @@ import java.util.Date;
  * @author Simone Scalabrino.
  */
 public class Issue {
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
+    }
+
     public enum Label {
         BUG,
         ENHANCEMENT,
@@ -31,6 +47,10 @@ public class Issue {
     private boolean locked;
     private boolean valid;
     private boolean duplicated;
+
+    private boolean closed;
+    private boolean fixed;
+
 
     private Collection<IssueComment> comments;
 
