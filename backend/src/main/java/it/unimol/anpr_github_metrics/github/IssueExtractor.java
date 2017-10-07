@@ -1,5 +1,6 @@
 package it.unimol.anpr_github_metrics.github;
 
+import it.unimol.anpr_github_metrics.beans.Commit;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.User;
 
@@ -46,4 +47,11 @@ public interface IssueExtractor {
      * @return
      */
     public List<Issue> getOpenIssues(User user, Repository repository);
+
+    /**
+     * Gets the list of all the commits involved in an issue
+     * @param issue Issue
+     * @return List of all the involved commits
+     */
+    public List<Commit> getCommitsInvolvedInIssue(Issue issue);
 }
