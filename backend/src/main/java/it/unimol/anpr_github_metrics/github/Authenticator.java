@@ -1,6 +1,7 @@
 package it.unimol.anpr_github_metrics.github;
 
 import com.jcabi.github.Github;
+import com.jcabi.github.RtGithub;
 
 /**
  * Authenticates a GitHub user
@@ -8,6 +9,7 @@ import com.jcabi.github.Github;
  */
 public class Authenticator {
     private static Authenticator instance;
+    private RtGithub github;
 
     /**
      * Returns an authenticator instance
@@ -36,8 +38,7 @@ public class Authenticator {
      * @return A Github object
      */
     public void authenticate(String oauth) {
-        //TODO implement
-        throw new RuntimeException();
+        this.github = new RtGithub(oauth);
     }
 
     /**
@@ -45,7 +46,6 @@ public class Authenticator {
      * @return Github object
      */
     public Github getGitHub() {
-        //TODO implement
-        throw new RuntimeException();
+        return this.github;
     }
 }
