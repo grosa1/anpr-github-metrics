@@ -2,6 +2,7 @@ package it.unimol.anpr_github_metrics.github;
 
 
 import com.jcabi.github.Coordinates;
+import com.jcabi.github.Event;
 import com.jcabi.github.Github;
 import com.jcabi.github.Repo;
 import it.unimol.anpr_github_metrics.beans.Commit;
@@ -9,9 +10,11 @@ import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.beans.User;
 
+import javax.json.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -70,6 +73,41 @@ public class IssueExtractorImpl implements IssueExtractor {
     }
 
     public Collection<Commit> getCommitsInvolvedInIssue(Issue issue) throws GithubException {
+        Repo remoteRepository = github.repos().get(new Coordinates.Simple(issue.getRepository().getName()));
+
+        com.jcabi.github.Issue remoteIssue = remoteRepository.issues().get(issue.getNumber());
+
+        Collection<Commit> commits = new ArrayList<>();
+
+        try {
+            for (Event event : remoteIssue.events()) {
+                if (event.json().getString("event").equals("closed")) {
+                    String commitId = event.json().getString("commit_id");
+
+                    JsonObject commitJson = remoteRepository.commits().get(commitId).json();
+                    Commit commit = new Commit();
+                    commit.setMessage(commitJson.getString("message"));
+                }
+            }
+        } catch (IOException e) {
+            throw new GithubException();
+        }
+
+        //TODO implement
+        throw new RuntimeException();
+    }
+
+    private Issue loadIssue(int number) {
+        //TODO implement
+        throw new RuntimeException();
+    }
+
+    private Commit loadCommit(String sha) {
+        //TODO implement
+        throw new RuntimeException();
+    }
+
+    private User loadUser(String login) {
         //TODO implement
         throw new RuntimeException();
     }

@@ -51,7 +51,6 @@ public class Issue {
     private boolean closed;
     private boolean fixed;
 
-
     private Collection<IssueComment> comments;
 
     public int getNumber() {
