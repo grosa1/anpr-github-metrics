@@ -61,10 +61,19 @@ public class Commit {
         return totalChanged;
     }
 
-    public class FileChange {
+    public static class FileChange {
+        private String fileName;
         private int addedLines;
         private int removedLines;
         private int changedLines;
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
 
         public int getAddedLines() {
             return addedLines;

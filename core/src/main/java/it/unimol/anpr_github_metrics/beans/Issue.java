@@ -23,6 +23,14 @@ public class Issue {
         this.fixed = fixed;
     }
 
+    public Collection<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Collection<Label> labels) {
+        this.labels = labels;
+    }
+
     public enum Label {
         BUG,
         ENHANCEMENT,
@@ -50,6 +58,8 @@ public class Issue {
 
     private boolean closed;
     private boolean fixed;
+
+    private Collection<Label> labels;
 
     private Collection<IssueComment> comments;
 
