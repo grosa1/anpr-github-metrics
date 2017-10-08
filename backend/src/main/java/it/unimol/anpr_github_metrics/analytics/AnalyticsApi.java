@@ -90,7 +90,7 @@ public class AnalyticsApi {
     }
 
     @GET
-    @Path("/open-issues-without-label/{repository-name}")
+    @Path("/open-issues-without-comment/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOpenWithoutComment(@PathParam("repository-name") String repoName) {
 
@@ -131,9 +131,8 @@ public class AnalyticsApi {
         }
     }
 
-
     @GET
-    @Path("/fixed-issues-without-comment/{repository-name}")
+    @Path("/closed-issues-without-comment/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClosedIssueWithoutComment(@PathParam("repository-name") String repoName) {
 
@@ -145,8 +144,6 @@ public class AnalyticsApi {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    //TODO: fare l'analoga alla precedente per closed issue. Aggiungere api getClosedIssue in services
 
     @GET
     @Path("/fixed-issues-without-comment/{repository-name}")
@@ -161,6 +158,4 @@ public class AnalyticsApi {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    //TODO: fare l'analoga alla precedente per closed issue. Aggiungere api getClosedIssue in services
 }
