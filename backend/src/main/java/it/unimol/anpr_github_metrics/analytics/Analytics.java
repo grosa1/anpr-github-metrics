@@ -43,7 +43,7 @@ public class Analytics {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
-            if(!comments.isEmpty()) {
+            if (!comments.isEmpty()) {
                 meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
                 total++;
             }
@@ -75,7 +75,7 @@ public class Analytics {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
-            if(!comments.isEmpty()){
+            if (!comments.isEmpty()) {
                 long firstResponseTime = comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
                 distribution.put(issue, firstResponseTime);
             }
@@ -102,12 +102,13 @@ public class Analytics {
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         long meanClosingTime = 0L;
-
+        int total = 0;
         for (Issue issue : issues) {
             meanClosingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+            total++;
         }
 
-        meanClosingTime /= issues.size();
+        meanClosingTime /= total == 0 ? 1 : total;
         return meanClosingTime;
     }
 
