@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class IssueExtractorStub implements IssueExtractor{
+public class IssueExtractorStub implements IssueExtractor {
     @Override
     public Collection<User> getContributors(Repository repository) throws GithubException {
         return null;
@@ -327,11 +327,16 @@ public class IssueExtractorStub implements IssueExtractor{
 
     @Override
     public Collection<Issue> getOpenIssues(User user, Repository repository) throws GithubException {
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     @Override
     public Collection<Commit> getCommitsInvolvedInIssue(Issue issue) throws GithubException {
-        return null;
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public Collection<Issue> getIssues(Repository repository) throws GithubException {
+        throw new RuntimeException("Not implemented");
     }
 }
