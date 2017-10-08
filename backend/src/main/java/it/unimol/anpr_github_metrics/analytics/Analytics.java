@@ -110,6 +110,6 @@ public class Analytics {
         Repository repository = new Repository();
         repository.setName(repoName);
 
-        return issueFactory.getFixedIssues(repository).size();
+        return issueFactory.getOpenIssues(repository).size();
     }
 }
