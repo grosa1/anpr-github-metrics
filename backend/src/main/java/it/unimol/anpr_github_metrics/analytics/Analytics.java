@@ -42,7 +42,9 @@ public class Analytics {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
-            meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
+            if(!comments.isEmpty()) {
+                meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
+            }
         }
 
         meanReponseTime /= issues.isEmpty() ? 1 : issues.size();
@@ -70,8 +72,11 @@ public class Analytics {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
-            long firstResponseTime = comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
-            distribution.put(issue, firstResponseTime);
+            if(!comments.isEmpty()){
+                long firstResponseTime = comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
+                distribution.put(issue, firstResponseTime);
+            }
+
         }
 
         return distribution;
