@@ -61,18 +61,15 @@ public class IssueExtractorImpl implements IssueExtractor {
                 } catch (IOException e) {
                     throw new GithubException();
                 }
-
                 contributors.add(user);
             }
-
             repository.setContributors(contributors);
         }
-
         return repository.getContributors();
     }
 
     public Collection<Issue> getFixedIssues(Repository repository) throws GithubException {
-        //TODO implement
+         //TODO implement
         throw new RuntimeException();
     }
 
@@ -245,6 +242,23 @@ public class IssueExtractorImpl implements IssueExtractor {
         user.setUrl(remoteUser.json().getString("html_url"));
 
         return user;
+    }
+
+    private Collection<Issue> getIssues(Repository repository) throws GithubException {
+        if (repository.getIssues() == null) {
+            List<Issue> issues = new ArrayList<>();
+            Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
+            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(new HashMap<>())) {
+                try {
+                    getIssues(repository);
+                        issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
+                } catch (IOException e) {
+                    throw new GithubException();
+                }
+            }
+            repository.setIssues(issues);
+        }
+        return repository.getIssues();
     }
 
     private Date getOptionalDate(String date) {
