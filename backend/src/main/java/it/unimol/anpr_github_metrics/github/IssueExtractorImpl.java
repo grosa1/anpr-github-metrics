@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Simone Scalabrino.
@@ -69,23 +70,27 @@ public class IssueExtractorImpl implements IssueExtractor {
     }
 
     public Collection<Issue> getFixedIssues(Repository repository) throws GithubException {
-         //TODO implement
-        throw new RuntimeException();
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(Issue::isFixed).collect(Collectors.toList());
     }
 
     public Collection<Issue> getFixedIssues(User user, Repository repository) throws GithubException {
-        //TODO implement
-        throw new RuntimeException();
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(issue -> issue.isFixed() && issue.getAuthor().equals(user)).collect(Collectors.toList());
     }
 
     public Collection<Issue> getOpenIssues(Repository repository) throws GithubException {
-        //TODO implement
-        throw new RuntimeException();
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(issue -> !issue.isClosed()).collect(Collectors.toList());
     }
 
     public Collection<Issue> getOpenIssues(User user, Repository repository) throws GithubException {
-        //TODO implement
-        throw new RuntimeException();
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(issue -> !issue.isClosed() && issue.getAuthor().equals(user)).collect(Collectors.toList());
     }
 
     public Collection<Commit> getCommitsInvolvedInIssue(Issue issue) throws GithubException {
@@ -164,7 +169,8 @@ public class IssueExtractorImpl implements IssueExtractor {
 
         issue.setCreatedTime(getMandatoryDate(issueJson.getString("created_at")));
         issue.setUpdatedTime(getOptionalDate(issueJson.getString("updated_at")));
-        issue.setClosedTime(getMandatoryDate(issueJson.getString("closed_at")));
+        if (!issueJson.isNull("closed_at"))
+            issue.setClosedTime(getMandatoryDate(issueJson.getString("closed_at")));
 
         issue.setFixed(fixed);
         if (lastClosedDate != null && lastClosedDate.compareTo(lastReopenedDate) > 0) {
@@ -250,8 +256,7 @@ public class IssueExtractorImpl implements IssueExtractor {
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
             for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(new HashMap<>())) {
                 try {
-                    getIssues(repository);
-                        issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
+                    issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
                 } catch (IOException e) {
                     throw new GithubException();
                 }
