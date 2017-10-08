@@ -41,7 +41,7 @@ public class LoginApi {
 //            HttpSession session = request.getSession();
 //            session.setAttribute("MySessionVariable", param);
 
-            return Response.status(Response.Status.OK).entity(resMap.get())
+            return Response.status(Response.Status.OK).entity(token).build();
 
         } catch (UnirestException e) {
             e.printStackTrace();
