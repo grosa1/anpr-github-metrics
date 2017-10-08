@@ -116,6 +116,23 @@ public class IssueExtractorImpl implements IssueExtractor {
         return commits;
     }
 
+    @Override
+    public Collection<Issue> getIssues(Repository repository) throws GithubException {
+        if (repository.getIssues() == null) {
+            List<Issue> issues = new ArrayList<>();
+            Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
+            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(new HashMap<>())) {
+                try {
+                    issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
+                } catch (IOException e) {
+                    throw new GithubException();
+                }
+            }
+            repository.setIssues(issues);
+        }
+        return repository.getIssues();
+    }
+
     private Issue loadIssue(Repo remoteRepository, Repository repository, int number) throws IOException {
         com.jcabi.github.Issue remoteIssue = remoteRepository.issues().get(number);
         JsonObject issueJson = remoteIssue.json();
@@ -248,22 +265,6 @@ public class IssueExtractorImpl implements IssueExtractor {
         user.setUrl(remoteUser.json().getString("html_url"));
 
         return user;
-    }
-
-    private Collection<Issue> getIssues(Repository repository) throws GithubException {
-        if (repository.getIssues() == null) {
-            List<Issue> issues = new ArrayList<>();
-            Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
-            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(new HashMap<>())) {
-                try {
-                    issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
-                } catch (IOException e) {
-                    throw new GithubException();
-                }
-            }
-            repository.setIssues(issues);
-        }
-        return repository.getIssues();
     }
 
     private Date getOptionalDate(String date) {
