@@ -7,9 +7,7 @@ import it.unimol.anpr_github_metrics.github.GithubException;
 import it.unimol.anpr_github_metrics.github.IssueExtractor;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * This class of services handles the mean first response time of an issue, i.e., the mean response time of the first comment of an issue
@@ -32,8 +30,8 @@ public class Analytics {
         long meanReponseTime = 0L;
 
         for (Issue issue : issues) {
-            ArrayList<IssueComment> comments = new ArrayList<>(issue.getComments());
-            Collections.sort(comments);
+            List<IssueComment> comments = new ArrayList<>(issue.getComments());
+            comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
             meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
         }
@@ -53,11 +51,11 @@ public class Analytics {
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
         issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
 
-        HashMap<Issue, Long> distribution = new HashMap();
+        HashMap<Issue, Long> distribution = new HashMap<>();
 
         for (Issue issue : issues) {
-            ArrayList<IssueComment> comments = new ArrayList(issue.getComments());
-            Collections.sort(comments);
+            List<IssueComment> comments = new ArrayList<>(issue.getComments());
+            comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
             long firstResponseTime = comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
             distribution.put(issue, firstResponseTime);

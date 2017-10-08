@@ -1,9 +1,6 @@
 package it.unimol.anpr_github_metrics.github;
 
-import it.unimol.anpr_github_metrics.beans.Commit;
-import it.unimol.anpr_github_metrics.beans.Issue;
-import it.unimol.anpr_github_metrics.beans.Repository;
-import it.unimol.anpr_github_metrics.beans.User;
+import it.unimol.anpr_github_metrics.beans.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,30 +28,115 @@ public class IssueExtractorStub implements IssueExtractor{
         issue1.setAuthor(stefano);
         issue1.setTitle("Issue 1 Title");
         issue1.setBody("Issue 1 Body");
-        issue1.setCreatedTime(new Date(2017, 10, 8));
-        issue1.setClosedTime(new Date(2017, 10, 9));
+
+        Date date = new Date(2017, 10, 8);
+        date.setHours(20);
+        date.setMinutes(00);
+        issue1.setCreatedTime(date);
+
+        ArrayList<IssueComment> comments = new ArrayList<>();
+
+        IssueComment comment1 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(20);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        IssueComment comment2 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(22);
+        date.setMinutes(00);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue1.setComments(comments);
 
         Issue issue2 = new Issue();
         issue2.setAuthor(daniel);
         issue2.setTitle("Issue 2 Title");
         issue2.setBody("Issue 2 Body");
-        issue2.setCreatedTime(new Date(2017, 10, 8));
-        issue2.setClosedTime(new Date(2017, 10, 10));
 
+        date = new Date(2017, 10, 8);
+        date.setHours(12);
+        date.setMinutes(00);
+        issue2.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(14);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(12);
+        date.setMinutes(15);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue2.setComments(comments);
 
         Issue issue3 = new Issue();
         issue3.setAuthor(stefano);
         issue3.setTitle("Issue 3 Title");
         issue3.setBody("Issue 3 Body");
-        issue3.setCreatedTime(new Date(2017, 10, 6));
-        issue3.setClosedTime(new Date(2017, 10, 7));
+
+        date = new Date(2017, 10, 8);
+        date.setHours(6);
+        date.setMinutes(00);
+        issue3.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(7);
+        date.setMinutes(50);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(9);
+        date.setMinutes(20);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue3.setComments(comments);
+
 
         Issue issue4 = new Issue();
         issue4.setAuthor(stefano);
         issue4.setTitle("Issue 4 Title");
         issue4.setBody("Issue 4 Body");
-        issue4.setCreatedTime(new Date(2017, 10, 6));
-        issue4.setClosedTime(new Date(2017, 10, 6));
+
+        date = new Date(2017, 10, 8);
+        date.setHours(17);
+        date.setMinutes(10);
+        issue4.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 9);
+        date.setHours(17);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 9);
+        date.setHours(12);
+        date.setMinutes(15);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue4.setComments(comments);
 
         issues.add(issue1);
         issues.add(issue2);
@@ -85,30 +167,115 @@ public class IssueExtractorStub implements IssueExtractor{
         issue1.setAuthor(stefano);
         issue1.setTitle("Issue 1 Title");
         issue1.setBody("Issue 1 Body");
-        issue1.setCreatedTime(new Date(2017, 10, 1));
-        issue1.setClosedTime(new Date(2017, 10, 2));
+
+        Date date = new Date(2017, 10, 6);
+        date.setHours(20);
+        date.setMinutes(00);
+        issue1.setCreatedTime(date);
+
+        ArrayList<IssueComment> comments = new ArrayList<>();
+
+        IssueComment comment1 = new IssueComment();
+        date = new Date(2017, 10, 7);
+        date.setHours(20);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        IssueComment comment2 = new IssueComment();
+        date = new Date(2017, 10, 8);
+        date.setHours(22);
+        date.setMinutes(00);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue1.setComments(comments);
 
         Issue issue2 = new Issue();
         issue2.setAuthor(daniel);
         issue2.setTitle("Issue 2 Title");
         issue2.setBody("Issue 2 Body");
-        issue2.setCreatedTime(new Date(2017, 10, 7));
-        issue2.setClosedTime(new Date(2017, 10, 10));
 
+        date = new Date(2017, 10, 4);
+        date.setHours(12);
+        date.setMinutes(00);
+        issue2.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 5);
+        date.setHours(14);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 5);
+        date.setHours(12);
+        date.setMinutes(15);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue2.setComments(comments);
 
         Issue issue3 = new Issue();
-        issue3.setAuthor(daniel);
+        issue3.setAuthor(stefano);
         issue3.setTitle("Issue 3 Title");
         issue3.setBody("Issue 3 Body");
-        issue3.setCreatedTime(new Date(2017, 10, 1));
-        issue3.setClosedTime(new Date(2017, 10, 5));
+
+        date = new Date(2017, 10, 3);
+        date.setHours(6);
+        date.setMinutes(00);
+        issue3.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 5);
+        date.setHours(7);
+        date.setMinutes(50);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 5);
+        date.setHours(9);
+        date.setMinutes(20);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue3.setComments(comments);
+
 
         Issue issue4 = new Issue();
         issue4.setAuthor(stefano);
         issue4.setTitle("Issue 4 Title");
         issue4.setBody("Issue 4 Body");
-        issue4.setCreatedTime(new Date(2017, 10, 5));
-        issue4.setClosedTime(new Date(2017, 10, 6));
+
+        date = new Date(2017, 10, 9);
+        date.setHours(17);
+        date.setMinutes(10);
+        issue4.setCreatedTime(date);
+
+        comments = new ArrayList<>();
+        comment1 = new IssueComment();
+        date = new Date(2017, 10, 9);
+        date.setHours(17);
+        date.setMinutes(30);
+        comment1.setCreatedTime(date);
+
+        comment2 = new IssueComment();
+        date = new Date(2017, 10, 9);
+        date.setHours(12);
+        date.setMinutes(15);
+        comment2.setCreatedTime(date);
+
+        comments.add(comment1);
+        comments.add(comment2);
+
+        issue4.setComments(comments);
 
         issues.add(issue1);
         issues.add(issue2);
