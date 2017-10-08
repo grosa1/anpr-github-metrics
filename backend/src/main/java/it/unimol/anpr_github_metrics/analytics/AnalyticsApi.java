@@ -12,8 +12,7 @@ import java.util.HashMap;
 
 
 /**
- * This class of services handles the mean first response time of an issue, i.e., the mean response time of the first comment of an issue
- * applications
+ * This class of services handles the end-point api of services
  * @author Code Warrior Team.
  */
 @Path("/analytics")

@@ -27,28 +27,6 @@ public class IssueExtractorImpl implements IssueExtractor {
         this.github = github;
     }
 
-//    public Collection<User> getContributorsOld(Repository repository) throws GithubException {
-//        if (repository.getContributors() == null) {
-//            Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
-//
-//            List<User> contributors = new ArrayList<>();
-//            for (com.jcabi.github.User remoteUser : remoteRepository.collaborators().iterate()) {
-//                User user;
-//                try {
-//                    user = loadUser(remoteUser.login());
-//                } catch (IOException e) {
-//                    throw new GithubException();
-//                }
-//
-//                contributors.add(user);
-//            }
-//
-//            repository.setContributors(contributors);
-//        }
-//
-//        return repository.getContributors();
-//    }
-
     public Collection<User> getContributors(Repository repository) throws GithubException {
         if (repository.getContributors() == null) {
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));

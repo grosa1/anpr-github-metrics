@@ -1,6 +1,6 @@
 package it.unimol.anpr_github_metrics.github;
 
-/**
+/** This class provide a factory to use the Issue Extractor
  * @author Simone Scalabrino.
  */
 public class IssueExtractorFactory {
