@@ -23,7 +23,7 @@ public class IssueExtractorImpl implements IssueExtractor {
     private static final SimpleDateFormat GH_DATE = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private Github github;
 
-    public void setGithub(Github github) {
+    public IssueExtractorImpl(Github github) {
         this.github = github;
     }
 

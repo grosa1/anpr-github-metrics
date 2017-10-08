@@ -1,5 +1,6 @@
 package it.unimol.anpr_github_metrics.recommender;
 
+import com.jcabi.github.Github;
 import it.unimol.anpr_github_metrics.beans.Commit;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.User;
@@ -14,9 +15,13 @@ import java.util.stream.Collectors;
  * @author Code Warrior Team
  */
 public class AssigneesRecommender {
-
+    private Github github;
     private ArrayList<User> users;
     private ArrayList<Issue> fixedIssues;
+
+    public AssigneesRecommender(Github github) {
+        this.github = github;
+    }
 
     public AssigneesRecommender(ArrayList<User> users, ArrayList<Issue> fixedIssues) {
         this.users = users;
@@ -48,7 +53,7 @@ public class AssigneesRecommender {
             distance += 1 - similarity;
 
             similarityMap.put(fixed, similarity);
-            issueCommitMap.put(fixed, (ArrayList<Commit>) IssueExtractorFactory.getInstance().getCommitsInvolvedInIssue(fixed));
+            issueCommitMap.put(fixed, (ArrayList<Commit>) IssueExtractorFactory.getInstance(github).getCommitsInvolvedInIssue(fixed));
         }
 
         final double meanDistance = fixedIssues.isEmpty() ? 0 : distance / fixedIssues.size();
@@ -64,9 +69,7 @@ public class AssigneesRecommender {
         ArrayList<RecommendedUser> recommendedUsers = new ArrayList<>();
 
         // Find user issues's coverage
-        Iterator<Map.Entry<Issue, Double>> iterator = similarityMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Issue, Double> entry = iterator.next();
+        for (Map.Entry<Issue, Double> entry : similarityMap.entrySet()) {
             Issue key = entry.getKey();
             double similarity = entry.getValue();
 
@@ -88,17 +91,16 @@ public class AssigneesRecommender {
             for (Map.Entry<User, Double> users : userChanges.entrySet()) {
                 User user = users.getKey();
 
-                double weight = similarity;
-                double coverage = users.getValue() / totalChanges * weight;
+                double coverage = users.getValue() / totalChanges * similarity;
 
                 if (recommendedUsers.contains(user)) {
                     RecommendedUser recommendedUser = recommendedUsers.get(recommendedUsers.indexOf(user));
                     recommendedUser.updateCoverage(coverage);
-                    recommendedUser.updateWeight(weight);
+                    recommendedUser.updateWeight(similarity);
                 } else {
                     RecommendedUser recommendedUser = new RecommendedUser(user);
                     recommendedUser.updateCoverage(coverage);
-                    recommendedUser.updateWeight(weight);
+                    recommendedUser.updateWeight(similarity);
                 }
             }
         }

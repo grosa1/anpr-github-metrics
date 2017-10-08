@@ -1,5 +1,6 @@
 package it.unimol.anpr_github_metrics.analytics;
 
+import com.jcabi.github.Github;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.IssueComment;
 import it.unimol.anpr_github_metrics.beans.Repository;
@@ -15,6 +16,11 @@ import java.util.*;
  * @author Code Warrior Team.
  */
 public class Analytics {
+    private final Github github;
+
+    public Analytics(Github github) {
+        this.github = github;
+    }
 
     /**
      * This method gets the mean time between a ticket creation and the first comment
@@ -24,8 +30,7 @@ public class Analytics {
      * @throws GithubException if an error in encountered with github api
      */
     public long getMeanFirstResponseTime(String repoName) throws GithubException {
-
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -53,7 +58,7 @@ public class Analytics {
      */
     public HashMap<Issue, Long> getFirstResponseTimeDistribution(String repoName) throws GithubException {
 
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -82,7 +87,7 @@ public class Analytics {
      */
     public long getMeanTicketClosingTime(String repoName) throws GithubException {
 
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -107,7 +112,7 @@ public class Analytics {
      */
     public HashMap<Issue, Long> getTicketClosingTimeDistribution(String repoName) throws GithubException {
 
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -132,7 +137,7 @@ public class Analytics {
      * @throws GithubException if an error in encountered with github api
      */
     public int getNumberOfOpenIssues(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -150,7 +155,7 @@ public class Analytics {
     public ArrayList<Issue> getOpenIssueWithoutComment(String repoName) throws GithubException {
         Repository repository = new Repository();
         repository.setName(repoName);
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         ArrayList<Issue> openIssue = new ArrayList<>();
 
         for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
@@ -172,7 +177,7 @@ public class Analytics {
     public ArrayList<Issue> getOpenIssueWithoutLabel(String repoName) throws GithubException {
         Repository repository = new Repository();
         repository.setName(repoName);
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         ArrayList<Issue> openIssue = new ArrayList<>();
 
         for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
@@ -196,7 +201,7 @@ public class Analytics {
         long lastCommentDate = 0;
 
         HashMap<Issue, Long> inactivityIssueTime = new HashMap<>();
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
         ArrayList<Issue> issueList = (ArrayList<Issue>) issueFactory.getIssues(repository);
@@ -220,7 +225,7 @@ public class Analytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getClosedIssueWithoutComment(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 
@@ -243,7 +248,7 @@ public class Analytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getFixedIssueWithoutComment(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
 

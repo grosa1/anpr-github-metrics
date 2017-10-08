@@ -20,9 +20,7 @@ public class AuthenticatorTest {
     public void test() throws IOException {
         assertNotNull(TOKEN);
 
-        Authenticator.getInstance().authenticate(TOKEN);
-
-        Github github = Authenticator.getInstance().getGitHub();
+        Github github = Authenticator.getInstance().authenticate(TOKEN).getGitHub();
         assertNotNull(github);
 
         Repo repo = github.repos().get(new Coordinates.Simple("intersimone999/anpr-github-metrics"));

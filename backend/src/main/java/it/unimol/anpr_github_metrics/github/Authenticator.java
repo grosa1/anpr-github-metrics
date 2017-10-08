@@ -16,10 +16,7 @@ public class Authenticator {
      * @return Instance of the authenticator
      */
     public static Authenticator getInstance() {
-        if (instance == null)
-            instance = new Authenticator();
-
-        return instance;
+        return new Authenticator();
     }
 
     /**
@@ -27,8 +24,10 @@ public class Authenticator {
      * @param username Username
      * @param password Password
      */
-    public void authenticate(String username, String password) {
+    public Authenticator authenticate(String username, String password) {
         this.github = new RtGithub(username, password);
+
+        return this;
     }
 
     /**
@@ -36,8 +35,10 @@ public class Authenticator {
      * @param oauth Authentication token
      * @return A Github object
      */
-    public void authenticate(String oauth) {
+    public Authenticator authenticate(String oauth) {
         this.github = new RtGithub(oauth);
+
+        return this;
     }
 
     /**

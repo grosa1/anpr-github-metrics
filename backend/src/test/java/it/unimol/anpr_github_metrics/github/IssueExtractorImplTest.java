@@ -19,14 +19,12 @@ public class IssueExtractorImplTest {
 
     @Before
     public void setup() {
+        IssueExtractorFactory.setImplementorStrategy(IssueExtractorFactory.InstantiationStrategy.TESTING);
     }
 
     @Test
     public void getContributors() throws Exception {
-        IssueExtractorImpl implementor = new IssueExtractorImpl();
-
-        Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN);
-        implementor.setGithub(Authenticator.getInstance().getGitHub());
+        IssueExtractorImpl implementor = new IssueExtractorImpl(Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub());
 
         Repository repository = new Repository();
         repository.setName("grosa1/Spoon-Knife");
@@ -43,10 +41,7 @@ public class IssueExtractorImplTest {
 
     @Test
     public void getFixedIssues() throws Exception {
-        IssueExtractorImpl implementor = new IssueExtractorImpl();
-
-        Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN);
-        implementor.setGithub(Authenticator.getInstance().getGitHub());
+        IssueExtractorImpl implementor = new IssueExtractorImpl(Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub());
 
         Repository repository = new Repository();
         repository.setName("grosa1/Spoon-Knife");
@@ -63,10 +58,7 @@ public class IssueExtractorImplTest {
 
     @Test
     public void getOpenIssues() throws Exception {
-        IssueExtractorImpl implementor = new IssueExtractorImpl();
-
-        Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN);
-        implementor.setGithub(Authenticator.getInstance().getGitHub());
+        IssueExtractorImpl implementor = new IssueExtractorImpl(Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub());
 
         Repository repository = new Repository();
         repository.setName("grosa1/Spoon-Knife");
@@ -84,10 +76,7 @@ public class IssueExtractorImplTest {
 
     @Test
     public void getCommitsInvolvedInIssue() throws Exception {
-        IssueExtractorImpl implementor = new IssueExtractorImpl();
-
-        Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN);
-        implementor.setGithub(Authenticator.getInstance().getGitHub());
+        IssueExtractorImpl implementor = new IssueExtractorImpl(Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub());
 
         Repository repository = new Repository();
         repository.setName("grosa1/Spoon-Knife");
