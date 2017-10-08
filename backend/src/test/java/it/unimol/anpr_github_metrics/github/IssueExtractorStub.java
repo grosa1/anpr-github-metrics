@@ -369,10 +369,6 @@ public class IssueExtractorStub implements IssueExtractor {
         throw new RuntimeException("Not implemented");
     }
 
-    @Override
-    public Collection<Issue> getIssues(Repository repository) throws GithubException {
-        throw new RuntimeException("Not implemented");
-    }
 
     @Override
     public Collection<Issue> getIssues(Repository repository) throws GithubException {
