@@ -1,7 +1,0 @@
-it\unimol\anpr_github_metrics\beans\User.class
-it\unimol\anpr_github_metrics\beans\Commit$FileChange.class
-it\unimol\anpr_github_metrics\beans\Commit.class
-it\unimol\anpr_github_metrics\beans\IssueComment.class
-it\unimol\anpr_github_metrics\beans\Issue.class
-it\unimol\anpr_github_metrics\beans\Issue$Label.class
-it\unimol\anpr_github_metrics\beans\Repository.class

@@ -1,9 +1,0 @@
-it\unimol\anpr_github_metrics\github\IssueExtractorImpl.class
-it\unimol\anpr_github_metrics\github\Authenticator.class
-it\unimol\anpr_github_metrics\analytics\Analytics.class
-it\unimol\anpr_github_metrics\services\TestService.class
-it\unimol\anpr_github_metrics\analytics\AnalyticsApi.class
-it\unimol\anpr_github_metrics\github\GithubException.class
-it\unimol\anpr_github_metrics\github\IssueExtractorFactory.class
-it\unimol\anpr_github_metrics\github\IssueExtractor.class
-it\unimol\anpr_github_metrics\github\RepositoryExtractor.class
