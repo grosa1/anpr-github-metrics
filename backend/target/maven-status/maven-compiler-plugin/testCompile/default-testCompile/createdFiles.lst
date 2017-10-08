@@ -1,0 +1,4 @@
+it\unimol\anpr_github_metrics\github\AuthenticatorTest.class
+it\unimol\anpr_github_metrics\analytics\AnalyticsTest.class
+it\unimol\anpr_github_metrics\github\IssueExtractorImplTest.class
+it\unimol\anpr_github_metrics\github\IssueExtractorStub.class
