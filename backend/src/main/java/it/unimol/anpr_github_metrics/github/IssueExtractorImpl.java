@@ -69,6 +69,18 @@ public class IssueExtractorImpl implements IssueExtractor {
         return repository.getContributors();
     }
 
+    public Collection<Issue> getClosedIssues(Repository repository) throws GithubException {
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(Issue::isClosed).collect(Collectors.toList());
+    }
+
+    public Collection<Issue> getClosedIssues(User user, Repository repository) throws GithubException {
+        Collection<Issue> allIssues = this.getIssues(repository);
+
+        return allIssues.stream().filter(issue -> issue.isClosed() && issue.getAuthor().equals(user)).collect(Collectors.toList());
+    }
+
     public Collection<Issue> getFixedIssues(Repository repository) throws GithubException {
         Collection<Issue> allIssues = this.getIssues(repository);
 

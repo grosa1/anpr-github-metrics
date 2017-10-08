@@ -19,6 +19,25 @@ public interface IssueExtractor {
      */
     public Collection<User> getContributors(Repository repository) throws GithubException;
 
+
+    /**
+     * Get the list of all the closed issues in a repository
+     * @param repository the repository
+     * @return a list of fixed issues
+     * @throws GithubException If there is any error in the GitHub APIs
+     */
+    public Collection<Issue> getClosedIssues(Repository repository) throws GithubException;
+
+    /**
+     * Get the list of all the closed issues in a repository by a given user
+     * @param user the user
+     * @param repository the repository
+     * @return a list of fixed issues
+     * @throws GithubException If there is any error in the GitHub APIs
+     */
+    public Collection<Issue> getClosedIssues(User user, Repository repository) throws GithubException;
+
+
     /**
      * Get the list of all the fixed issues in a repository
      * @param repository the repository

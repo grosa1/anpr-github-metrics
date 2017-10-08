@@ -22,10 +22,8 @@ public class Analytics {
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
         Repository repository = new Repository();
         repository.setName(repoName);
-        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
 
-        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
-        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         long meanReponseTime = 0L;
 
@@ -45,10 +43,8 @@ public class Analytics {
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
         Repository repository = new Repository();
         repository.setName(repoName);
-        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
 
-        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
-        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         HashMap<Issue, Long> distribution = new HashMap<>();
 
@@ -69,10 +65,8 @@ public class Analytics {
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
         Repository repository = new Repository();
         repository.setName(repoName);
-        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
 
-        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
-        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         long meanClosingTime = 0L;
 
@@ -89,10 +83,8 @@ public class Analytics {
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
         Repository repository = new Repository();
         repository.setName(repoName);
-        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
 
-        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
-        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         HashMap<Issue, Long> distribution = new HashMap<>();
 
@@ -111,5 +103,89 @@ public class Analytics {
         repository.setName(repoName);
 
         return issueFactory.getOpenIssues(repository).size();
+    }
+
+
+    public ArrayList<Issue> getOpenIssueWithoutComment (String repoName) throws GithubException {
+        Repository repository = new Repository();
+        repository.setName(repoName);
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        ArrayList<Issue> openIssue = new ArrayList<>();
+
+        for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))){
+            if (issue.getComments().isEmpty()) {
+                openIssue.add(issue);
+            }
+        }
+
+        return openIssue;
+    }
+
+    public ArrayList<Issue> getOpenIssueWithoutLabel (String repoName) throws GithubException {
+        Repository repository = new Repository();
+        repository.setName(repoName);
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        ArrayList<Issue> openIssue = new ArrayList<>();
+
+        for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))){
+            if (issue.getLabels().isEmpty()) {
+                openIssue.add(issue);
+            }
+        }
+
+        return openIssue;
+    }
+
+    public HashMap<Issue, Long> getTimeToLastComment (String repoName) throws GithubException {
+        long actualDate = new Date().getTime();
+        long lastCommentDate = 0;
+
+        HashMap<Issue, Long> inactivityIssueTime = new HashMap<>();
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+        ArrayList<Issue> issueList = (ArrayList<Issue>) issueFactory.getIssues(repository);
+
+        for (Issue issue : issueList) {
+            if (issue.getUpdatedTime() != null) {
+                lastCommentDate = issue.getUpdatedTime().getTime();
+                inactivityIssueTime.put(issue, actualDate - lastCommentDate);
+            }
+        }
+
+        return inactivityIssueTime;
+    }
+
+
+    public ArrayList<Issue> getClosedIssueWithoutComment (String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> closedIssue = new ArrayList<>();
+
+        for (Issue issue : new ArrayList<>(issueFactory.getClosedIssues(repository))) {
+            if (issue.getComments().isEmpty()) {
+                closedIssue.add(issue);
+            }
+        }
+
+        return closedIssue;
+    }
+
+    public ArrayList<Issue> getFixedIssueWithoutComment (String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> closedIssue = new ArrayList<>();
+
+        for (Issue issue : new ArrayList<>(issueFactory.getClosedIssues(repository))){
+            if (issue.getComments().isEmpty()) {
+                closedIssue.add(issue);
+            }
+        }
+
+        return closedIssue;
     }
 }
