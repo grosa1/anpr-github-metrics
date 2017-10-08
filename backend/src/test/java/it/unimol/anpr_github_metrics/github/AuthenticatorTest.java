@@ -17,7 +17,6 @@ public class AuthenticatorTest {
     public static final String TOKEN = "d34794572238fff111575134a1c13bc3c403e6fa";
 
     @Test
-    @Ignore
     public void test() throws IOException {
         assertNotNull(TOKEN);
 
