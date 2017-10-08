@@ -70,3 +70,15 @@ fabric.properties
 
 .idea/*
 *.iml
+backend/target
+frontend/target
+core/target
+target
+frontend/web/WEB-INF/lib
+frontend/web/WEB-INF/classes
+frontend/web/META-INF
+target
+backend/web/WEB-INF/lib
+backend/web/WEB-INF/classes
+backend/web/META-INF
+
