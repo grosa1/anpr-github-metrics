@@ -26,15 +26,38 @@ public class IssueExtractorImpl implements IssueExtractor {
         this.github = github;
     }
 
+//    public Collection<User> getContributorsOld(Repository repository) throws GithubException {
+//        if (repository.getContributors() == null) {
+//            Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
+//
+//            List<User> contributors = new ArrayList<>();
+//            for (com.jcabi.github.User remoteUser : remoteRepository.collaborators().iterate()) {
+//                User user;
+//                try {
+//                    user = loadUser(remoteUser.login());
+//                } catch (IOException e) {
+//                    throw new GithubException();
+//                }
+//
+//                contributors.add(user);
+//            }
+//
+//            repository.setContributors(contributors);
+//        }
+//
+//        return repository.getContributors();
+//    }
+
     public Collection<User> getContributors(Repository repository) throws GithubException {
         if (repository.getContributors() == null) {
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
 
-            List<User> contributors = new ArrayList<>();
-            for (com.jcabi.github.User remoteUser : remoteRepository.collaborators().iterate()) {
+            Set<User> contributors = new HashSet<>();
+            for (com.jcabi.github.RepoCommit remoteCommit : remoteRepository.commits().iterate(new HashMap<>())) {
                 User user;
                 try {
-                    user = loadUser(remoteUser.login());
+                    String login = remoteCommit.json().getJsonObject("author").getString("login");
+                    user = loadUser(login);
                 } catch (IOException e) {
                     throw new GithubException();
                 }

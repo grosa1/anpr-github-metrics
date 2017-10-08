@@ -14,14 +14,14 @@ import static org.junit.Assert.*;
  * @author Simone Scalabrino.
  */
 public class AuthenticatorTest {
+    public static final String TOKEN = "d34794572238fff111575134a1c13bc3c403e6fa";
 
     @Test
     @Ignore
     public void test() throws IOException {
-        String token = "d34794572238fff111575134a1c13bc3c403e6fa";
-        assertNotNull(token);
+        assertNotNull(TOKEN);
 
-        Authenticator.getInstance().authenticate(token);
+        Authenticator.getInstance().authenticate(TOKEN);
 
         Github github = Authenticator.getInstance().getGitHub();
         assertNotNull(github);
