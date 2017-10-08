@@ -92,10 +92,20 @@ public class IssueExtractorImplTest {
         Repository repository = new Repository();
         repository.setName("grosa1/Spoon-Knife");
 
-        //TODO get CLOSED issues, not FIXED (there is still no fixed issue in the test repo)
-        List<Issue> issues = new ArrayList<>(implementor.getFixedIssues(repository));
+        List<Issue> issues = new ArrayList<>(implementor.getIssues(repository));
 
-        Collection<Commit> commitsInvolvedInIssue = implementor.getCommitsInvolvedInIssue(issues.get(0));
+        Optional<Issue> first = issues.stream().filter(Issue::isClosed).findFirst();
+        assertTrue(first.isPresent());
+
+        Collection<Commit> commitsInvolvedInIssue = implementor.getCommitsInvolvedInIssue(first.get());
+
+        assertEquals(2, commitsInvolvedInIssue.size());
+
+        List<Commit> sortedCommits = new ArrayList<>(commitsInvolvedInIssue);
+        sortedCommits.sort(Comparator.comparing(Commit::getHash));
+
+        assertEquals("05a0502774ea50f6b4ed195f33c8e443615d63ee", sortedCommits.get(0).getHash());
+        assertEquals("c428a7409a2ead4caf60bc6d47e2a487d06ab690", sortedCommits.get(1).getHash());
     }
 
 }

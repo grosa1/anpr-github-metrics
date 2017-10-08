@@ -102,11 +102,14 @@ public class IssueExtractorImpl implements IssueExtractor {
 
         try {
             for (Event event : remoteIssue.events()) {
-                if (event.json().getString("event").equals("closed")) {
-                    String commitId = event.json().getString("commit_id");
+                String eventType = event.json().getString("event");
+                if (eventType.equals("closed") || eventType.equals("referenced")) {
+                    if (!event.json().isNull("commit_id")) {
+                        String commitId = event.json().getString("commit_id");
 
-                    Commit commit = this.loadCommit(remoteRepository, commitId);
-                    commits.add(commit);
+                        Commit commit = this.loadCommit(remoteRepository, commitId);
+                        commits.add(commit);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -121,7 +124,9 @@ public class IssueExtractorImpl implements IssueExtractor {
         if (repository.getIssues() == null) {
             List<Issue> issues = new ArrayList<>();
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
-            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(new HashMap<>())) {
+            Map<String, String> params = new HashMap<>();
+            params.put("state", "all");
+            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(params)) {
                 try {
                     issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
                 } catch (IOException e) {
@@ -152,8 +157,7 @@ public class IssueExtractorImpl implements IssueExtractor {
                     if (lastClosedDate == null || newClosed.compareTo(lastClosedDate) > 0)
                         lastClosedDate = newClosed;
 
-                    String commitId = event.json().getString("commit_id");
-                    if (commitId != null) {
+                    if (!event.json().isNull("commit_id")) {
                         fixed = true;
                     }
 
@@ -240,7 +244,8 @@ public class IssueExtractorImpl implements IssueExtractor {
         Collection<Commit.FileChange> changes = new ArrayList<>();
         JsonArray fileArray = commitJson.getJsonArray("files");
         for (JsonValue jsonValue : fileArray) {
-            JsonObject fileJson = jsonValue.asJsonObject();
+            assert jsonValue instanceof JsonObject;
+            JsonObject fileJson = (JsonObject) jsonValue;
             Commit.FileChange fileChange = new Commit.FileChange();
 
             fileChange.setFileName(fileJson.getString("filename"));
@@ -251,6 +256,7 @@ public class IssueExtractorImpl implements IssueExtractor {
         }
 
         Commit commit = new Commit();
+        commit.setHash(commitId);
         commit.setAuthor(loadUser(commitJson.getJsonObject("author").getString("login")));
         commit.setMessage(commitJson.getJsonObject("commit").getString("message"));
         commit.setChanges(changes);
