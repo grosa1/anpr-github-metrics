@@ -37,6 +37,7 @@ public class Analytics {
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
         long meanReponseTime = 0L;
+        int total = 0;
 
         for (Issue issue : issues) {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
@@ -44,10 +45,12 @@ public class Analytics {
 
             if(!comments.isEmpty()) {
                 meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
+                total++;
             }
         }
 
-        meanReponseTime /= issues.isEmpty() ? 1 : issues.size();
+        //meanReponseTime /= issues.isEmpty() ? 1 : issues.size();
+        meanReponseTime /= total == 0 ? 1 : total;
         return meanReponseTime;
     }
 
