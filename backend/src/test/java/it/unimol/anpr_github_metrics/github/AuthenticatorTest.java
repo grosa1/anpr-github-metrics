@@ -3,6 +3,7 @@ package it.unimol.anpr_github_metrics.github;
 import com.jcabi.github.Coordinates;
 import com.jcabi.github.Github;
 import com.jcabi.github.Repo;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,8 +16,9 @@ import static org.junit.Assert.*;
 public class AuthenticatorTest {
 
     @Test
+    @Ignore
     public void test() throws IOException {
-        String token = "f86035f8bc5c425839f9b4fec06fcc441e8b8d30";
+        String token = "d34794572238fff111575134a1c13bc3c403e6fa";
         assertNotNull(token);
 
         Authenticator.getInstance().authenticate(token);
@@ -26,6 +28,6 @@ public class AuthenticatorTest {
 
         Repo repo = github.repos().get(new Coordinates.Simple("intersimone999/anpr-github-metrics"));
         assertNotNull(repo);
-//        assertNotNull(repo.json().toString());
+        assertNotNull(repo.json().toString());
     }
 }
