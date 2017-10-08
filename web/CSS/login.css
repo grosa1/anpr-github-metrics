@@ -1,27 +1,13 @@
-
+.demo-container{
+    padding-top: 30px;
+}
 
 #github{
+    padding: 20px;
     text-align: center;
 }
 
 #login{
+    padding: 20px;
     text-align: center;
-}
-
-.Aligner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.Aligner-item {
-    max-width: 50%;
-}
-
-.Aligner-item--top {
-    align-self: flex-start;
-}
-
-.Aligner-item--bottom {
-    align-self: flex-end;
 }
