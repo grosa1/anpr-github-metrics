@@ -104,8 +104,10 @@ public class Analytics {
         long meanClosingTime = 0L;
         int total = 0;
         for (Issue issue : issues) {
-            meanClosingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
-            total++;
+            if (issue.getClosedTime() != null) {
+                meanClosingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+                total++;
+            }
         }
 
         meanClosingTime /= total == 0 ? 1 : total;
@@ -131,8 +133,10 @@ public class Analytics {
 
         for (Issue issue : issues) {
 
-            long timeOpened = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
-            distribution.put(issue, timeOpened);
+            if (issue.getClosedTime() != null) {
+                long timeOpened = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+                distribution.put(issue, timeOpened);
+            }
         }
 
         return distribution;
