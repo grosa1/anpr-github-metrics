@@ -3,9 +3,6 @@ package it.unimol.anpr_github_metrics.github;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import it.unimol.anpr_github_metrics.analytics.Analytics;
-
-import javax.servlet.
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,26 +14,32 @@ import java.util.Map;
 
 public class LoginApi {
 
+    String token;
+    Map<String, String> resMap;
+
     @GET
     @Path("/getLoginCode/{res}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(@PathParam("res") String res) {
 
-        Map<String, String> resMap = this.getQueryMap(res);
+        resMap = this.getQueryMap(res);
 
         try {
-            HttpResponse<String> token = Unirest.post("https://github.com/login/oauth/access_token")
+            HttpResponse<String> tokenRes = Unirest.post("https://github.com/login/oauth/access_token")
                     .field("client_id", "1211d954012cf73c2e2b")
                     .field("client_secret", "1237664d8ab78f6305d2571ee7189fdc5b641ef6")
-                    .field("code", code)
+                    .field("code", resMap.get("code"))
                     .field("redirect_uri", "http://www.unimol.it")
                     .field("state", "codewarriorsunimol")
                     .asString();
 
+            resMap = getQueryMap(tokenRes.toString());
+            token = resMap.get("access_token");
 
-            HttpSession session = request.getSession();
-            session.setAttribute("MySessionVariable", param);
+            //TODO SALVARE TOKEN IN SESSIONE
+//            HttpSession session = request.getSession();
+//            session.setAttribute("MySessionVariable", param);
 
             return Response.status(Response.Status.OK).entity(resMap.get())
 
