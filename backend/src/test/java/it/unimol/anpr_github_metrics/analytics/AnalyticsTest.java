@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,4 +49,51 @@ public class AnalyticsTest {
         assertEquals(4, openIssue);
     }
 
+    @Test
+    public void getOpenIssueWithoutComment() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        ArrayList<Issue> issues = analytics.getOpenIssueWithoutComment("myRepoName");
+        assertEquals(ArrayList.class, issues.getClass());
+        assertEquals(0, issues.size());
+    }
+
+
+    @Test
+    public void getOpenIssueWithoutLabel() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        ArrayList<Issue> issues = analytics.getOpenIssueWithoutLabel("myRepoName");
+        assertEquals(ArrayList.class, issues.getClass());
+        assertEquals(4, issues.size());
+    }
+
+
+    @Test
+    public void getTimeToLastComment() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        HashMap<Issue, Long> issueTime = analytics.getTimeToLastComment("myRepoName");
+        assertEquals(HashMap.class, issueTime.getClass());
+    }
+
+
+    @Test
+    public void getClosedIssueWithoutComment() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        ArrayList<Issue> issues = analytics.getClosedIssueWithoutComment("myRepoName");
+        assertEquals(ArrayList.class, issues.getClass());
+        assertEquals(2, issues.size());
+    }
+
+
+    @Test
+    public void getFixedIssueWithoutComment() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        ArrayList<Issue> issues = analytics.getFixedIssueWithoutComment("myRepoName");
+        assertEquals(ArrayList.class, issues.getClass());
+        assertEquals(2, issues.size());
+    }
 }
