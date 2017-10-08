@@ -3,6 +3,10 @@ package it.unimol.anpr_github_metrics.github;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sun.jersey.api.core.HttpResponseContext;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,11 +21,13 @@ public class LoginApi {
     String token;
     Map<String, String> resMap;
 
+
     @GET
     @Path("/getLoginCode/{res}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getToken(@PathParam("res") String res) {
+
+    public Response getToken(@PathParam("res") String res, @Context HttpServletRequest request) {
 
         resMap = this.getQueryMap(res);
 
@@ -38,8 +44,8 @@ public class LoginApi {
             token = resMap.get("access_token");
 
             //TODO SALVARE TOKEN IN SESSIONE
-//            HttpSession session = request.getSession();
-//            session.setAttribute("MySessionVariable", param);
+            HttpSession session = request.getSession();
+            session.setAttribute("token", token);
 
             return Response.status(Response.Status.OK).entity(token).build();
 
