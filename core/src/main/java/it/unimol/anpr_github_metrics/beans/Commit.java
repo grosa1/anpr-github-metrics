@@ -6,6 +6,7 @@ import java.util.Collection;
  * @author Simone Scalabrino.
  */
 public class Commit {
+    private String hash;
     private User author;
     private String message;
     private Collection<FileChange> changes;
@@ -61,10 +62,27 @@ public class Commit {
         return totalChanged;
     }
 
-    public class FileChange {
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public static class FileChange {
+        private String fileName;
         private int addedLines;
         private int removedLines;
         private int changedLines;
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
 
         public int getAddedLines() {
             return addedLines;

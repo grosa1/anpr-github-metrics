@@ -22,4 +22,20 @@ public class User {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            User user = (User) o;
+
+            return this.login.equals(user.login);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.login.hashCode();
+    }
 }

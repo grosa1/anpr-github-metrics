@@ -15,6 +15,7 @@ public interface IssueExtractor {
      * Get the list of all contributors of a repository
      * @param repository the repository
      * @return a list of User
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<User> getContributors(Repository repository) throws GithubException;
 
@@ -22,6 +23,7 @@ public interface IssueExtractor {
      * Get the list of all the fixed issues in a repository
      * @param repository the repository
      * @return a list of fixed issues
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<Issue> getFixedIssues(Repository repository) throws GithubException;
 
@@ -30,22 +32,25 @@ public interface IssueExtractor {
      * @param user the user
      * @param repository the repository
      * @return a list of fixed issues
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<Issue> getFixedIssues(User user, Repository repository) throws GithubException;
 
     /**
      * Get the list of all the opened issues in a repository
-     * @param repository
-     * @return
+     * @param repository Repository
+     * @return All the open issues in the repository
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<Issue> getOpenIssues(Repository repository) throws GithubException;
 
 
     /**
      * Get the list of all the issues in a repository opened by a given user
-     * @param user
-     * @param repository
-     * @return
+     * @param user The user who opened the issues
+     * @param repository Repository
+     * @return All the open issues opened by the user
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<Issue> getOpenIssues(User user, Repository repository) throws GithubException;
 
@@ -53,6 +58,15 @@ public interface IssueExtractor {
      * Gets the list of all the commits involved in an issue
      * @param issue Issue
      * @return List of all the involved commits
+     * @throws GithubException If there is any error in the GitHub APIs
      */
     public Collection<Commit> getCommitsInvolvedInIssue(Issue issue) throws GithubException;
+
+    /**
+     * Gets the list of all the issues of a repository
+     * @param repository Repository
+     * @return All the issues
+     * @throws GithubException If there is any error in the GitHub APIs
+     */
+    public Collection<Issue> getIssues(Repository repository) throws GithubException;
 }
