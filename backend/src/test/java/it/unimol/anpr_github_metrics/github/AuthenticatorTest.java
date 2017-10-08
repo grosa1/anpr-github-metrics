@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  * @author Simone Scalabrino.
  */
 public class AuthenticatorTest {
-    public static final String TOKEN = "d34794572238fff111575134a1c13bc3c403e6fa";
+    public static final String TOKEN = Authenticator.TEST;
 
     @Test
     public void test() throws IOException {

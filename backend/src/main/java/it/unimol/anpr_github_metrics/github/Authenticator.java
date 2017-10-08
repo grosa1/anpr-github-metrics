@@ -8,6 +8,7 @@ import com.jcabi.github.RtGithub;
  * @author Simone Scalabrino.
  */
 public class Authenticator {
+    public static final String TEST = "d34794572238fff111575134a1c13bc3c403e6fa";
     private static Authenticator instance;
     private RtGithub github;
 

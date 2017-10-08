@@ -52,6 +52,14 @@ public class LoginApi {
         }
     }
 
+    @GET
+    @Path("/testLogin")
+    public void testLogin(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("token", Authenticator.TEST);
+        session.setAttribute("github", Authenticator.getInstance().authenticate(Authenticator.TEST).getGitHub());
+    }
+
     public Map<String, String> getQueryMap(String query) {
         String[] params = query.split("&");
         Map<String, String> map = new HashMap<String, String>();
