@@ -1,7 +1,3 @@
-.fa{
-    padding: 15px;
-}
-
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -183,6 +179,7 @@ _:-ms-input-placeholder, :root .demo-graph {
 }
 .demo-updates .mdl-card__title {
     min-height: 200px;
+    background-image: url('images/dog.png');
     background-position: 90% 100%;
     background-repeat: no-repeat;
 }
@@ -216,4 +213,12 @@ _:-ms-input-placeholder, :root .demo-graph {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
+}
+
+.mdl-list__item{
+    width: 400px;
+}
+
+.h2{
+    text-align: center;
 }
