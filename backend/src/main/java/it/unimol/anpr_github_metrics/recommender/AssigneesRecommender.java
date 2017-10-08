@@ -4,14 +4,13 @@ import it.unimol.anpr_github_metrics.beans.Commit;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.User;
 import it.unimol.anpr_github_metrics.github.GithubException;
-import it.unimol.anpr_github_metrics.github.IssueExtractor;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class implement a Recommender engine for assignees recommendation
+ * This class provides an engine to provide user recommendation for a given issue
  * @author Code Warrior Team
  */
 public class AssigneesRecommender {
@@ -19,11 +18,6 @@ public class AssigneesRecommender {
     private ArrayList<User> users;
     private ArrayList<Issue> fixedIssues;
 
-    /**
-     * Instantiate the Assignees Recommender
-     * @param users the users to take into account in recommendation
-     * @param fixedIssues the list of fixed issues he users to take into account in recommendation tn recommendation
-     */
     public AssigneesRecommender(ArrayList<User> users, ArrayList<Issue> fixedIssues) {
         this.users = users;
         fixedIssues.removeIf(issue -> !issue.isClosed());
@@ -32,10 +26,10 @@ public class AssigneesRecommender {
 
     /**
      * This method returns a list of recommended users ordered in descend order of ranking
-     * @param issue an open issues which user recommendation is needed
-     * @return a list of recommended users ordered in descend order of ranking
-     * @throws ClosedIssueException if the <i>issue</i> is a closed issue
-     * @throws GithubException if an error occurred with GitHub Api
+     * @param issue the issue to which user recommendation is needed
+     * @return an ArrayList of recommended users
+     * @throws ClosedIssueException
+     * @throws GithubException
      */
     public ArrayList<RecommendedUser> getRecommendation(Issue issue) throws ClosedIssueException, GithubException {
 
@@ -113,4 +107,5 @@ public class AssigneesRecommender {
         Collections.reverse(recommendedUsers);
         return recommendedUsers;
     }
+
 }

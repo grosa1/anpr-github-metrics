@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class provide methods to compute text similarities based on Vector Space Model
- * @author Code Warrios Dalla Palma
+ * This class provides methods to compute text similarity based on Vector Space Model
+ * @author Stefano Dalla Palma
  */
 public class VSM {
 

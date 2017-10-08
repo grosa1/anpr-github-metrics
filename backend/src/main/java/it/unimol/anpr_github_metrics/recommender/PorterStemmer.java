@@ -1,7 +1,8 @@
 package it.unimol.anpr_github_metrics.recommender;
 
 /**
- * This class implements the Porter stemmer
+ * This class implements the Porter Stemmer
+ * @author Code Warrior team
  */
 public class PorterStemmer {
 
