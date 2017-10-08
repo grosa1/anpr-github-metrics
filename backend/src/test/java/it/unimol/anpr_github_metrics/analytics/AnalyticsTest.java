@@ -20,7 +20,7 @@ public class AnalyticsTest {
         IssueExtractorFactory.setImplementor(new IssueExtractorStub());
         Analytics analytics = new Analytics();
         long meanFirstResponseTime = analytics.getMeanFirstResponseTime("myRepoName");
-        assertEquals(19500000,meanFirstResponseTime);
+        assertEquals(15225000,meanFirstResponseTime);
     }
 
     @Test
@@ -29,6 +29,23 @@ public class AnalyticsTest {
         Analytics analytics = new Analytics();
         HashMap<Issue, Long> firstResponseTime = analytics.getFirstResponseTimeDistribution("myRepoName");
         assertEquals(HashMap.class, firstResponseTime.getClass());
+    }
+
+    @Test
+    public void getMeanTicketClosingTime() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        long meanClosingTime = analytics.getMeanTicketClosingTime("myRepoName");
+        assertEquals(143400000, meanClosingTime);
+    }
+
+
+    @Test
+    public void getNumberOfOpenIssues() throws Exception {
+        IssueExtractorFactory.setImplementor(new IssueExtractorStub());
+        Analytics analytics = new Analytics();
+        long openIssue = analytics.getNumberOfOpenIssues("myRepoName");
+        assertEquals(4, openIssue);
     }
 
 }

@@ -47,4 +47,49 @@ public class AnalyticsApi {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GET
+    @Path("/mean-ticket-closing-time/{repository-name}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMeanTicketClosingTime(@PathParam("repository-name") String repoName) {
+
+        Analytics analytics = new Analytics();
+        try {
+            Long meanTicketClosingTime = analytics.getMeanTicketClosingTime(repoName);
+            return Response.status(Response.Status.OK).entity(meanTicketClosingTime).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GET
+    @Path("/ticket-closing-time-distribution/{repository-name}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTicketClosingTimeDistribution(@PathParam("repository-name") String repoName) {
+
+        Analytics analytics = new Analytics();
+        try {
+            HashMap<Issue, Long> ticketClosingTimeDistribution = analytics.getTicketClosingTimeDistribution(repoName);
+            return Response.status(Response.Status.OK).entity(ticketClosingTimeDistribution).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GET
+    @Path("/number-of-open-issues/{repository-name}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNumberOfOpenIssues(@PathParam("repository-name") String repoName) {
+
+        Analytics analytics = new Analytics();
+        try {
+            int numberOfOpenIssues = analytics.getNumberOfOpenIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfOpenIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

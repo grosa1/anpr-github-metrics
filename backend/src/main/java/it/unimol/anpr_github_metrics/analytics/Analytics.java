@@ -38,7 +38,6 @@ public class Analytics {
 
         meanReponseTime /= issues.size();
         return meanReponseTime;
-
     }
 
     public HashMap<Issue, Long> getFirstResponseTimeDistribution(String repoName) throws GithubException {
@@ -62,5 +61,55 @@ public class Analytics {
         }
 
         return distribution;
+    }
+
+
+    public long getMeanTicketClosingTime(String repoName) throws GithubException {
+
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+
+        long meanClosingTime = 0L;
+
+        for (Issue issue : issues) {
+            meanClosingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+        }
+
+        meanClosingTime /= issues.size();
+        return meanClosingTime;
+    }
+
+    public HashMap<Issue, Long> getTicketClosingTimeDistribution(String repoName) throws GithubException {
+
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+        // TODO: Cambiare con RepositoryExtractorImpl.getRepository.getIssues();
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.addAll(new ArrayList<>(issueFactory.getFixedIssues(repository)));
+
+        HashMap<Issue, Long> distribution = new HashMap<>();
+
+        for (Issue issue : issues) {
+
+            long timeOpened = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+            distribution.put(issue, timeOpened);
+        }
+
+        return distribution;
+    }
+
+    public int getNumberOfOpenIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance();
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        return issueFactory.getFixedIssues(repository).size();
     }
 }

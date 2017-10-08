@@ -34,6 +34,11 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setMinutes(00);
         issue1.setCreatedTime(date);
 
+        date = new Date(2017, 10, 9);
+        date.setHours(10);
+        date.setMinutes(00);
+        issue1.setClosedTime(date);
+
         ArrayList<IssueComment> comments = new ArrayList<>();
 
         IssueComment comment1 = new IssueComment();
@@ -63,6 +68,11 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setMinutes(00);
         issue2.setCreatedTime(date);
 
+        date = new Date(2017, 10, 9);
+        date.setHours(20);
+        date.setMinutes(00);
+        issue2.setClosedTime(date);
+
         comments = new ArrayList<>();
         comment1 = new IssueComment();
         date = new Date(2017, 10, 8);
@@ -90,6 +100,11 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setHours(6);
         date.setMinutes(00);
         issue3.setCreatedTime(date);
+
+        date = new Date(2017, 10, 10);
+        date.setHours(20);
+        date.setMinutes(30);
+        issue3.setClosedTime(date);
 
         comments = new ArrayList<>();
         comment1 = new IssueComment();
@@ -120,10 +135,15 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setMinutes(10);
         issue4.setCreatedTime(date);
 
+        date = new Date(2017, 10, 10);
+        date.setHours(20);
+        date.setMinutes(00);
+        issue4.setClosedTime(date);
+
         comments = new ArrayList<>();
         comment1 = new IssueComment();
         date = new Date(2017, 10, 9);
-        date.setHours(17);
+        date.setHours(7);
         date.setMinutes(30);
         comment1.setCreatedTime(date);
 
@@ -173,16 +193,21 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setMinutes(00);
         issue1.setCreatedTime(date);
 
+        date = new Date(2017, 10, 9);
+        date.setHours(15);
+        date.setMinutes(00);
+        issue1.setClosedTime(date);
+
         ArrayList<IssueComment> comments = new ArrayList<>();
 
         IssueComment comment1 = new IssueComment();
-        date = new Date(2017, 10, 7);
+        date = new Date(2017, 10, 10);
         date.setHours(20);
         date.setMinutes(30);
         comment1.setCreatedTime(date);
 
         IssueComment comment2 = new IssueComment();
-        date = new Date(2017, 10, 8);
+        date = new Date(2017, 10, 9);
         date.setHours(22);
         date.setMinutes(00);
         comment2.setCreatedTime(date);
@@ -201,6 +226,11 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setHours(12);
         date.setMinutes(00);
         issue2.setCreatedTime(date);
+
+        date = new Date(2017, 10, 7);
+        date.setHours(16);
+        date.setMinutes(30);
+        issue2.setClosedTime(date);
 
         comments = new ArrayList<>();
         comment1 = new IssueComment();
@@ -230,6 +260,11 @@ public class IssueExtractorStub implements IssueExtractor{
         date.setMinutes(00);
         issue3.setCreatedTime(date);
 
+        date = new Date(2017, 10, 7);
+        date.setHours(10);
+        date.setMinutes(00);
+        issue3.setClosedTime(date);
+
         comments = new ArrayList<>();
         comment1 = new IssueComment();
         date = new Date(2017, 10, 5);
@@ -255,9 +290,14 @@ public class IssueExtractorStub implements IssueExtractor{
         issue4.setBody("Issue 4 Body");
 
         date = new Date(2017, 10, 9);
-        date.setHours(17);
+        date.setHours(10);
         date.setMinutes(10);
         issue4.setCreatedTime(date);
+
+        date = new Date(2017, 10, 9);
+        date.setHours(23);
+        date.setMinutes(00);
+        issue4.setClosedTime(date);
 
         comments = new ArrayList<>();
         comment1 = new IssueComment();
