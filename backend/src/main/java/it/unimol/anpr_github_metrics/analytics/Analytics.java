@@ -45,7 +45,7 @@ public class Analytics {
             meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
         }
 
-        meanReponseTime /= issues.size();
+        meanReponseTime /= issues.isEmpty() ? 1 : issues.size();
         return meanReponseTime;
     }
 
