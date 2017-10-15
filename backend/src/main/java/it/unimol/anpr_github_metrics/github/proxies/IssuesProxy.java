@@ -17,15 +17,14 @@ public class IssuesProxy implements Issues, Proxy<Issues> {
     private final Issues origin;
 
     private final Map<Integer, Issue> issueCache;
-    private final Map<Map<String, String>, Set<Issue>> iterableCache;
-    private final Map<Map<String, String>, Date> iterableCacheLastUpdate;
+    private final IterableProxy<Issue, Integer> issuesProxies;
 
     public IssuesProxy(RepoProxy repo, Issues origin) {
         this.repo = repo;
         this.origin = origin;
         this.issueCache = new HashMap<>();
-        this.iterableCache = new HashMap<>();
-        this.iterableCacheLastUpdate = new HashMap<>();
+
+        this.issuesProxies = new IterableProxy<>();
     }
 
     @Override
@@ -48,18 +47,13 @@ public class IssuesProxy implements Issues, Proxy<Issues> {
 
     @Override
     public Iterable<Issue> iterate(Map<String, String> map) {
-        // If the "since" parameter is used, just fall back to the normal implementation, because
-        // we can't handle it at the moment.
-        if (map.containsKey("since"))
-            return this.origin.iterate(map);
-
-        if (!this.iterableCache.containsKey(map)) {
-            createIterableCache(map);
-        } else {
-            updateIterableCache(map);
-        }
-
-        return this.iterableCache.get(map);
+        return this.issuesProxies.getProxied(map,
+                origin::iterate,
+                issue -> {
+                    Issue issueProxy = new IssueProxy(this.repo, issue);
+                    this.issueCache.put(issueProxy.number(), issueProxy);
+                    return issueProxy;
+                });
     }
 
     @Override
@@ -70,36 +64,5 @@ public class IssuesProxy implements Issues, Proxy<Issues> {
     @Override
     public Issues getOrigin() {
         return this.origin;
-    }
-
-    private void createIterableCache(Map<String, String> map) {
-        Set<Issue> matching = new HashSet<>();
-
-        for (Issue issue : this.origin.iterate(map)) {
-            saveIssueInCache(issue, matching);
-        }
-
-        this.iterableCache.put(map, matching);
-        this.iterableCacheLastUpdate.put(map, new Date());
-    }
-
-    private void updateIterableCache(Map<String, String> map) {
-        Set<Issue> matching = this.iterableCache.get(map);
-
-        Map<String, String> newRequest = new HashMap<>(map);
-        String sinceString = DateUtils.GITHUB_DATE.format(this.iterableCacheLastUpdate.get(map));
-        newRequest.put("since", sinceString);
-
-        for (Issue issue : this.origin.iterate(newRequest)) {
-            saveIssueInCache(issue, matching);
-        }
-
-        this.iterableCacheLastUpdate.put(map, new Date());
-    }
-
-    private void saveIssueInCache(Issue issue, Set<Issue> matching) {
-        Issue issueProxy = new IssueProxy(this.repo, issue);
-        this.issueCache.put(issueProxy.number(), issueProxy);
-        matching.add(issueProxy);
     }
 }

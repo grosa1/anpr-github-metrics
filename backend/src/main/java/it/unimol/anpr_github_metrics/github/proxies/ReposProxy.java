@@ -15,7 +15,7 @@ import java.util.Map;
 public class ReposProxy implements Repos, Proxy<Repos> {
     private final GithubProxy github;
     private final Repos origin;
-    private Map<Coordinates, Repo> cachedRepos;
+    private Map<String, Repo> cachedRepos;
 
     public ReposProxy(GithubProxy proxy, Repos origin) {
         this.github = proxy;
@@ -35,10 +35,10 @@ public class ReposProxy implements Repos, Proxy<Repos> {
 
     @Override
     public Repo get(Coordinates coordinates) {
-        if (!this.cachedRepos.containsKey(coordinates))
-            this.cachedRepos.put(coordinates, new RepoProxy(this.github, this.origin.get(coordinates), coordinates));
+        if (!this.cachedRepos.containsKey(coordinates.toString()))
+            this.cachedRepos.put(coordinates.toString(), new RepoProxy(this.github, this.origin.get(coordinates), coordinates));
 
-        return this.cachedRepos.get(coordinates);
+        return this.cachedRepos.get(coordinates.toString());
     }
 
     @Override

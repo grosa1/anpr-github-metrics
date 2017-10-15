@@ -118,9 +118,9 @@ public class IssueExtractorImpl implements IssueExtractor {
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
             Map<String, String> params = new HashMap<>();
             params.put("state", "all");
-            for (com.jcabi.github.Issue remoteIssues : remoteRepository.issues().iterate(params)) {
+            for (com.jcabi.github.Issue remoteIssue : remoteRepository.issues().iterate(params)) {
                 try {
-                    issues.add(loadIssue(remoteRepository, repository, remoteIssues.number()));
+                    issues.add(loadIssue(repository, remoteIssue));
                 } catch (IOException e) {
                     throw new GithubException();
                 }
@@ -132,7 +132,12 @@ public class IssueExtractorImpl implements IssueExtractor {
 
     private Issue loadIssue(Repo remoteRepository, Repository repository, int number) throws IOException {
         com.jcabi.github.Issue remoteIssue = remoteRepository.issues().get(number);
+        return loadIssue(repository, remoteIssue);
+    }
+
+    private Issue loadIssue(Repository repository, com.jcabi.github.Issue remoteIssue) throws IOException {
         JsonObject issueJson = remoteIssue.json();
+        com.jcabi.github.Issue.Smart smartIssue = new com.jcabi.github.Issue.Smart(remoteIssue);
 
         Date lastClosedDate = null;
         Date lastReopenedDate = new Date(0);
@@ -142,12 +147,10 @@ public class IssueExtractorImpl implements IssueExtractor {
 
         boolean fixed = false;
 
-        //Note that events older than 90 days are not reported!
-        //TODO remove events dependency, just rely on issues, if possible
         for (Event event : remoteIssue.events()) {
             switch (event.json().getString("event")) {
                 case "closed":
-                    Date newClosed = getMandatoryDate(event.json().getString("created_at"));
+                    Date newClosed = DateUtils.getMandatoryDate(event.json().getString("created_at"));
                     if (lastClosedDate == null || newClosed.compareTo(lastClosedDate) > 0)
                         lastClosedDate = newClosed;
 
@@ -157,17 +160,17 @@ public class IssueExtractorImpl implements IssueExtractor {
 
                     break;
                 case "repoened":
-                    Date newReopenedDate = getMandatoryDate(event.json().getString("created_at"));
+                    Date newReopenedDate = DateUtils.getMandatoryDate(event.json().getString("created_at"));
                     if (newReopenedDate.compareTo(lastReopenedDate) > 0)
                         lastReopenedDate = newReopenedDate;
                     break;
                 case "marked_as_duplicated":
-                    Date newDuplicated = getMandatoryDate(event.json().getString("created_at"));
+                    Date newDuplicated = DateUtils.getMandatoryDate(event.json().getString("created_at"));
                     if (lastDuplicatedMarkDate == null || newDuplicated.compareTo(lastDuplicatedMarkDate) > 0)
                         lastDuplicatedMarkDate = newDuplicated;
                     break;
                 case "unmarked_as_duplicated":
-                    Date newUnduplicated = getMandatoryDate(event.json().getString("created_at"));
+                    Date newUnduplicated = DateUtils.getMandatoryDate(event.json().getString("created_at"));
                     if (newUnduplicated.compareTo(lastUnduplicatedMarkDate) > 0)
                         lastUnduplicatedMarkDate = newUnduplicated;
                     break;
@@ -175,23 +178,21 @@ public class IssueExtractorImpl implements IssueExtractor {
         }
 
         Issue issue = new Issue();
-        issue.setNumber(number);
+        issue.setNumber(remoteIssue.number());
         issue.setAuthor(loadUser(issueJson.getJsonObject("user").getString("login")));
 
         issue.setUrl(issueJson.getString("html_url"));
         issue.setTitle(issueJson.getString("title"));
         issue.setBody(issueJson.getString("body"));
 
-        issue.setCreatedTime(getMandatoryDate(issueJson.getString("created_at")));
-        issue.setUpdatedTime(getOptionalDate(issueJson.getString("updated_at")));
+        issue.setCreatedTime(DateUtils.getMandatoryDate(issueJson.getString("created_at")));
+        issue.setUpdatedTime(DateUtils.getOptionalDate(issueJson.getString("updated_at")));
         if (!issueJson.isNull("closed_at"))
-            issue.setClosedTime(getMandatoryDate(issueJson.getString("closed_at")));
+            issue.setClosedTime(DateUtils.getMandatoryDate(issueJson.getString("closed_at")));
 
         issue.setFixed(fixed);
-        if (lastClosedDate != null && lastClosedDate.compareTo(lastReopenedDate) > 0) {
-            issue.setClosed(true);
-            assert issue.getClosedTime() != null;
-        }
+
+        issue.setClosed(!smartIssue.isOpen());
 
         issue.setLocked(issueJson.getBoolean("locked"));
 
@@ -202,8 +203,8 @@ public class IssueExtractorImpl implements IssueExtractor {
             IssueComment comment = new IssueComment();
             comment.setAuthor(loadUser(commentJson.getJsonObject("user").getString("login")));
             comment.setBody(commentJson.getString("body"));
-            comment.setCreatedTime(getMandatoryDate(commentJson.getString("created_at")));
-            comment.setUpdatedTime(getMandatoryDate(commentJson.getString("updated_at")));
+            comment.setCreatedTime(DateUtils.getMandatoryDate(commentJson.getString("created_at")));
+            comment.setUpdatedTime(DateUtils.getMandatoryDate(commentJson.getString("updated_at")));
             comment.setUrl(commentJson.getString("html_url"));
 
             comment.setIssue(issue);
@@ -233,7 +234,12 @@ public class IssueExtractorImpl implements IssueExtractor {
     }
 
     private Commit loadCommit(Repo remoteRepository, String commitId) throws IOException {
-        JsonObject commitJson = remoteRepository.commits().get(commitId).json();
+        RepoCommit remoteCommit = remoteRepository.commits().get(commitId);
+        return loadCommit(remoteCommit);
+    }
+
+    private Commit loadCommit(RepoCommit remoteCommit) throws IOException {
+        JsonObject commitJson = remoteCommit.json();
 
         Collection<Commit.FileChange> changes = new ArrayList<>();
         JsonArray fileArray = commitJson.getJsonArray("files");
@@ -250,7 +256,7 @@ public class IssueExtractorImpl implements IssueExtractor {
         }
 
         Commit commit = new Commit();
-        commit.setHash(commitId);
+        commit.setHash(remoteCommit.sha());
         commit.setAuthor(loadUser(commitJson.getJsonObject("author").getString("login")));
         commit.setMessage(commitJson.getJsonObject("commit").getString("message"));
         commit.setChanges(changes);
@@ -265,26 +271,5 @@ public class IssueExtractorImpl implements IssueExtractor {
         user.setUrl(remoteUser.json().getString("html_url"));
 
         return user;
-    }
-
-    private Date getOptionalDate(String date) {
-        if (date == null)
-            return null;
-
-        try {
-            return DateUtils.GITHUB_DATE.parse(date);
-        } catch (ParseException e) {
-            throw new RuntimeException("Invalid date " + date + ". " + e.getMessage());
-        }
-    }
-
-    private Date getMandatoryDate(String date) {
-        assert date != null;
-
-        try {
-            return DateUtils.GITHUB_DATE.parse(date);
-        } catch (ParseException e) {
-            throw new RuntimeException("Invalid date " + date + ". " + e.getMessage());
-        }
     }
 }

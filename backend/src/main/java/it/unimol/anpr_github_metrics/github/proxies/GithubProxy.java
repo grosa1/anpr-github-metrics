@@ -14,6 +14,7 @@ public class GithubProxy implements Github, Proxy<Github> {
     private final Github origin;
 
     private ReposProxy repos;
+    private UsersProxy users;
 
     public GithubProxy(Github origin) {
         this.origin = origin;
@@ -39,7 +40,10 @@ public class GithubProxy implements Github, Proxy<Github> {
 
     @Override
     public Users users() {
-        return this.origin.users();
+        if (this.users == null)
+            this.users = new UsersProxy(this, this.origin.users());
+
+        return this.users;
     }
 
     @Override
@@ -64,17 +68,17 @@ public class GithubProxy implements Github, Proxy<Github> {
 
     @Override
     public Gitignores gitignores() throws IOException {
-        return null;
+        return this.origin.gitignores();
     }
 
     @Override
     public JsonObject meta() throws IOException {
-        return null;
+        return this.origin.meta();
     }
 
     @Override
     public JsonObject emojis() throws IOException {
-        return null;
+        return this.origin.emojis();
     }
 
     @Override
