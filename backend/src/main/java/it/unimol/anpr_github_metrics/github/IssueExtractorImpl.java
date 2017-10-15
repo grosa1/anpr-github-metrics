@@ -6,6 +6,7 @@ import it.unimol.anpr_github_metrics.beans.*;
 import it.unimol.anpr_github_metrics.beans.Commit;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.User;
+import it.unimol.anpr_github_metrics.utils.DateUtils;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
  * @author Simone Scalabrino.
  */
 public class IssueExtractorImpl implements IssueExtractor {
-    private static final SimpleDateFormat GH_DATE = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private Github github;
 
     public IssueExtractorImpl(Github github) {
@@ -91,6 +91,8 @@ public class IssueExtractorImpl implements IssueExtractor {
         Collection<Commit> commits = new ArrayList<>();
 
         try {
+            //Note that events older than 90 days are not reported!
+            //TODO remove events dependency, just rely on issues, if possible
             for (Event event : remoteIssue.events()) {
                 String eventType = event.json().getString("event");
                 if (eventType.equals("closed") || eventType.equals("referenced")) {
@@ -140,6 +142,8 @@ public class IssueExtractorImpl implements IssueExtractor {
 
         boolean fixed = false;
 
+        //Note that events older than 90 days are not reported!
+        //TODO remove events dependency, just rely on issues, if possible
         for (Event event : remoteIssue.events()) {
             switch (event.json().getString("event")) {
                 case "closed":
@@ -268,7 +272,7 @@ public class IssueExtractorImpl implements IssueExtractor {
             return null;
 
         try {
-            return GH_DATE.parse(date);
+            return DateUtils.GITHUB_DATE.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException("Invalid date " + date + ". " + e.getMessage());
         }
@@ -278,7 +282,7 @@ public class IssueExtractorImpl implements IssueExtractor {
         assert date != null;
 
         try {
-            return GH_DATE.parse(date);
+            return DateUtils.GITHUB_DATE.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException("Invalid date " + date + ". " + e.getMessage());
         }
