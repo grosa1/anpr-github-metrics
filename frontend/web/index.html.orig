@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+
+<<<<<<< HEAD:frontend/web/index.html
+<div class="mdl-grid center-items">
+    <div class="mdl-cell mdl-cell--4-col"></div>
+    <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-layout mdl-js-layout">
+            <main class="mdl-layout__content">
+                <div class="mdl-card mdl-shadow--6dp">
+                    <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                        <h2 class="mdl-card__title-text">Login</h2>
+                    </div>
+
+                    <div id="github">
+                        <i class="fa fa-github fa-5x" aria-hidden="true"></i>
+                    </div>
+                    <div class="mdl-card__actions" id="login">
+                        <a href="Pages/dashboard.html">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Login with GitHub
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </main>
+=======
+<div class="demo-container mdl-grid">
+    <div class="mdl-cell mdl-cell--3-col mdl-cell--hide-tablet "></div>
+
+
+    <div class="demo-content mdl-color--white mdl-shadow--6dp content mdl-color-text--grey-800 mdl-cell mdl-cell--6-col">
+
+        <div class="mdl-card__title mdl-color--light-blue mdl-color-text--white">
+            <h2 class="mdl-card__title-text">Login</h2>
+>>>>>>> e1494abd913bf716811d8f63963f9d1db3a7a2db:web/Pages/login.html
+        </div>
+
+        <form class="contenitore mdl-cell mdl-cell--12-col cell_con">
+
+            <div id="github">
+                <i class="fa fa-github fa-5x" aria-hidden="true"></i>
+            </div>
+            <div class="mdl-card__actions" id="login">
+                <a href="repositories.html">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        Login with GitHub
+                    </button>
+                </a>
+            </div>
+
+    </div>
+    </main>
+</div>
+
+</body>
+</html>
