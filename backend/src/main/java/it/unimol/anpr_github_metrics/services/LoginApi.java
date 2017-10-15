@@ -1,9 +1,11 @@
 package it.unimol.anpr_github_metrics.services;
 
+import com.jcabi.github.Github;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.github.Authenticator;
+import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
 import org.apache.http.auth.AUTH;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,10 +57,37 @@ public class LoginApi {
 
     @GET
     @Path("/testLogin")
-    public void testLogin(@Context HttpServletRequest request) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response testLogin(@Context HttpServletRequest request) {
+        Github github = Authenticator.getInstance().authenticate(Authenticator.TEST).getGitHub();
         HttpSession session = request.getSession();
         session.setAttribute("token", Authenticator.TEST);
-        session.setAttribute("github", Authenticator.getInstance().authenticate(Authenticator.TEST).getGitHub());
+        session.setAttribute("github", github);
+
+        try {
+            if (!github.users().self().login().equals("")) {
+                return Response.status(Response.Status.OK).entity(true).build();
+            }
+        } catch (IOException e) {
+        }
+
+        return Response.status(Response.Status.OK).entity("Test login not working").build();
+    }
+
+    @GET
+    @Path("/quota")
+    public Response quota(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Github github = (Github) session.getAttribute("github");
+        if (github == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        try {
+            int limit = github.limits().get("").json().getInt("X-RateLimit-Remaining");
+            return Response.status(Response.Status.OK).entity(limit).build();
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     public Map<String, String> getQueryMap(String query) {

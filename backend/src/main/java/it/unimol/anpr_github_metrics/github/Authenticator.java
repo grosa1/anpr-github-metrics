@@ -2,6 +2,7 @@ package it.unimol.anpr_github_metrics.github;
 
 import com.jcabi.github.Github;
 import com.jcabi.github.RtGithub;
+import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
 
 /**
  * Authenticates a GitHub user
@@ -9,8 +10,21 @@ import com.jcabi.github.RtGithub;
  */
 public class Authenticator {
     public static final String TEST = "d34794572238fff111575134a1c13bc3c403e6fa";
-    private static Authenticator instance;
-    private RtGithub github;
+    private Github github;
+    private static boolean cachingEnabled;
+
+
+    static {
+        cachingEnabled = true;
+    }
+
+    public static void enableCaching() {
+        cachingEnabled = true;
+    }
+
+    public static void disableCaching() {
+        cachingEnabled = false;
+    }
 
     /**
      * Returns an authenticator instance
@@ -26,7 +40,11 @@ public class Authenticator {
      * @param password Password
      */
     public Authenticator authenticate(String username, String password) {
-        this.github = new RtGithub(username, password);
+        Github realGithub = new RtGithub(username, password);
+        if (cachingEnabled)
+            this.github = new GithubProxy(realGithub);
+        else
+            this.github = realGithub;
 
         return this;
     }
@@ -37,7 +55,11 @@ public class Authenticator {
      * @return A Github object
      */
     public Authenticator authenticate(String oauth) {
-        this.github = new RtGithub(oauth);
+        Github realGithub = new RtGithub(oauth);
+        if (cachingEnabled)
+            this.github = new GithubProxy(realGithub);
+        else
+            this.github = realGithub;
 
         return this;
     }
