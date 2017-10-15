@@ -14,6 +14,8 @@ public class RepoProxy implements Repo, Proxy<Repo> {
     private final Repo origin;
 
     private IssuesProxy issuesProxy;
+    private RepoCommitsProxy commitsProxy;
+    private JsonObject storedJson;
 
     public RepoProxy(GithubProxy github, Repo origin, Coordinates coordinates) {
         this.github = github;
@@ -86,7 +88,11 @@ public class RepoProxy implements Repo, Proxy<Repo> {
 
     @Override
     public RepoCommits commits() {
-        return this.origin.commits();
+        if (this.commitsProxy == null) {
+            this.commitsProxy = new RepoCommitsProxy(this, this.origin.commits());
+        }
+
+        return this.commitsProxy;
     }
 
     @Override
@@ -131,7 +137,10 @@ public class RepoProxy implements Repo, Proxy<Repo> {
 
     @Override
     public JsonObject json() throws IOException {
-        return this.origin.json();
+        if (this.storedJson == null)
+            this.storedJson = this.origin.json();
+
+        return this.storedJson;
     }
 
     @Override

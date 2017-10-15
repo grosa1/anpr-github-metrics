@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/github")
+
 public class LoginApi {
     @GET
     @Path("/getLoginCode/{res}")

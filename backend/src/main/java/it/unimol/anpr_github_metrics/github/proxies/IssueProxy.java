@@ -4,20 +4,32 @@ import com.jcabi.github.*;
 
 import javax.json.JsonObject;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Simone Scalabrino.
  */
 
-//TODO this proxy might be useless: double check and, if necessary, remove.
 public class IssueProxy implements Issue, Proxy<Issue> {
     private final RepoProxy repo;
     private final Issue origin;
+    private final Set<Event> events;
+    private boolean invalidatedEventsCache;
+
+
+
+    private JsonObject storedJson;
+    private CommentsProxy commentsProxy;
 
     public IssueProxy(RepoProxy repo, Issue origin) {
         this.repo = repo;
         this.origin = origin;
+        this.events = new HashSet<>();
+
+        this.invalidatedEventsCache = false;
     }
+
     @Override
     public Repo repo() {
         return this.repo;
@@ -30,7 +42,10 @@ public class IssueProxy implements Issue, Proxy<Issue> {
 
     @Override
     public Comments comments() {
-        return this.origin.comments();
+        if (this.commentsProxy == null)
+            this.commentsProxy = new CommentsProxy(this, this.origin.comments());
+
+        return this.commentsProxy;
     }
 
     @Override
@@ -40,7 +55,28 @@ public class IssueProxy implements Issue, Proxy<Issue> {
 
     @Override
     public Iterable<Event> events() throws IOException {
-        return this.origin.events();
+        if (this.invalidatedEventsCache) {
+            this.events.clear();
+        }
+
+        if (this.events.isEmpty()) {
+            for (Event event : this.origin.events()) {
+                this.events.add(new EventProxy(this.repo, event));
+            }
+
+            this.invalidatedEventsCache = false;
+
+            new Thread(() -> {
+                try {
+                    //Invalidates the cache in 6 hours
+                    Thread.sleep(6*60*60*1000);
+                } catch (InterruptedException ignore) {
+                }
+                invalidate();
+            }).start();
+        }
+
+        return this.events;
     }
 
     @Override
@@ -55,7 +91,10 @@ public class IssueProxy implements Issue, Proxy<Issue> {
 
     @Override
     public JsonObject json() throws IOException {
-        return this.origin.json();
+        if (this.storedJson == null)
+            this.storedJson = this.origin.json();
+
+        return this.storedJson;
     }
 
     @Override
@@ -66,5 +105,10 @@ public class IssueProxy implements Issue, Proxy<Issue> {
     @Override
     public int compareTo(Issue issue) {
         return this.origin.compareTo(issue);
+    }
+
+    @Override
+    public void invalidate() {
+        this.invalidatedEventsCache = true;
     }
 }
