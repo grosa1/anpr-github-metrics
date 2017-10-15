@@ -1,0 +1,18 @@
+.demo-container{
+    padding-top: 100px;
+    justify-content: space-around;
+}
+
+.demo-content {
+    width: 300px;
+}
+
+#github{
+    padding: 20px;
+    text-align: center;
+}
+
+#login{
+    padding: 20px;
+    text-align: center;
+}
