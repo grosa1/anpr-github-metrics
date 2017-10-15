@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Path("/github")
-
 public class LoginApi {
     @GET
     @Path("/getLoginCode/{res}")
@@ -51,41 +50,6 @@ public class LoginApi {
 
         } catch (UnirestException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GET
-    @Path("/testLogin")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testLogin(@Context HttpServletRequest request) {
-        Github github = Authenticator.getInstance().authenticate(Authenticator.TEST).getGitHub();
-        HttpSession session = request.getSession();
-        session.setAttribute("token", Authenticator.TEST);
-        session.setAttribute("github", github);
-
-        try {
-            if (!github.users().self().login().equals("")) {
-                return Response.status(Response.Status.OK).entity(true).build();
-            }
-        } catch (IOException e) {
-        }
-
-        return Response.status(Response.Status.OK).entity("Test login not working").build();
-    }
-
-    @GET
-    @Path("/quota")
-    public Response quota(@Context HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Github github = (Github) session.getAttribute("github");
-        if (github == null)
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-
-        try {
-            int limit = github.limits().get("").json().getInt("X-RateLimit-Remaining");
-            return Response.status(Response.Status.OK).entity(limit).build();
-        } catch (IOException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
