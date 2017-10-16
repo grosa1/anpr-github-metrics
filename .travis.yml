@@ -32,4 +32,4 @@ addons:
     notification_email: intersimone999@hotmail.it
     build_command_prepend: "mvn clean"
     build_command:   "mvn -DskipTests=true compile"
-    branch_pattern: coverity_scan
+    branch_pattern: releases
