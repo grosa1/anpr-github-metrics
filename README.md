@@ -1,4 +1,4 @@
-![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)
+[![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)](https://travis-ci.org/intersimone999/anpr-github-metrics)
 
 # ZE&trade;US
 
