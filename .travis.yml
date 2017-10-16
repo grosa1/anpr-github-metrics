@@ -4,8 +4,12 @@ sudo: required
 services:
   - docker
 
-script: mvn clean package
+script:
+  - mvn clean
+  - mvn cobertura:cobertura
+  - mvn package -DskipTests
 
 after_success:
+  - bash <(curl -s https://codecov.io/bash)
   - docker build -t unimol/zeus-api backend
   - docker build -t unimol/zeus frontend
