@@ -1,3 +1,10 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "XRLJ+pMjg6V1/TaPSfX0LgYtpsiuS2DKHAJToedffVltdJTxDy/6E0OKOBMo/KJkrGr8Pkf8ld6bbBxwSAS72OCERFZuzm9k9/vABWmVlMc3d1RtHjaGo2HJO/qL9hL+BTAnemIYhtZvRrk7czKFVs+mTc0CjhTmGVpyMskpORFmdBKD+ma3t0cnNTDb4SAt+WvJLpaBne0UWY5/T3CcWmPn8po3HWQ8qTjPE6aLD+6iwbyikfldM/kh0vJqia44APjB9WUM8S5fnvFSzekRUWOuKSosPd9tgkxmruaEeQ/r9/0M83IDMnEnKD5tPaNb4hm1fiwzAeixE70d1nDPq0yFswzyKDD2NCpTrfBXB2ixwUs8HbDMbBrVH6lXCwn8Q4C9ryUqprhvpohelhA2BJfxDT4CUnlI5K6amcRNIJn7yLhx+cISyX8hrATRu8v9S4Ffbu2JWcJddXLb2DTj1RE7CPvtwx/sYrJKB+9oYLpRMc1Eo+kZMwH2hXt904c7hmAkIXQC5eKL0t4uW7/qCij6iJhx9vYvPcuYKjqsuyZXybPK2ZJQvc/4zNnikPAEKpAVH0HFvFnjlIUFg6zGce0dTpa2U92Xq60LpzYEuxcSURQSnhP1PRUc3cS3kpVnCA4C02185nX3Re39Ewdrx9zbpjjs20awlAJggRwdi0E="
+
+
 language: java
 sudo: required
 
@@ -13,3 +20,16 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - docker build -t unimol/zeus-api backend
   - docker build -t unimol/zeus frontend
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "intersimone999/anpr-github-metrics"
+      description: "Build submitted via Travis CI"
+    notification_email: intersimone999@hotmail.it
+    build_command_prepend: "mvn clean"
+    build_command:   "mvn -DskipTests=true compile"
+    branch_pattern: coverity_scan
