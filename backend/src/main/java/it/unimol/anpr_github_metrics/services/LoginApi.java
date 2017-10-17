@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+@Path("/github")
 public class LoginApi {
     @GET
     @Path("/getLoginCode")
@@ -29,23 +30,28 @@ public class LoginApi {
         String token;
 
         try {
-            HttpResponse<JsonNode> tokenRes = Unirest.post("https://github.com/login/oauth/access_token")
+            HttpResponse<String> tokenRes = Unirest.post("https://github.com/login/oauth/access_token")
                     .field("client_id", "1211d954012cf73c2e2b")
                     .field("client_secret", "1237664d8ab78f6305d2571ee7189fdc5b641ef6")
                     .field("code", code)
                     .field("redirect_uri", "http://www.unimol.it")
                     .field("state", state)
-                    .asJson();
+                    .asString();
+                    
+            Map<String, String> map = getQueryMap(tokenRes.getBody());
 
-            token = tokenRes.getBody().getObject().getString("access_token");
+            token = map.get("access_token");
+            
+            System.out.println(token);
 
             //TODO check
             HttpSession session = request.getSession();
+            
+            Github github = Authenticator.getInstance().authenticate(token).getGitHub();
             session.setAttribute("token", token);
-            session.setAttribute("github", Authenticator.getInstance().authenticate(token).getGitHub());
-
-            return Response.status(Response.Status.OK).entity(token).build();
-
+            session.setAttribute("github", github);
+            
+            return Response.status(Response.Status.OK).entity(true).build();
         } catch (UnirestException e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -56,8 +62,8 @@ public class LoginApi {
         String[] params = query.split("&");
         Map<String, String> map = new HashMap<String, String>();
         for (String param : params) {
-            String name = param.split("=")[0];
-            String value = param.split("=")[1];
+            String name = param.split("=", 2)[0];
+            String value = param.split("=", 2)[1];
             map.put(name, value);
         }
         return map;
