@@ -1,5 +1,6 @@
-![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)
-
+[![Travis](https://travis-ci.org/intersimone999/anpr-github-metrics.svg?branch=master)](https://travis-ci.org/intersimone999/anpr-github-metrics)
+[![codecov](https://codecov.io/gh/intersimone999/anpr-github-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/intersimone999/anpr-github-metrics)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/14034/badge.svg)](https://scan.coverity.com/projects/intersimone999-anpr-github-metrics)
 # ZE&trade;US
 
 The *Zero-Effort ticket management Unimol System* (ZE&trade;US, pronounced "zeus") allows to easily manage

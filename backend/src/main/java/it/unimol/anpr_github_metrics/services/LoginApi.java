@@ -1,10 +1,12 @@
 package it.unimol.anpr_github_metrics.services;
 
+import com.jcabi.github.Github;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.github.Authenticator;
+import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
 import org.apache.http.auth.AUTH;
 import org.json.JSONObject;
 
@@ -14,10 +16,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/github")
 
 public class LoginApi {
     @GET
@@ -48,14 +50,6 @@ public class LoginApi {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    @GET
-    @Path("/testLogin")
-    public void testLogin(@Context HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("token", Authenticator.TEST);
-        session.setAttribute("github", Authenticator.getInstance().authenticate(Authenticator.TEST).getGitHub());
     }
 
     public Map<String, String> getQueryMap(String query) {
