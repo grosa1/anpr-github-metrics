@@ -159,7 +159,7 @@ public class IssueExtractorImpl implements IssueExtractor {
                     }
 
                     break;
-                case "repoened":
+                case "reopened":
                     Date newReopenedDate = DateUtils.getMandatoryDate(event.json().getString("created_at"));
                     if (newReopenedDate.compareTo(lastReopenedDate) > 0)
                         lastReopenedDate = newReopenedDate;

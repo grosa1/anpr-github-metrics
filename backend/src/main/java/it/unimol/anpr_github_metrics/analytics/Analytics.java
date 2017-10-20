@@ -36,22 +36,20 @@ public class Analytics {
 
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
-        long meanReponseTime = 0L;
-        int total = 0;
+        long firstReponseTime = 0L;
+        int numberOfComments = 0;
 
         for (Issue issue : issues) {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
             if (!comments.isEmpty()) {
-                meanReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
-                total++;
+                firstReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
+                numberOfComments++;
             }
         }
 
-        //meanReponseTime /= issues.isEmpty() ? 1 : issues.size();
-        meanReponseTime /= total == 0 ? 1 : total;
-        return meanReponseTime;
+        return (numberOfComments > 0) ? firstReponseTime/numberOfComments : 0;
     }
 
     /**
@@ -101,17 +99,17 @@ public class Analytics {
 
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
-        long meanClosingTime = 0L;
-        int total = 0;
+        long closingTime = 0L;
+        int numberOfClosedIssues= 0;
+
         for (Issue issue : issues) {
             if (issue.getClosedTime() != null) {
-                meanClosingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
-                total++;
+                closingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+                numberOfClosedIssues++;
             }
         }
 
-        meanClosingTime /= total == 0 ? 1 : total;
-        return meanClosingTime;
+        return (numberOfClosedIssues > 0) ? closingTime/numberOfClosedIssues : 0;
     }
 
     /**
@@ -129,10 +127,9 @@ public class Analytics {
 
         ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
-        HashMap<Issue, Long> distribution = new HashMap<>();
+        HashMap<Issue, Long> distribution = new HashMap<>();    //The ticket distribution over closing time
 
         for (Issue issue : issues) {
-
             if (issue.getClosedTime() != null) {
                 long timeOpened = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
                 distribution.put(issue, timeOpened);
@@ -169,15 +166,15 @@ public class Analytics {
         Repository repository = new Repository();
         repository.setName(repoName);
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        ArrayList<Issue> openIssue = new ArrayList<>();
+        ArrayList<Issue> openIssues = new ArrayList<>();
 
         for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
             if (issue.getComments().isEmpty()) {
-                openIssue.add(issue);
+                openIssues.add(issue);
             }
         }
 
-        return openIssue;
+        return openIssues;
     }
 
     /**
@@ -191,15 +188,15 @@ public class Analytics {
         Repository repository = new Repository();
         repository.setName(repoName);
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        ArrayList<Issue> openIssue = new ArrayList<>();
+        ArrayList<Issue> openIssues = new ArrayList<>();
 
         for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
             if (issue.getLabels().isEmpty()) {
-                openIssue.add(issue);
+                openIssues.add(issue);
             }
         }
 
-        return openIssue;
+        return openIssues;
     }
 
     /**
@@ -209,24 +206,23 @@ public class Analytics {
      * @return an ArrayList of open issues that have no comment
      * @throws GithubException if an error in encountered with github api
      */
-    public HashMap<Issue, Long> getTimeToLastComment(String repoName) throws GithubException {
+    public HashMap<Issue, Long> getTimeFromLastComment(String repoName) throws GithubException {
         long actualDate = new Date().getTime();
-        long lastCommentDate = 0;
+        HashMap<Issue, Long> map = new HashMap<>(); // The issue-inactivityTime map
 
-        HashMap<Issue, Long> inactivityIssueTime = new HashMap<>();
         IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
-        ArrayList<Issue> issueList = (ArrayList<Issue>) issueFactory.getIssues(repository);
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
 
-        for (Issue issue : issueList) {
+        for (Issue issue : issues) {
             if (issue.getUpdatedTime() != null) {
-                lastCommentDate = issue.getUpdatedTime().getTime();
-                inactivityIssueTime.put(issue, actualDate - lastCommentDate);
+                long lastCommentDate = issue.getUpdatedTime().getTime();
+                map.put(issue, actualDate - lastCommentDate);
             }
         }
 
-        return inactivityIssueTime;
+        return map;
     }
 
 

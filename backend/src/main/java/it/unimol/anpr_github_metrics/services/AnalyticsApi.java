@@ -164,7 +164,7 @@ public class AnalyticsApi {
     }
 
     @GET
-    @Path("/time-to-last-commit/{login-name}/{repository-name}")
+    @Path("/time-from-last-comment/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTimeToLastComment(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
@@ -176,7 +176,7 @@ public class AnalyticsApi {
         String repoName = loginName+"/"+repoPath;
         Analytics analytics = new Analytics(github);
         try {
-            HashMap<Issue, Long> issueTimes = analytics.getTimeToLastComment(repoName);
+            HashMap<Issue, Long> issueTimes = analytics.getTimeFromLastComment(repoName);
             return Response.status(Response.Status.OK).entity(issueTimes).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
