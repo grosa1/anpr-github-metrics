@@ -25,10 +25,15 @@ import java.util.HashMap;
  * - /average-first-response-time
  * - /closing-time-distribution
  * - /first-response-time-distribution
+ * - /number-of-closed-issues
+ * - /number-of-commented-closed-issues
+ * - /number-of-commented-labeled-issues
  * - /number-of-commented-open-issues
  * - /number-of-labeled-open-issues
  * - /number-of-open-issues
+ * - /number-of-uncommented-closed-issues
  * - /number-of-uncommented-open-issues
+ * - /number-of-unlabeled-closed-issues
  * - /number-of-unlabeled-open-issues
  */
 @Path("/analytics")
@@ -277,8 +282,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            int numberOfCommentedClosedIssues = analytics.getNumberOfCommentedClosedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfCommentedClosedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -332,8 +344,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            int numberOfClosedIssues = analytics.getNumberOfClosedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfClosedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -364,8 +383,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            int numberOfLabeledClosedIssues = analytics.getNumberOfLabeledClosedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfLabeledClosedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -442,8 +468,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            int numberOfUncommentedClosedIssues = analytics.getNumberOfUncommentedClosedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUncommentedClosedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -497,8 +530,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            int numberOfUnlabeledClosedIssues = analytics.getNumberOfUnlabeledClosedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUnlabeledClosedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 

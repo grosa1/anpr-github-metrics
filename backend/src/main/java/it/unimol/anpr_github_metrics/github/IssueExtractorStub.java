@@ -15,25 +15,96 @@ public class IssueExtractorStub implements IssueExtractor {
 
     @Override
     public Collection<Issue> getClosedIssues(Repository repository) throws GithubException {
-        User stefano = new User();
-        stefano.setUrl("stefanoUri");
-        stefano.setLogin("stefano");
+        // User
+        User user = new User();
+        user.setUrl("userUrl");
+        user.setLogin("userLogin");
 
+        // Creation and closed Date (diff by 10 hour)
+        Date creationDate = new Date(2017, 10, 6);
+        creationDate.setHours(10);
+        creationDate.setMinutes(00);
+
+        Date closedDate = new Date(2017, 10, 6);
+        closedDate.setHours(20);
+        closedDate.setMinutes(00);
+
+
+        // Comments
+        Collection<IssueComment> comments;
+        IssueComment comment = new IssueComment();
+        comment.setAuthor(user);
+        comment.setBody("This is a comment.");
+
+        Date dateComment = new Date(2017, 10, 5);
+        dateComment.setHours(14);
+        dateComment.setMinutes(30);
+        comment.setCreatedTime(dateComment);
+
+        // Labels
+        Collection<Issue.Label> labels = new HashSet<>();
+        labels.add(Issue.Label.HELP);
+
+
+        Collection<Issue> issues = new ArrayList<>();
+
+        // Issues 1 - No comment, no label
         Issue issue1 = new Issue();
-        issue1.setAuthor(stefano);
-        issue1.setTitle("Issue 1 Title");
-        issue1.setBody("Issue 1 Body");
-        issue1.setComments(new HashSet<>());
+        issue1.setAuthor(user);
+        issue1.setTitle("Uncommented and Unlabeled Closed Issue");
+        issue1.setBody("This is an uncommented and unlabeled closed issue");
+        issue1.setCreatedTime(creationDate);
+        issue1.setClosedTime(closedDate);
+        issue1.setComments(new ArrayList<>());   // No comments
+        issue1.setLabels(new HashSet<>());       // No labels
 
+        // Issues 2 - 1 Comment, no label
         Issue issue2 = new Issue();
-        issue2.setAuthor(stefano);
-        issue2.setTitle("Issue 1 Title");
-        issue2.setBody("Issue 1 Body");
-        issue2.setComments(new HashSet<>());
+        issue2.setAuthor(user);
+        issue2.setTitle("Commented Open Issue");
+        issue2.setBody("This an open issue with 1 comment and no label.");
 
-        ArrayList<Issue> issues = new ArrayList<>();
+        creationDate = new Date(2017, 10, 4);
+        creationDate.setHours(12);
+        creationDate.setMinutes(00);
+        issue2.setCreatedTime(creationDate);
+        issue2.setClosedTime(closedDate);
+
+        comment.setIssue(issue2);
+        comments = new ArrayList<>();
+        comments.add(comment);
+        issue2.setComments(comments);       // 1 comment
+        issue2.setLabels(new HashSet<>());  // No labels
+
+        // Issues 3 - No comment, 1 label
+        Issue issue3 = new Issue();
+        issue3.setAuthor(user);
+        issue3.setTitle("Labeled Open Issue");
+        issue3.setBody("This an open issue with 1 label and no comment.");
+        issue3.setCreatedTime(creationDate);
+        issue3.setClosedTime(closedDate);
+
+        issue3.setComments(new ArrayList<>());   // No comment
+        issue3.setLabels(labels);                // 1 label
+
+        // Issues 4 - 1 comment, 1 label
+        Issue issue4 = new Issue();
+        issue4.setAuthor(user);
+        issue4.setTitle("Labeled and Commented Open Issue");
+        issue4.setBody("This is a open issue with one label and one comment");
+        issue4.setCreatedTime(creationDate);
+        issue4.setClosedTime(closedDate);
+
+        comment.setIssue(issue4);
+        comments = new ArrayList<>();
+        comments.add(comment);
+        issue4.setComments(comments);   // 1 comment
+        issue4.setLabels(labels);       // 1 label
+
         issues.add(issue1);
         issues.add(issue2);
+        issues.add(issue3);
+        issues.add(issue4);
 
         return issues;
     }

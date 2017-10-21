@@ -104,14 +104,42 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
 
 
     /**
+     * This method returns the number of closed issues
+     *
+     * @param repoName the name of the repository to analyze
+     * @return an integer representing the number of closed issues that have at least one comment
+     * @throws GithubException if an error in encountered with github api
+     */
+    public int getNumberOfClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        return issueFactory.getClosedIssues(repository).size();
+    }
+
+    /**
      * This method returns the number of closed issues having comments
      *
      * @param repoName the name of the repository to analyze
      * @return an integer representing the number of closed issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfCommentedClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfCommentedClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfCommentedIssues = 0;
+
+        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        for(Issue issue : closedIssues){
+            if(!issue.getComments().isEmpty()){
+                System.out.println(issue.getTitle());
+                numberOfCommentedIssues++;
+            }
+        }
+        return numberOfCommentedIssues;
     }
 
 
@@ -122,8 +150,20 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of closed issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfLabeledClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfLabeledClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfLabeledIssues = 0;
+
+        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        for(Issue issue : closedIssues){
+            if(!issue.getLabels().isEmpty()){
+                numberOfLabeledIssues++;
+            }
+        }
+        return numberOfLabeledIssues;
     }
 
 
@@ -134,8 +174,21 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of closed issues that have no comments
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfUncommentedClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfUncommentedClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUncommentedIssues = 0;
+
+        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        for(Issue issue : closedIssues){
+            if(issue.getComments().isEmpty()){
+                System.out.println(issue.getTitle());
+                numberOfUncommentedIssues++;
+            }
+        }
+        return numberOfUncommentedIssues;
     }
 
 
@@ -146,8 +199,20 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of closed issues that have no labels
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfUnlabeledClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfUnlabeledClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUnlabeledIssues = 0;
+
+        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        for(Issue issue : closedIssues){
+            if(issue.getLabels().isEmpty()){
+                numberOfUnlabeledIssues++;
+            }
+        }
+        return numberOfUnlabeledIssues;
     }
 
 
