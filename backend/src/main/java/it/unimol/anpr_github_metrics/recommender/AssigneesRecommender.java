@@ -29,6 +29,14 @@ public class AssigneesRecommender {
         this.fixedIssues = fixedIssues;
     }
 
+
+    public AssigneesRecommender(Github github, ArrayList<User> users, ArrayList<Issue> fixedIssues) {
+        this.github = github;
+        this.users = users;
+        fixedIssues.removeIf(issue -> !issue.isClosed());
+        this.fixedIssues = fixedIssues;
+    }
+
     /**
      * This method returns a list of recommended users ordered in descend order of ranking
      * @param issue the issue to which user recommendation is needed
@@ -37,6 +45,8 @@ public class AssigneesRecommender {
      * @throws GithubException
      */
     public ArrayList<RecommendedUser> getRecommendation(Issue issue) throws ClosedIssueException, GithubException {
+
+        ArrayList<RecommendedUser> recommendedUsers = new ArrayList<>();
 
         if (issue.isClosed()) {
             throw new ClosedIssueException("The issue is closed. Pass an opened issue");
@@ -66,8 +76,6 @@ public class AssigneesRecommender {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 
-        ArrayList<RecommendedUser> recommendedUsers = new ArrayList<>();
-
         // Find user issues's coverage
         for (Map.Entry<Issue, Double> entry : similarityMap.entrySet()) {
             Issue key = entry.getKey();
@@ -78,6 +86,7 @@ public class AssigneesRecommender {
 
             int totalChanges = 0;
             for (Commit commit : commits) {
+
                 double value = commit.getTotalAddedLines() + commit.getTotalRemovedLines();
 
                 if (userChanges.containsKey(commit.getAuthor())) {
@@ -93,14 +102,16 @@ public class AssigneesRecommender {
 
                 double coverage = users.getValue() / totalChanges * similarity;
 
-                if (recommendedUsers.contains(user)) {
-                    RecommendedUser recommendedUser = recommendedUsers.get(recommendedUsers.indexOf(user));
+                RecommendedUser recommendedUser = new RecommendedUser(user);
+
+                if (recommendedUsers.contains(recommendedUser)) {
+                    recommendedUser = recommendedUsers.get(recommendedUsers.indexOf(recommendedUser));
                     recommendedUser.updateCoverage(coverage);
                     recommendedUser.updateWeight(similarity);
                 } else {
-                    RecommendedUser recommendedUser = new RecommendedUser(user);
                     recommendedUser.updateCoverage(coverage);
                     recommendedUser.updateWeight(similarity);
+                    recommendedUsers.add(recommendedUser);
                 }
             }
         }

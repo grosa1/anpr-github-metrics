@@ -67,4 +67,13 @@ public class RecommendedUser implements Comparable {
             return 1;
         }
     }
+
+    @Override
+    public String toString() {
+        return "RecommendedUser{" +
+                "user=" + user.getLogin() +
+                ", coverage=" + coverage +
+                ", weight=" + weight +
+                '}';
+    }
 }
