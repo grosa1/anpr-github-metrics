@@ -8,6 +8,7 @@ import it.unimol.anpr_github_metrics.github.IssueExtractor;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * This class is about open issues analytics
@@ -27,8 +28,8 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of open issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getCommentedOpenIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getCommentedOpenIssues(String repoName) throws GithubException {
+        throw new RuntimeException("Not implemented yet");
     }
 
 
@@ -39,8 +40,8 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of open issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getLabeledOpenIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getLabeledOpenIssues(String repoName) throws GithubException {
+        throw new RuntimeException("Not implemented yet");
     }
 
 
@@ -51,8 +52,21 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of open issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfCommentedOpenIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfCommentedOpenIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfCommentedIssues = 0;
+
+        ArrayList<Issue> openIssues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        for(Issue issue : openIssues){
+            if(!issue.getComments().isEmpty()){
+                System.out.println(issue.getTitle());
+                numberOfCommentedIssues++;
+            }
+        }
+        return numberOfCommentedIssues;
     }
 
 
@@ -63,8 +77,20 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of open issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfLabeledOpenIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfLabeledOpenIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfLabeledIssues = 0;
+
+        ArrayList<Issue> openIssues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        for(Issue issue : openIssues){
+            if(!issue.getLabels().isEmpty()){
+                numberOfLabeledIssues++;
+            }
+        }
+        return numberOfLabeledIssues;
     }
 
 
@@ -91,7 +117,19 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public int getNumberOfUncommentedOpenIssues(String repoName) throws GithubException {
-        return 0;
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUncommentedIssues = 0;
+
+        ArrayList<Issue> openIssues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        for(Issue issue : openIssues){
+            if(issue.getComments().isEmpty()){
+                numberOfUncommentedIssues++;
+            }
+        }
+        return numberOfUncommentedIssues;
     }
 
     /**
@@ -101,8 +139,20 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of open issues that have no labels
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfUnlabeledOpenIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfUnlabeledOpenIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUnlabeledIssues = 0;
+
+        ArrayList<Issue> openIssues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        for(Issue issue : openIssues){
+            if(issue.getLabels().isEmpty()){
+                numberOfUnlabeledIssues++;
+            }
+        }
+        return numberOfUnlabeledIssues;
     }
 
 

@@ -25,12 +25,11 @@ import java.util.HashMap;
  * - /average-first-response-time
  * - /closing-time-distribution
  * - /first-response-time-distribution
+ * - /number-of-commented-open-issues
+ * - /number-of-labeled-open-issues
  * - /number-of-open-issues
- * -
- * -
- * -
- * -
- * -
+ * - /number-of-uncommented-open-issues
+ * - /number-of-unlabeled-open-issues
  */
 @Path("/analytics")
 public class AnalyticsApi {
@@ -50,7 +49,8 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             Long meanTicketClosingTime = analytics.getAverageClosingTime(repoName);
-            return Response.status(Response.Status.OK).entity(meanTicketClosingTime).build();
+            return Response.ok(meanTicketClosingTime).build();
+            //return Response.status(Response.Status.OK).entity(meanTicketClosingTime).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -62,22 +62,6 @@ public class AnalyticsApi {
     @Path("/average-fixing-time/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAverageFixingTime(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
-        if (!checkSession(request.getSession())) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
-        Github github = (Github)request.getSession().getAttribute("github");
-
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
-    }
-
-
-    // ============================ AVERAGE TIME FROM LAST COMMENT ============================//
-    @GET
-    @Path("/average-fixing-time/{login-name}/{repository-name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAverageTimeFromLastComment(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -111,6 +95,20 @@ public class AnalyticsApi {
     }
 
 
+    // ============================ AVERAGE TIME FROM LAST COMMENT ============================//
+    @GET
+    @Path("/average-time-from-last-comment/{login-name}/{repository-name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAverageTimeFromLastComment(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
+        if (!checkSession(request.getSession())) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        Github github = (Github)request.getSession().getAttribute("github");
+
+        // TODO implement
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
 
 
     // ============================ COMMENTED CLOSED ISSUES ============================//
@@ -311,8 +309,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+
+        try {
+            int numberOfCommentedOpenIssues = analytics.getNumberOfCommentedOpenIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfCommentedOpenIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -334,7 +339,7 @@ public class AnalyticsApi {
 
     // ============================ NUMBER OF FIXED ISSUES ============================//
     @GET
-    @Path("/number-of-closed-issues/{login-name}/{repository-name}")
+    @Path("/number-of-fixed-issues/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getNumberOfFixedIssues(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
@@ -391,8 +396,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+
+        try {
+            int numberOfLabeledOpenIssues = analytics.getNumberOfLabeledOpenIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfLabeledOpenIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -462,8 +474,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+
+        try {
+            int numberOfUncommentedOpenIssues = analytics.getNumberOfUncommentedOpenIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUncommentedOpenIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -510,8 +529,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+
+        try {
+            int numberOfUnlabeledOpenIssues = analytics.getNumberOfUnlabeledOpenIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUnlabeledOpenIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
