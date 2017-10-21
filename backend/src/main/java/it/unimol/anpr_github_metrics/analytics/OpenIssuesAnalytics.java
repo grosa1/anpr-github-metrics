@@ -8,7 +8,6 @@ import it.unimol.anpr_github_metrics.github.IssueExtractor;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * This class is about open issues analytics
@@ -62,7 +61,6 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
         ArrayList<Issue> openIssues = new ArrayList<>(issueFactory.getOpenIssues(repository));
         for(Issue issue : openIssues){
             if(!issue.getComments().isEmpty()){
-                System.out.println(issue.getTitle());
                 numberOfCommentedIssues++;
             }
         }

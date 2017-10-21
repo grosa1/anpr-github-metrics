@@ -1,7 +1,6 @@
 package it.unimol.anpr_github_metrics.analytics;
 
 import com.jcabi.github.Github;
-import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.github.Authenticator;
 import it.unimol.anpr_github_metrics.github.AuthenticatorTest;
@@ -9,14 +8,12 @@ import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertEquals;
 
 public class ClosedIssuesAnalyticsTest {
     public static final Github NullGithub = null;
     public static final String RepositoryName = "grosa1/Spoon-Knife";
-    public static final IssueExtractorFactory.InstantiationStrategy Environment = IssueExtractorFactory.InstantiationStrategy.PRODUCTION;
+    public static final IssueExtractorFactory.InstantiationStrategy Environment = IssueExtractorFactory.InstantiationStrategy.TESTING;
 
     @Before
     public void setup() {
@@ -59,7 +56,7 @@ public class ClosedIssuesAnalyticsTest {
                 break;
 
             case PRODUCTION:
-                assertEquals(5, closedIssues);
+                assertEquals(9, closedIssues);
                 break;
         }
     }
@@ -80,7 +77,7 @@ public class ClosedIssuesAnalyticsTest {
                 break;
 
             case PRODUCTION:
-                assertEquals(2, numberOfCommented);
+                assertEquals(4, numberOfCommented);
                 break;
         }
     }
@@ -101,7 +98,7 @@ public class ClosedIssuesAnalyticsTest {
                 break;
 
             case PRODUCTION:
-                assertEquals(2, numberOflabeled);
+                assertEquals(4, numberOflabeled);
                 break;
         }
     }
@@ -122,7 +119,7 @@ public class ClosedIssuesAnalyticsTest {
                 break;
 
             case PRODUCTION:
-                assertEquals(3, numberOfUncommented);
+                assertEquals(5, numberOfUncommented);
                 break;
         }
     }
@@ -143,7 +140,7 @@ public class ClosedIssuesAnalyticsTest {
                 break;
 
             case PRODUCTION:
-                assertEquals(3, numberOfUnlabeled);
+                assertEquals(5, numberOfUnlabeled);
                 break;
         }
     }

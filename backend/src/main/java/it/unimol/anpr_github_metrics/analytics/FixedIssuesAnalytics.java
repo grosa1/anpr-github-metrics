@@ -75,8 +75,20 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of fixed issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfCommentedFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfCommentedFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfCommentedIssues = 0;
+
+        ArrayList<Issue> fixedIssues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        for(Issue issue : fixedIssues){
+            if(!issue.getComments().isEmpty()){
+                numberOfCommentedIssues++;
+            }
+        }
+        return numberOfCommentedIssues;
     }
 
     /**
@@ -86,8 +98,12 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of fixed issues
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        return issueFactory.getFixedIssues(repository).size();
     }
 
 
@@ -98,8 +114,20 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of fixed issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfLabeledFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfLabeledFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfLabeledIssues = 0;
+
+        ArrayList<Issue> fixedIssues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        for(Issue issue : fixedIssues){
+            if(!issue.getLabels().isEmpty()){
+                numberOfLabeledIssues++;
+            }
+        }
+        return numberOfLabeledIssues;
     }
 
 
@@ -110,21 +138,22 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an integer representing the number of fixed issues that have no comments
      * @throws GithubException if an error in encountered with github api
      */
-    public int getNumberOfUncommentedFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public int getNumberOfUncommentedFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUncommentedIssues = 0;
+
+        ArrayList<Issue> fixedIssues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        for(Issue issue : fixedIssues){
+            if(issue.getComments().isEmpty()){
+                numberOfUncommentedIssues++;
+            }
+        }
+        return numberOfUncommentedIssues;
     }
 
-
-    /**
-     * This method returns the number of fixed issues having no labels
-     *
-     * @param repoName the name of the repository to analyze
-     * @return an integer representing the number of fixed issues that have no labels
-     * @throws GithubException if an error in encountered with github api
-     */
-    public int getNumberOfUnlabeledFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
-    }
 
 
     /**
@@ -150,6 +179,28 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
         return fixedIssue;
     }
 
+    /**
+     * This method returns the number of fixed issues having no labels
+     *
+     * @param repoName the name of the repository to analyze
+     * @return an integer representing the number of fixed issues that have no labels
+     * @throws GithubException if an error in encountered with github api
+     */
+    public int getNumberOfUnlabeledFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUnlabeledIssues = 0;
+
+        ArrayList<Issue> fixedIssues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        for(Issue issue : fixedIssues){
+            if(issue.getLabels().isEmpty()){
+                numberOfUnlabeledIssues++;
+            }
+        }
+        return numberOfUnlabeledIssues;
+    }
 
     /**
      * This method returns all the fixed issues having no labels

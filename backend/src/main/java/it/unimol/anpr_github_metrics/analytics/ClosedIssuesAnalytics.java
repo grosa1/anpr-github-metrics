@@ -135,7 +135,6 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
         ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
         for(Issue issue : closedIssues){
             if(!issue.getComments().isEmpty()){
-                System.out.println(issue.getTitle());
                 numberOfCommentedIssues++;
             }
         }
@@ -184,35 +183,10 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
         ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
         for(Issue issue : closedIssues){
             if(issue.getComments().isEmpty()){
-                System.out.println(issue.getTitle());
                 numberOfUncommentedIssues++;
             }
         }
         return numberOfUncommentedIssues;
-    }
-
-
-    /**
-     * This method returns the number of closed issues having no labels
-     *
-     * @param repoName the name of the repository to analyze
-     * @return an integer representing the number of closed issues that have no labels
-     * @throws GithubException if an error in encountered with github api
-     */
-    public int getNumberOfUnlabeledClosedIssues(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        Repository repository = new Repository();
-        repository.setName(repoName);
-
-        int numberOfUnlabeledIssues = 0;
-
-        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
-        for(Issue issue : closedIssues){
-            if(issue.getLabels().isEmpty()){
-                numberOfUnlabeledIssues++;
-            }
-        }
-        return numberOfUnlabeledIssues;
     }
 
 
@@ -237,6 +211,29 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
         }
 
         return closedIssue;
+    }
+
+    /**
+     * This method returns the number of closed issues having no labels
+     *
+     * @param repoName the name of the repository to analyze
+     * @return an integer representing the number of closed issues that have no labels
+     * @throws GithubException if an error in encountered with github api
+     */
+    public int getNumberOfUnlabeledClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        int numberOfUnlabeledIssues = 0;
+
+        ArrayList<Issue> closedIssues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        for(Issue issue : closedIssues){
+            if(issue.getLabels().isEmpty()){
+                numberOfUnlabeledIssues++;
+            }
+        }
+        return numberOfUnlabeledIssues;
     }
 
     /**

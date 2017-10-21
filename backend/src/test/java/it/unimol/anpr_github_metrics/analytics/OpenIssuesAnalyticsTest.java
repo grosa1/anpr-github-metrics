@@ -6,12 +6,10 @@ import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.github.Authenticator;
 import it.unimol.anpr_github_metrics.github.AuthenticatorTest;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
-import it.unimol.anpr_github_metrics.github.IssueExtractorImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,10 +18,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class OpenIssuesAnalyticsTest {
     public static final Github NullGithub = null;
+    public static final String RepositoryName = "grosa1/Spoon-Knife";
+    public static final IssueExtractorFactory.InstantiationStrategy Environment = IssueExtractorFactory.InstantiationStrategy.TESTING;
 
     @Before
     public void setup() {
-        IssueExtractorFactory.setImplementorStrategy(IssueExtractorFactory.InstantiationStrategy.TESTING);
+        IssueExtractorFactory.setImplementorStrategy(Environment);
     }
 
     @Test
@@ -41,12 +41,20 @@ public class OpenIssuesAnalyticsTest {
         Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
 
         Repository repository = new Repository();
-        repository.setName("grosa1/Spoon-Knife");
+        repository.setName(RepositoryName);
 
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         int numberOfCommented = analytics.getNumberOfCommentedOpenIssues(repository.getName());
 
-        assertEquals(2,numberOfCommented);
+        switch (Environment){
+            case TESTING:
+                assertEquals(2,numberOfCommented);
+                break;
+
+            case PRODUCTION:
+                assertEquals(1, numberOfCommented);
+                break;
+        }
     }
 
     @Test
@@ -54,19 +62,41 @@ public class OpenIssuesAnalyticsTest {
         Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
 
         Repository repository = new Repository();
-        repository.setName("grosa1/Spoon-Knife");
+        repository.setName(RepositoryName);
 
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         int numberOflabeled = analytics.getNumberOfLabeledOpenIssues(repository.getName());
 
-        assertEquals(2,numberOflabeled);
+        switch (Environment){
+            case TESTING:
+                assertEquals(2,numberOflabeled);
+                break;
+
+            case PRODUCTION:
+                assertEquals(1, numberOflabeled);
+                break;
+        }
     }
 
     @Test
     public void getNumberOfOpenIssues() throws Exception {
-        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(NullGithub);
-        int openIssues = analytics.getNumberOfOpenIssues("myRepoName");
-        assertEquals(4, openIssues);
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        int openIssues = analytics.getNumberOfOpenIssues(repository.getName());
+
+        switch(Environment){
+            case TESTING:
+                assertEquals(4, openIssues);
+                break;
+
+            case PRODUCTION:
+                assertEquals(3, openIssues);
+                break;
+        }
     }
 
     @Test
@@ -74,12 +104,20 @@ public class OpenIssuesAnalyticsTest {
         Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
 
         Repository repository = new Repository();
-        repository.setName("grosa1/Spoon-Knife");
+        repository.setName(RepositoryName);
 
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         int numberOfUncommented = analytics.getNumberOfUncommentedOpenIssues(repository.getName());
 
-        assertEquals(2,numberOfUncommented);
+        switch(Environment){
+            case TESTING:
+                assertEquals(2,numberOfUncommented);
+                break;
+
+            case PRODUCTION:
+                assertEquals(2,numberOfUncommented);
+                break;
+        }
     }
 
     @Test
@@ -87,28 +125,67 @@ public class OpenIssuesAnalyticsTest {
         Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
 
         Repository repository = new Repository();
-        repository.setName("grosa1/Spoon-Knife");
+        repository.setName(RepositoryName);
 
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         int numberOfUnlabeled = analytics.getNumberOfUnlabeledOpenIssues(repository.getName());
 
-        assertEquals(2,numberOfUnlabeled);
+        switch(Environment){
+            case TESTING:
+                assertEquals(2,numberOfUnlabeled);
+                break;
+
+            case PRODUCTION:
+                assertEquals(2, numberOfUnlabeled);
+                break;
+        }
     }
 
     @Test
     public void getUncommentedOpenIssue() throws Exception {
-        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(NullGithub);
-        ArrayList<Issue> issues = analytics.getUncommentedOpenIssue("myRepoName");
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        ArrayList<Issue> issues = analytics.getUncommentedOpenIssue(repository.getName());
+
         assertEquals(ArrayList.class, issues.getClass());
-        assertEquals(2, issues.size());
+
+        switch(Environment){
+            case TESTING:
+                assertEquals(2, issues.size());
+                break;
+
+            case PRODUCTION:
+                assertEquals(2, issues.size());
+                break;
+        }
+
     }
 
     @Test
     public void getUnlabeledOpenIssue() throws Exception {
-        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(NullGithub);
-        ArrayList<Issue> issues = analytics.getUnlabeledOpenIssues("myRepoName");
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        ArrayList<Issue> issues = analytics.getUnlabeledOpenIssues(repository.getName());
         assertEquals(ArrayList.class, issues.getClass());
-        assertEquals(2, issues.size());
+
+        switch(Environment){
+            case TESTING:
+                assertEquals(2, issues.size());
+                break;
+
+            case PRODUCTION:
+                assertEquals(2, issues.size());
+                break;
+        }
+
     }
 
 }

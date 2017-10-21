@@ -27,13 +27,19 @@ import java.util.HashMap;
  * - /first-response-time-distribution
  * - /number-of-closed-issues
  * - /number-of-commented-closed-issues
+ * - /number-of-commented-fixed-issues
  * - /number-of-commented-labeled-issues
  * - /number-of-commented-open-issues
+ * - /number-of-fixed-issues
+ * - /number-of-labeled-closed-issues ---
+ * - /number-of-labeled-fixed-issues
  * - /number-of-labeled-open-issues
  * - /number-of-open-issues
  * - /number-of-uncommented-closed-issues
+ * - /number-of-uncommented-fixed-issues
  * - /number-of-uncommented-open-issues
  * - /number-of-unlabeled-closed-issues
+ * - /number-of-unlabeled-fixed-issues
  * - /number-of-unlabeled-open-issues
  */
 @Path("/analytics")
@@ -305,8 +311,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            int numberOfCommentedFixedIssues = analytics.getNumberOfCommentedFixedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfCommentedFixedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -367,8 +380,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            int numberOfFixedIssues = analytics.getNumberOfFixedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfFixedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -406,8 +426,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            int numberOfLabeledFixedIssues = analytics.getNumberOfLabeledFixedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfLabeledFixedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -491,8 +518,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            int numberOfUncommentedFixedIssues = analytics.getNumberOfUncommentedFixedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUncommentedFixedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -553,8 +587,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            int numberOfUnlabeledFixedIssues = analytics.getNumberOfUnlabeledFixedIssues(repoName);
+            return Response.status(Response.Status.OK).entity(numberOfUnlabeledFixedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
