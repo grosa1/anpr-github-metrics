@@ -63,16 +63,14 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
         Repository repository = new Repository();
         repository.setName(repoName);
 
-        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getClosedIssues(repository));
 
         HashMap<Issue, Long> distribution = new HashMap<>();    //The ticket distribution over closing time
 
-        for (Issue issue : issues) {
-            if (issue.getClosedTime() != null) {
-                long closingTime = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
-                distribution.put(issue, closingTime);
-            }
-        }
+        issues.forEach(issue -> {
+            long closingTime = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+            distribution.put(issue, closingTime);
+        });
 
         return distribution;
     }
@@ -85,8 +83,15 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of closed issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getCommentedClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getCommentedClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        issues.removeIf(issue -> issue.getComments().isEmpty());
+
+        return issues;
     }
 
 
@@ -97,8 +102,15 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of closed issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getLabeledClosedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getLabeledClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        issues.removeIf(issue -> issue.getLabels().isEmpty());
+
+        return issues;
     }
 
 
@@ -191,29 +203,6 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
 
 
     /**
-     * This method returns all closed issues having no comments
-     *
-     * @param repoName the name of the repository to analyze
-     * @return an ArrayList of closed issues that have no comments
-     * @throws GithubException if an error in encountered with github api
-     */
-    public ArrayList<Issue> getUncommentedClosedIssues(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        Repository repository = new Repository();
-        repository.setName(repoName);
-
-        ArrayList<Issue> closedIssue = new ArrayList<>();
-
-        for (Issue issue : new ArrayList<>(issueFactory.getClosedIssues(repository))) {
-            if (issue.getComments().isEmpty()) {
-                closedIssue.add(issue);
-            }
-        }
-
-        return closedIssue;
-    }
-
-    /**
      * This method returns the number of closed issues having no labels
      *
      * @param repoName the name of the repository to analyze
@@ -236,6 +225,25 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
         return numberOfUnlabeledIssues;
     }
 
+
+    /**
+     * This method returns all closed issues having no comments
+     *
+     * @param repoName the name of the repository to analyze
+     * @return an ArrayList of closed issues that have no comments
+     * @throws GithubException if an error in encountered with github api
+     */
+    public ArrayList<Issue> getUncommentedClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        issues.removeIf(issue -> !issue.getComments().isEmpty());
+
+        return issues;
+    }
+
     /**
      * This method returns all the closed issues having no labels
      *
@@ -244,17 +252,13 @@ public class ClosedIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getUnlabeledClosedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        ArrayList<Issue> closedIssues = new ArrayList<>();
 
-        for (Issue issue : new ArrayList<>(issueFactory.getClosedIssues(repository))) {
-            if (issue.getLabels().isEmpty()) {
-                closedIssues.add(issue);
-            }
-        }
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getClosedIssues(repository));
+        issues.removeIf(issue -> !issue.getLabels().isEmpty());
 
-        return closedIssues;
+        return issues;
     }
 }

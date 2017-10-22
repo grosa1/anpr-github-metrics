@@ -28,7 +28,14 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getCommentedOpenIssues(String repoName) throws GithubException {
-        throw new RuntimeException("Not implemented yet");
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        issues.removeIf(issue -> issue.getComments().isEmpty());
+
+        return issues;
     }
 
 
@@ -40,7 +47,14 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getLabeledOpenIssues(String repoName) throws GithubException {
-        throw new RuntimeException("Not implemented yet");
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        issues.removeIf(issue -> issue.getLabels().isEmpty());
+
+        return issues;
     }
 
 
@@ -162,18 +176,14 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getUncommentedOpenIssue(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        ArrayList<Issue> openIssues = new ArrayList<>();
 
-        for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
-            if (issue.getComments().isEmpty()) {
-                openIssues.add(issue);
-            }
-        }
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        issues.removeIf(issue -> !issue.getComments().isEmpty());
 
-        return openIssues;
+        return issues;
     }
 
     /**
@@ -184,18 +194,14 @@ public class OpenIssuesAnalytics extends IssuesAnalytics {
      * @throws GithubException if an error in encountered with github api
      */
     public ArrayList<Issue> getUnlabeledOpenIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
         Repository repository = new Repository();
         repository.setName(repoName);
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        ArrayList<Issue> openIssues = new ArrayList<>();
 
-        for (Issue issue : new ArrayList<>(issueFactory.getOpenIssues(repository))) {
-            if (issue.getLabels().isEmpty()) {
-                openIssues.add(issue);
-            }
-        }
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getOpenIssues(repository));
+        issues.removeIf(issue -> !issue.getLabels().isEmpty());
 
-        return openIssues;
+        return issues;
     }
 
 }

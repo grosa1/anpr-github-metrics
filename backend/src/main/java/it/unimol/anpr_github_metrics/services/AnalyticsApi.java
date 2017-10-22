@@ -5,7 +5,10 @@ import com.jcabi.github.Github;
 import it.unimol.anpr_github_metrics.analytics.*;
 import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.github.GithubException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
@@ -59,9 +62,8 @@ public class AnalyticsApi {
         String repoName = loginName+"/"+repoPath;
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
-            Long meanTicketClosingTime = analytics.getAverageClosingTime(repoName);
-            return Response.ok(meanTicketClosingTime).build();
-            //return Response.status(Response.Status.OK).entity(meanTicketClosingTime).build();
+            Long averageClosingTime = analytics.getAverageClosingTime(repoName);
+            return Response.ok(averageClosingTime).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -79,8 +81,14 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+        try {
+            Long averageFixingTime = analytics.getAverageFixingTime(repoName);
+            return Response.ok(averageFixingTime).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -98,8 +106,8 @@ public class AnalyticsApi {
         String repoName = loginName+"/"+repoPath;
         IssuesAnalytics analytics = new IssuesAnalytics(github);
         try {
-            Long meanFirstResponseTime = analytics.getAverageFirstResponseTime(repoName);
-            return Response.status(Response.Status.OK).entity(meanFirstResponseTime).build();
+            Long averageFirstResponseTime = analytics.getAverageFirstResponseTime(repoName);
+            return Response.ok(averageFirstResponseTime).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -117,8 +125,14 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        IssuesAnalytics analytics = new IssuesAnalytics(github);
+        try {
+            Long averageTimeFromLastComment = analytics.getAverageTimeFromLastComment(repoName);
+            return Response.ok(averageTimeFromLastComment).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -133,8 +147,16 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+        try {
+            final ArrayList<Issue> commentedIssues = analytics.getCommentedClosedIssues(repoName);
+            JSONArray json = JSONConverter.issuesToJSON(commentedIssues);
+            return Response.ok(json).build();
+
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -149,8 +171,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+        try {
+            ArrayList<Issue> commentedIssues = analytics.getCommentedFixedIssues(repoName);
+            // TODO transalate in JsonObject
+            return Response.ok(commentedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -165,8 +194,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        try {
+            ArrayList<Issue> commentedIssues = analytics.getCommentedOpenIssues(repoName);
+            // TODO transalate in JsonObject
+            return Response.ok(commentedIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -185,7 +221,8 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             HashMap<Issue, Long> ticketClosingTimeDistribution = analytics.getClosingTimeDistribution(repoName);
-            return Response.status(Response.Status.OK).entity(ticketClosingTimeDistribution).build();
+            //TODO return JsonObject
+            return Response.ok(ticketClosingTimeDistribution).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -207,7 +244,8 @@ public class AnalyticsApi {
         IssuesAnalytics analytics = new IssuesAnalytics(github);
         try {
             HashMap<Issue, Long> firstResponseTimeDistribution = analytics.getFirstResponseTimeDistribution(repoName);
-            return Response.status(Response.Status.OK).entity(firstResponseTimeDistribution).build();
+            //TODO return JsonObject
+            return Response.ok(firstResponseTimeDistribution).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -225,8 +263,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+        try {
+            HashMap<Issue, Long> fixingTimeDistribution = analytics.getFixingTimeDistribution(repoName);
+            //TODO return JsonObject
+            return Response.ok(fixingTimeDistribution).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -241,8 +286,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+        try {
+            ArrayList<Issue> labeledIssues = analytics.getLabeledClosedIssues(repoName);
+            // TODO transalate in JsonObject
+            return Response.ok(labeledIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -257,8 +309,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+        try {
+            ArrayList<Issue> labeledIssues = analytics.getLabeledFixedIssues(repoName);
+            // TODO transalate in JsonObject
+            return Response.ok(labeledIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // ============================ LABELED OPEN ISSUES ============================//
@@ -272,8 +331,15 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        try {
+            ArrayList<Issue> labeledIssues = analytics.getLabeledOpenIssues(repoName);
+            // TODO transalate in JsonObject
+            return Response.ok(labeledIssues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -659,7 +725,8 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             ArrayList<Issue> issues = analytics.getUncommentedClosedIssues(repoName);
-            return Response.status(Response.Status.OK).entity(issues).build();
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -682,7 +749,8 @@ public class AnalyticsApi {
         FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
         try {
             ArrayList<Issue> issues = analytics.getUncommentedFixedIssues(repoName);
-            return Response.status(Response.Status.OK).entity(issues).build();
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -705,7 +773,8 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUncommentedOpenIssue(repoName);
-            return Response.status(Response.Status.OK).entity(issues).build();
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -723,8 +792,16 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
+
+        try {
+            ArrayList<Issue> issues = analytics.getUnlabeledClosedIssues(repoName);
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -739,8 +816,16 @@ public class AnalyticsApi {
 
         Github github = (Github)request.getSession().getAttribute("github");
 
-        // TODO implement
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        String repoName = loginName+"/"+repoPath;
+        FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
+
+        try {
+            ArrayList<Issue> issues = analytics.getUnlabeledFixedIssues(repoName);
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
+        } catch (GithubException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -760,7 +845,8 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUnlabeledOpenIssues(repoName);
-            return Response.status(Response.Status.OK).entity(issues).build();
+            //  TODO return JsonObject
+            return Response.ok(issues).build();
         } catch (GithubException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }

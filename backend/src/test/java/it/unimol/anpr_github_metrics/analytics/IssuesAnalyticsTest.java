@@ -8,8 +8,10 @@ import it.unimol.anpr_github_metrics.github.AuthenticatorTest;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 import org.junit.Before;
 import org.junit.Test;
+import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
@@ -34,8 +36,9 @@ public class IssuesAnalyticsTest {
         long meanFirstResponseTime = analytics.getAverageFirstResponseTime(repository.getName());
 
         switch (Environment){
-            case TESTING:
-                assertEquals(15225000,meanFirstResponseTime);
+                case TESTING:
+                    assertTrue(meanFirstResponseTime >= 0);
+                    assertEquals(18000000,meanFirstResponseTime);
                 break;
 
             case PRODUCTION:
@@ -46,7 +49,25 @@ public class IssuesAnalyticsTest {
 
     @Test
     public void getAverageTimeFromLastComment() throws Exception {
-        //TODO write test
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        IssuesAnalytics analytics = new IssuesAnalytics(github);
+        long averageTimeFromLastComment = analytics.getAverageTimeFromLastComment(repository.getName());
+
+        switch (Environment){
+            case TESTING:
+                assertTrue(averageTimeFromLastComment >= 0);
+                assertTrue(averageTimeFromLastComment >= 1879200000);
+                System.out.println(averageTimeFromLastComment);
+                break;
+
+            case PRODUCTION:
+                assertTrue(averageTimeFromLastComment >= 0);
+                break;
+        }
     }
 
     @Test
@@ -58,8 +79,18 @@ public class IssuesAnalyticsTest {
 
 
         IssuesAnalytics analytics = new IssuesAnalytics(github);
-        HashMap<Issue, Long> firstResponseTime = analytics.getFirstResponseTimeDistribution(repository.getName());
-        assertEquals(HashMap.class, firstResponseTime.getClass());
+        HashMap<Issue, Long> distribution = analytics.getFirstResponseTimeDistribution(repository.getName());
+        assertEquals(HashMap.class, distribution.getClass());
+
+        switch (Environment){
+            case TESTING:
+                assertEquals(6, distribution.size());
+                break;
+
+            case PRODUCTION:
+                //assertEquals(0, distribution.size());
+                break;
+        }
     }
 
     @Test

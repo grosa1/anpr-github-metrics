@@ -28,12 +28,48 @@ public class OpenIssuesAnalyticsTest {
 
     @Test
     public void getCommentedOpenIssues() throws Exception {
-        //TODO write test
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        ArrayList<Issue> issues = analytics.getCommentedOpenIssues(repository.getName());
+
+        assertEquals(ArrayList.class, issues.getClass());
+
+        switch (Environment){
+            case TESTING:
+                assertEquals(2,issues.size());
+                break;
+
+            case PRODUCTION:
+                assertEquals(1, issues.size());
+                break;
+        }
     }
 
     @Test
     public void getLabeledOpenIssues() throws Exception {
-        //TODO write test
+        Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
+
+        Repository repository = new Repository();
+        repository.setName(RepositoryName);
+
+        OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
+        ArrayList<Issue> issues = analytics.getCommentedOpenIssues(repository.getName());
+
+        assertEquals(ArrayList.class, issues.getClass());
+
+        switch (Environment){
+            case TESTING:
+                assertEquals(2,issues.size());
+                break;
+
+            case PRODUCTION:
+                assertEquals(1, issues.size());
+                break;
+        }
     }
 
     @Test
@@ -174,6 +210,7 @@ public class OpenIssuesAnalyticsTest {
 
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         ArrayList<Issue> issues = analytics.getUnlabeledOpenIssues(repository.getName());
+
         assertEquals(ArrayList.class, issues.getClass());
 
         switch(Environment){

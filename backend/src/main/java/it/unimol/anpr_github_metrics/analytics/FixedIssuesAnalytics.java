@@ -2,13 +2,16 @@ package it.unimol.anpr_github_metrics.analytics;
 
 import com.jcabi.github.Github;
 import it.unimol.anpr_github_metrics.beans.Issue;
+import it.unimol.anpr_github_metrics.beans.IssueComment;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.github.GithubException;
 import it.unimol.anpr_github_metrics.github.IssueExtractor;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class is about fixed issues analytics
@@ -27,8 +30,24 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return a long indicating the average interval between the creation of a ticket and its fix
      * @throws GithubException if an error in encountered with github api
      */
-    public long getAverageFixingTime(String repoName) throws Exception {
-        throw new Exception("Not implemented yet.");
+    public long getAverageFixingTime(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+
+        long fixingTime = 0L;
+        int numberOfFixedIssues= 0;
+
+        for (Issue issue : issues) {
+            if (issue.getClosedTime() != null) {
+                fixingTime += issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+                numberOfFixedIssues++;
+            }
+        }
+
+        return (numberOfFixedIssues > 0) ? fixingTime/numberOfFixedIssues : 0;
     }
 
 
@@ -39,8 +58,21 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return a HashMap indicating the interval between a ticket creation and its fix's date (value) associated to a ticket (key)
      * @throws GithubException if an error in encountered with github api
      */
-    public HashMap<Issue, Long> getFixingTimeDistribution(String repoName) throws Exception {
-        throw new Exception("Not implemented yet.");
+    public HashMap<Issue, Long> getFixingTimeDistribution(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+
+        HashMap<Issue, Long> distribution = new HashMap<>();
+
+        issues.forEach(issue -> {
+            long fixingTime = issue.getClosedTime().getTime() - issue.getCreatedTime().getTime();
+            distribution.put(issue, fixingTime);
+        });
+
+        return distribution;
     }
 
 
@@ -51,8 +83,15 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of fixed issues that have at least one comment
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getCommentedFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getCommentedFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.removeIf(issue -> issue.getComments().isEmpty());
+
+        return issues;
     }
 
 
@@ -63,8 +102,15 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
      * @return an ArrayList of fixed issues that have at least one label
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getLabeledFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getLabeledFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.removeIf(issue -> issue.getLabels().isEmpty());
+
+        return issues;
     }
 
 
@@ -155,30 +201,6 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
     }
 
 
-
-    /**
-     * This method returns all fixed issues having no comment
-     *
-     * @param repoName the name of the repository to analyze
-     * @return an ArrayList of fixed issues that have no comment
-     * @throws GithubException if an error in encountered with github api
-     */
-    public ArrayList<Issue> getUncommentedFixedIssues(String repoName) throws GithubException {
-        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
-        Repository repository = new Repository();
-        repository.setName(repoName);
-
-        ArrayList<Issue> fixedIssue = new ArrayList<>();
-
-        for (Issue issue : new ArrayList<>(issueFactory.getFixedIssues(repository))) {
-            if (issue.getComments().isEmpty()) {
-                fixedIssue.add(issue);
-            }
-        }
-
-        return fixedIssue;
-    }
-
     /**
      * This method returns the number of fixed issues having no labels
      *
@@ -203,13 +225,38 @@ public class FixedIssuesAnalytics extends IssuesAnalytics {
     }
 
     /**
+     * This method returns all fixed issues having no comment
+     *
+     * @param repoName the name of the repository to analyze
+     * @return an ArrayList of fixed issues that have no comment
+     * @throws GithubException if an error in encountered with github api
+     */
+    public ArrayList<Issue> getUncommentedFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.removeIf(issue -> !issue.getComments().isEmpty());
+
+        return issues;
+    }
+
+    /**
      * This method returns all the fixed issues having no labels
      *
      * @param repoName the name of the repository to analyze
      * @return an ArrayList of fixed issues that have no labels
      * @throws GithubException if an error in encountered with github api
      */
-    public ArrayList<Issue> getUnlabeledFixedIssues(String repoName) throws Exception {
-        throw new Exception("Not implemented yet");
+    public ArrayList<Issue> getUnlabeledFixedIssues(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getFixedIssues(repository));
+        issues.removeIf(issue -> !issue.getLabels().isEmpty());
+
+        return issues;
     }
 }

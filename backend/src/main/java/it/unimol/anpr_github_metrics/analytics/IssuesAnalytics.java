@@ -44,7 +44,7 @@ public class IssuesAnalytics {
             List<IssueComment> comments = new ArrayList<>(issue.getComments());
             comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
 
-            if (!comments.isEmpty()) {
+            if (comments.size() > 0) {
                 firstReponseTime += comments.get(0).getCreatedTime().getTime() - issue.getCreatedTime().getTime();
                 numberOfComments++;
             }
@@ -60,8 +60,28 @@ public class IssuesAnalytics {
      * @return a long indicating the average interval between the last comment and the current time, expressed in milliseconds
      * @throws GithubException if an error in encountered with github api
      */
-    public long getAverageTimeFromLastComment(String repoName) throws Exception {
-       throw new Exception("Not implemented yet.");
+    public long getAverageTimeFromLastComment(String repoName) throws GithubException {
+        IssueExtractor issueFactory = IssueExtractorFactory.getInstance(this.github);
+        Repository repository = new Repository();
+        repository.setName(repoName);
+
+        ArrayList<Issue> issues = new ArrayList<>(issueFactory.getIssues(repository));
+
+        long timeFromLastComment = 0L;
+        long now = new Date().getTime();
+        int numberOfCommentedIssues = 0;
+
+        for(Issue issue : issues){
+            List<IssueComment> comments = new ArrayList<>(issue.getComments());
+            comments.sort(Comparator.comparing(IssueComment::getCreatedTime));
+
+            if(comments.size() > 0){
+                timeFromLastComment += now - comments.get(comments.size()-1).getCreatedTime().getTime();
+                numberOfCommentedIssues++;
+            }
+        }
+
+        return numberOfCommentedIssues > 0 ? timeFromLastComment/numberOfCommentedIssues : 0;
     }
 
     /**
