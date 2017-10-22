@@ -12,9 +12,11 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 import java.io.IOException;
+import java.security.cert.CollectionCertStoreParameters;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -118,119 +120,34 @@ public class IssueExtractorImpl implements IssueExtractor {
             Repo remoteRepository = github.repos().get(new Coordinates.Simple(repository.getName()));
             Map<String, String> params = new HashMap<>();
             params.put("state", "all");
+
+            ExecutorService executorService = Executors.newCachedThreadPool();
+            Collection<Callable<Issue>> callables = new ArrayList<>();
+
             for (com.jcabi.github.Issue remoteIssue : remoteRepository.issues().iterate(params)) {
-                try {
-                    issues.add(loadIssue(repository, remoteIssue));
-                } catch (IOException e) {
-                    throw new GithubException();
-                }
+                callables.add(new IssueLoaderThread(this.github, repository, remoteIssue));
             }
+
+            try {
+                List<Future<Issue>> futures = executorService.invokeAll(callables);
+
+                for(Future<Issue> future : futures){
+                    Issue issue = null;
+                    try {
+                        issue = future.get();
+                        issues.add(issue);
+                    } catch (InterruptedException | ExecutionException e) {
+                        // Ignore the issue
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                throw new GithubException();
+            }
+
             repository.setIssues(issues);
         }
         return repository.getIssues();
-    }
-
-    private Issue loadIssue(Repo remoteRepository, Repository repository, int number) throws IOException {
-        com.jcabi.github.Issue remoteIssue = remoteRepository.issues().get(number);
-        return loadIssue(repository, remoteIssue);
-    }
-
-    private Issue loadIssue(Repository repository, com.jcabi.github.Issue remoteIssue) throws IOException {
-        JsonObject issueJson = remoteIssue.json();
-        com.jcabi.github.Issue.Smart smartIssue = new com.jcabi.github.Issue.Smart(remoteIssue);
-
-        Date lastClosedDate = null;
-        Date lastReopenedDate = new Date(0);
-
-        Date lastDuplicatedMarkDate = null;
-        Date lastUnduplicatedMarkDate = new Date(0);
-
-        boolean fixed = false;
-
-        for (Event event : remoteIssue.events()) {
-            switch (event.json().getString("event")) {
-                case "closed":
-                    Date newClosed = DateUtils.getMandatoryDate(event.json().getString("created_at"));
-                    if (lastClosedDate == null || newClosed.compareTo(lastClosedDate) > 0)
-                        lastClosedDate = newClosed;
-
-                    if (!event.json().isNull("commit_id")) {
-                        fixed = true;
-                    }
-
-                    break;
-                case "reopened":
-                    Date newReopenedDate = DateUtils.getMandatoryDate(event.json().getString("created_at"));
-                    if (newReopenedDate.compareTo(lastReopenedDate) > 0)
-                        lastReopenedDate = newReopenedDate;
-                    break;
-                case "marked_as_duplicated":
-                    Date newDuplicated = DateUtils.getMandatoryDate(event.json().getString("created_at"));
-                    if (lastDuplicatedMarkDate == null || newDuplicated.compareTo(lastDuplicatedMarkDate) > 0)
-                        lastDuplicatedMarkDate = newDuplicated;
-                    break;
-                case "unmarked_as_duplicated":
-                    Date newUnduplicated = DateUtils.getMandatoryDate(event.json().getString("created_at"));
-                    if (newUnduplicated.compareTo(lastUnduplicatedMarkDate) > 0)
-                        lastUnduplicatedMarkDate = newUnduplicated;
-                    break;
-            }
-        }
-
-        Issue issue = new Issue();
-        issue.setNumber(remoteIssue.number());
-        issue.setAuthor(loadUser(issueJson.getJsonObject("user").getString("login")));
-
-        issue.setUrl(issueJson.getString("html_url"));
-        issue.setTitle(issueJson.getString("title"));
-        issue.setBody(issueJson.getString("body"));
-
-        issue.setCreatedTime(DateUtils.getMandatoryDate(issueJson.getString("created_at")));
-        issue.setUpdatedTime(DateUtils.getOptionalDate(issueJson.getString("updated_at")));
-        if (!issueJson.isNull("closed_at"))
-            issue.setClosedTime(DateUtils.getMandatoryDate(issueJson.getString("closed_at")));
-
-        issue.setFixed(fixed);
-
-        issue.setClosed(!smartIssue.isOpen());
-
-        issue.setLocked(issueJson.getBoolean("locked"));
-
-        Collection<IssueComment> comments = new ArrayList<>();
-        for (Comment remoteComment : remoteIssue.comments().iterate(issue.getCreatedTime())) {
-            JsonObject commentJson = remoteComment.json();
-
-            IssueComment comment = new IssueComment();
-            comment.setAuthor(loadUser(commentJson.getJsonObject("user").getString("login")));
-            comment.setBody(commentJson.getString("body"));
-            comment.setCreatedTime(DateUtils.getMandatoryDate(commentJson.getString("created_at")));
-            comment.setUpdatedTime(DateUtils.getMandatoryDate(commentJson.getString("updated_at")));
-            comment.setUrl(commentJson.getString("html_url"));
-
-            comment.setIssue(issue);
-
-            comments.add(comment);
-        }
-        issue.setComments(comments);
-        issue.setRepository(repository);
-
-        Collection<Issue.Label> labels = new HashSet<>();
-        for (Label label : remoteIssue.labels().iterate()) {
-            if (label.name().equalsIgnoreCase("bug")) {
-                labels.add(Issue.Label.BUG);
-            } else if (label.name().equalsIgnoreCase("enhancement")) {
-                labels.add(Issue.Label.ENHANCEMENT);
-            } else if (label.name().equalsIgnoreCase("help wanted")) {
-                labels.add(Issue.Label.HELP);
-            } else if (label.name().equalsIgnoreCase("question")) {
-                labels.add(Issue.Label.QUESTION);
-            } else if (label.name().equalsIgnoreCase("invalid")) {
-                issue.setInvalid(true);
-            }
-        }
-        issue.setLabels(labels);
-
-        return issue;
     }
 
     private Commit loadCommit(Repo remoteRepository, String commitId) throws IOException {
