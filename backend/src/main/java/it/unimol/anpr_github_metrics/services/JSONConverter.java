@@ -1,6 +1,7 @@
 package it.unimol.anpr_github_metrics.services;
 
 import it.unimol.anpr_github_metrics.beans.Issue;
+import it.unimol.anpr_github_metrics.beans.IssueComment;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.beans.User;
 import org.json.JSONArray;
@@ -14,16 +15,50 @@ import java.util.Collections;
  */
 public class JSONConverter {
 
-    public static JSONArray issuesToJSON(final Collection<Issue> issues) {
+    public static JSONArray issueCommentsToJSONArray(final Collection<IssueComment> comments) throws IllegalArgumentException {
+
+        if(null == comments) throw new IllegalArgumentException("Null parameter");
+
         JSONArray array = new JSONArray();
-        issues.forEach(issue -> {
-            array.put(issueToJSON(issue));
+        comments.forEach(comment -> {
+            array.put(issueCommentToJSONObject(comment));
         });
 
         return array;
     }
 
-    public static JSONObject issueToJSON(final Issue issue) {
+    public static JSONObject issueCommentToJSONObject(final IssueComment comment) throws IllegalArgumentException {
+
+        if(null == comment) throw new IllegalArgumentException("Null parameter");
+
+        JSONObject json = new JSONObject();
+
+        json.put("author", userToJSONObject(comment.getAuthor()));
+        json.put("body", comment.getBody());
+        json.put("created_at", comment.getCreatedTime().getTime());
+        json.put("updated_at", comment.getUpdatedTime().getTime());
+        json.put("issue_number", comment.getIssue().getNumber());
+        json.put("url", comment.getUrl());
+
+        return json;
+    }
+
+    public static JSONArray issuesToJSONArray(final Collection<Issue> issues) throws IllegalArgumentException {
+
+        if(null == issues) throw new IllegalArgumentException("Null parameter");
+
+        JSONArray array = new JSONArray();
+        issues.forEach(issue -> {
+            array.put(issueToJSONObject(issue));
+        });
+
+        return array;
+    }
+
+    public static JSONObject issueToJSONObject(final Issue issue) throws IllegalArgumentException {
+
+        if(null == issue) throw new IllegalArgumentException("Null parameter");
+
         JSONObject json = new JSONObject();
 
         json.put("number", issue.getNumber());
@@ -38,7 +73,7 @@ public class JSONConverter {
         json.put("invalid", issue.isInvalid());
         json.put("locked", issue.isLocked());
 
-        json.put("author", userToJSON(issue.getAuthor()));
+        json.put("author", userToJSONObject(issue.getAuthor()));
 
         // A Json object representing only the name and url of the repository
         JSONObject lightRepo = new JSONObject();
@@ -47,10 +82,29 @@ public class JSONConverter {
 
         json.put("repository", lightRepo);
 
+        json.put("comments", issueCommentsToJSONArray(issue.getComments()));
+        json.put("labels", labelsToJSONArray(issue.getLabels()));
+
         return json;
     }
 
-    public static JSONObject repositoryToJSON(final Repository repo) {
+
+    public static JSONArray labelsToJSONArray(final Collection<Issue.Label> labels) throws IllegalArgumentException {
+
+        if(null == labels) throw new IllegalArgumentException("Null parameter");
+
+        JSONArray array = new JSONArray();
+        labels.forEach(label -> {
+            array.put(label.toString());
+        });
+
+        return array;
+    }
+
+    public static JSONObject repositoryToJSONObject(final Repository repo) throws IllegalArgumentException {
+
+        if(null == repo) throw new IllegalArgumentException("Null parameter");
+
         JSONObject json = new JSONObject();
 
         json.put("name", repo.getName());
@@ -58,20 +112,23 @@ public class JSONConverter {
 
         JSONArray issues = new JSONArray();
         repo.getIssues().forEach(issue -> {
-            issues.put(issueToJSON(issue));
+            issues.put(issueToJSONObject(issue));
         });
         json.put("issues", issues);
 
         JSONArray contributors = new JSONArray();
         repo.getContributors().forEach(contributor -> {
-            contributors.put(userToJSON(contributor));
+            contributors.put(userToJSONObject(contributor));
         });
         json.put("contributors", contributors);
 
         return json;
     }
 
-    public static JSONObject userToJSON(final User user) {
+    public static JSONObject userToJSONObject(final User user) throws IllegalArgumentException {
+
+        if(null == user) throw new IllegalArgumentException("Null parameter");
+
         JSONObject json = new JSONObject();
 
         json.put("login", user.getLogin());

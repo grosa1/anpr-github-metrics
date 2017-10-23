@@ -27,14 +27,18 @@ import java.util.HashMap;
  * - /average-closing-time
  * - /average-first-response-time
  * - /closing-time-distribution
+ * - /commented-closed-issues
+ * - /commented-fixed-issues
+ * - /commented-open-issues
  * - /first-response-time-distribution
+ * - /fixing-time-distribution
  * - /number-of-closed-issues
  * - /number-of-commented-closed-issues
  * - /number-of-commented-fixed-issues
  * - /number-of-commented-labeled-issues
  * - /number-of-commented-open-issues
  * - /number-of-fixed-issues
- * - /number-of-labeled-closed-issues ---
+ * - /number-of-labeled-closed-issues
  * - /number-of-labeled-fixed-issues
  * - /number-of-labeled-open-issues
  * - /number-of-open-issues
@@ -44,6 +48,16 @@ import java.util.HashMap;
  * - /number-of-unlabeled-closed-issues
  * - /number-of-unlabeled-fixed-issues
  * - /number-of-unlabeled-open-issues
+ * - /labeled-closed-issues
+ * - /labeled-fixed-issues
+ * - /labeled-open-issues
+ * - /times-from-last-comment
+ * - /uncommented-closed-issues
+ * - /uncommented-fixed-issues
+ * - /uncommented-open-issues
+ * - /unlabeled-closed-issues
+ * - /unlabeled-fixed-issues
+ * - /unlabeled-open-issues
  */
 @Path("/analytics")
 public class AnalyticsApi {
@@ -151,10 +165,10 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             final ArrayList<Issue> commentedIssues = analytics.getCommentedClosedIssues(repoName);
-            JSONArray json = JSONConverter.issuesToJSON(commentedIssues);
-            return Response.ok(json).build();
+            JSONArray json = JSONConverter.issuesToJSONArray(commentedIssues);
+            return Response.ok(json.toString()).build();
 
-        } catch (GithubException e) {
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -175,9 +189,9 @@ public class AnalyticsApi {
         FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
         try {
             ArrayList<Issue> commentedIssues = analytics.getCommentedFixedIssues(repoName);
-            // TODO transalate in JsonObject
-            return Response.ok(commentedIssues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(commentedIssues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -198,9 +212,9 @@ public class AnalyticsApi {
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         try {
             ArrayList<Issue> commentedIssues = analytics.getCommentedOpenIssues(repoName);
-            // TODO transalate in JsonObject
-            return Response.ok(commentedIssues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(commentedIssues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -221,9 +235,18 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             HashMap<Issue, Long> ticketClosingTimeDistribution = analytics.getClosingTimeDistribution(repoName);
-            //TODO return JsonObject
-            return Response.ok(ticketClosingTimeDistribution).build();
-        } catch (GithubException e) {
+
+            JSONArray json = new JSONArray();
+
+            ticketClosingTimeDistribution.forEach((issue, time)->{
+                JSONObject obj = new JSONObject();
+                obj.put("issue", JSONConverter.issueToJSONObject(issue));
+                obj.put("closing_time", time);
+                json.put(obj);
+            });
+
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -244,9 +267,18 @@ public class AnalyticsApi {
         IssuesAnalytics analytics = new IssuesAnalytics(github);
         try {
             HashMap<Issue, Long> firstResponseTimeDistribution = analytics.getFirstResponseTimeDistribution(repoName);
-            //TODO return JsonObject
-            return Response.ok(firstResponseTimeDistribution).build();
-        } catch (GithubException e) {
+
+            JSONArray json = new JSONArray();
+
+            firstResponseTimeDistribution.forEach((issue, responseTime)->{
+                JSONObject obj = new JSONObject();
+                obj.put("issue", JSONConverter.issueToJSONObject(issue));
+                obj.put("response_time", responseTime);
+                json.put(obj);
+            });
+
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -267,9 +299,18 @@ public class AnalyticsApi {
         FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
         try {
             HashMap<Issue, Long> fixingTimeDistribution = analytics.getFixingTimeDistribution(repoName);
-            //TODO return JsonObject
-            return Response.ok(fixingTimeDistribution).build();
-        } catch (GithubException e) {
+
+            JSONArray json = new JSONArray();
+
+            fixingTimeDistribution.forEach((issue, fixingTime)->{
+                JSONObject obj = new JSONObject();
+                obj.put("issue", JSONConverter.issueToJSONObject(issue));
+                obj.put("fixing_time", fixingTime);
+                json.put(obj);
+            });
+
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -290,9 +331,9 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             ArrayList<Issue> labeledIssues = analytics.getLabeledClosedIssues(repoName);
-            // TODO transalate in JsonObject
-            return Response.ok(labeledIssues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(labeledIssues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -313,9 +354,9 @@ public class AnalyticsApi {
         FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
         try {
             ArrayList<Issue> labeledIssues = analytics.getLabeledFixedIssues(repoName);
-            // TODO transalate in JsonObject
-            return Response.ok(labeledIssues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(labeledIssues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -335,9 +376,9 @@ public class AnalyticsApi {
         OpenIssuesAnalytics analytics = new OpenIssuesAnalytics(github);
         try {
             ArrayList<Issue> labeledIssues = analytics.getLabeledOpenIssues(repoName);
-            // TODO transalate in JsonObject
-            return Response.ok(labeledIssues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(labeledIssues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -703,8 +744,17 @@ public class AnalyticsApi {
         IssuesAnalytics analytics = new IssuesAnalytics(github);
         try {
             HashMap<Issue, Long> issueTimes = analytics.getTimesFromLastComment(repoName);
-            return Response.status(Response.Status.OK).entity(issueTimes).build();
-        } catch (GithubException e) {
+            JSONArray json = new JSONArray();
+
+            issueTimes.forEach((issue, timeFromLastComment)->{
+                JSONObject obj = new JSONObject();
+                obj.put("issue", JSONConverter.issueToJSONObject(issue));
+                obj.put("time_from_last_comment", timeFromLastComment);
+                json.put(obj);
+            });
+
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -725,9 +775,9 @@ public class AnalyticsApi {
         ClosedIssuesAnalytics analytics = new ClosedIssuesAnalytics(github);
         try {
             ArrayList<Issue> issues = analytics.getUncommentedClosedIssues(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -749,9 +799,9 @@ public class AnalyticsApi {
         FixedIssuesAnalytics analytics = new FixedIssuesAnalytics(github);
         try {
             ArrayList<Issue> issues = analytics.getUncommentedFixedIssues(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -773,9 +823,9 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUncommentedOpenIssue(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -797,9 +847,9 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUnlabeledClosedIssues(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -821,9 +871,9 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUnlabeledFixedIssues(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -845,9 +895,9 @@ public class AnalyticsApi {
 
         try {
             ArrayList<Issue> issues = analytics.getUnlabeledOpenIssues(repoName);
-            //  TODO return JsonObject
-            return Response.ok(issues).build();
-        } catch (GithubException e) {
+            JSONArray json = JSONConverter.issuesToJSONArray(issues);
+            return Response.ok(json.toString()).build();
+        } catch (GithubException | IllegalArgumentException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
