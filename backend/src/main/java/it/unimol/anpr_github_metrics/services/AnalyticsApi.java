@@ -764,7 +764,7 @@ public class AnalyticsApi {
     @GET
     @Path("/uncommented-closed-issues/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUncommentedClosedIssue(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
+    public Response getUncommentedClosedIssues(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -788,7 +788,7 @@ public class AnalyticsApi {
     @GET
     @Path("/uncommented-fixed-issues/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUncommentedFixedIssue(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
+    public Response getUncommentedFixedIssues(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -811,7 +811,7 @@ public class AnalyticsApi {
     @GET
     @Path("/uncommented-open-issues/{login-name}/{repository-name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUncommentedOpen(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
+    public Response getUncommentedOpenIssues(@PathParam("repository-name") String repoPath, @PathParam("login-name") String loginName, @Context HttpServletRequest request) {
         if (!checkSession(request.getSession())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -901,8 +901,6 @@ public class AnalyticsApi {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
 
 
 
