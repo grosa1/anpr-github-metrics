@@ -20,8 +20,8 @@ import java.io.IOException;
  */
 @WebServlet(name="/ShowRepositories")
 public class ShowRepositories extends GetOnlyForcedLoggedServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionHandler handler = SessionHandler.getInstance(request.getSession());
 
         if (!ServletUtils.getInstance().checkLoginAndEnforce(request, response))

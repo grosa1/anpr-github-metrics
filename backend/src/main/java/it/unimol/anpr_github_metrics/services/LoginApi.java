@@ -4,11 +4,11 @@ import com.jcabi.github.Github;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.unimol.anpr_github_metrics.config.OAuthConfigManager;
 import it.unimol.anpr_github_metrics.github.Authenticator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.Null;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -29,12 +29,13 @@ public class LoginApi {
 
         String token;
         HttpResponse<String> res = null;
+        OAuthConfigManager prefs = OAuthConfigManager.getInstance();
         try {
             res = Unirest.post("https://github.com/login/oauth/access_token")
-                    .field("client_id", "1211d954012cf73c2e2b")
-                    .field("client_secret", "1237664d8ab78f6305d2571ee7189fdc5b641ef6")
+                    .field("client_id", prefs.getValue(OAuthConfigManager.KEY_CLIENT_ID))
+                    .field("client_secret", prefs.getValue(OAuthConfigManager.KEY_CLIENT_SECRET))
                     .field("code", code)
-                    .field("redirect_uri", ON_LOGIN_REDIRECT_URI)
+                    .field("redirect_uri", prefs.getValue(OAuthConfigManager.KEY_REDIRECT_URI))
                     .field("state", state)
                     .asString();
 
@@ -64,7 +65,9 @@ public class LoginApi {
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-
+        } catch (MissingConfValueException e) {
+            System.out.println("Invalid value in properties file");
+            return  Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
