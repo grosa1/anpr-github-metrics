@@ -4,6 +4,7 @@ import it.unimol.anpr_github_metrics.beans.Issue;
 import it.unimol.anpr_github_metrics.beans.IssueComment;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.beans.User;
+import it.unimol.anpr_github_metrics.recommender.RecommendedUser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,10 +21,7 @@ public class JSONConverter {
         if(null == comments) throw new IllegalArgumentException("Null parameter");
 
         JSONArray array = new JSONArray();
-        comments.forEach(comment -> {
-            array.put(issueCommentToJSONObject(comment));
-        });
-
+        comments.forEach(comment -> array.put(issueCommentToJSONObject(comment)));
         return array;
     }
 
@@ -48,9 +46,7 @@ public class JSONConverter {
         if(null == issues) throw new IllegalArgumentException("Null parameter");
 
         JSONArray array = new JSONArray();
-        issues.forEach(issue -> {
-            array.put(issueToJSONObject(issue));
-        });
+        issues.forEach(issue -> array.put(issueToJSONObject(issue)));
 
         return array;
     }
@@ -94,10 +90,7 @@ public class JSONConverter {
         if(null == labels) throw new IllegalArgumentException("Null parameter");
 
         JSONArray array = new JSONArray();
-        labels.forEach(label -> {
-            array.put(label.toString());
-        });
-
+        labels.forEach(label -> array.put(label.toString()));
         return array;
     }
 
@@ -111,15 +104,11 @@ public class JSONConverter {
         json.put("url", repo.getUrl());
 
         JSONArray issues = new JSONArray();
-        repo.getIssues().forEach(issue -> {
-            issues.put(issueToJSONObject(issue));
-        });
+        repo.getIssues().forEach(issue -> issues.put(issueToJSONObject(issue)));
         json.put("issues", issues);
 
         JSONArray contributors = new JSONArray();
-        repo.getContributors().forEach(contributor -> {
-            contributors.put(userToJSONObject(contributor));
-        });
+        repo.getContributors().forEach(contributor -> contributors.put(userToJSONObject(contributor)));
         json.put("contributors", contributors);
 
         return json;
@@ -130,10 +119,27 @@ public class JSONConverter {
         if(null == user) throw new IllegalArgumentException("Null parameter");
 
         JSONObject json = new JSONObject();
-
         json.put("login", user.getLogin());
         json.put("url", user.getUrl());
+        return json;
+    }
 
+
+    public static JSONArray recommendedUserToJSONArray(final Collection<RecommendedUser> users) throws IllegalArgumentException {
+
+        if(null == users) throw new IllegalArgumentException("Null parameter");
+
+        JSONArray array = new JSONArray();
+        users.forEach(user -> array.put(recommendedUserToJSONObject(user)));
+        return array;
+    }
+
+    public static JSONObject recommendedUserToJSONObject(final RecommendedUser user) throws IllegalArgumentException {
+        if(null == user) throw new IllegalArgumentException("Null parameter");
+
+        JSONObject json = new JSONObject();
+        json.put("user", userToJSONObject(user.getUser()));
+        json.put("rank", user.getWeightedCoverage());
         return json;
     }
 }
