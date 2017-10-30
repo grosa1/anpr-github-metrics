@@ -1,3 +1,17 @@
+<%@ page import="it.unimol.anpr_github_metrics.jsp.JSPUtils" %>
+<%@ page import="it.unimol.anpr_github_metrics.session.SessionKey" %>
+<%@ page import="it.unimol.anpr_github_metrics.beans.Repository" %>
+<%@ page import="it.unimol.anpr_github_metrics.session.SessionHandler" %>
+
+<%
+    JSPUtils utils = JSPUtils.getInstance();
+
+    if (!utils.requireUnlessRedirect(request, response, SessionKey.MY_REPOSITORIES, "ShowRepositories")) {
+        return;
+    }
+
+    Repository[] repositories = SessionHandler.getInstance(request.getSession()).getRepositories();
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -63,7 +77,7 @@
                                 eventually description
                             </div>
                             <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
+                                <a href="dashboard.jsp" class="mdl-button">use this repository</a>
                             </div>
                         </div>
 
@@ -74,330 +88,26 @@
 
 
             <!-- START REPO EXAMPLES - TO REMOVE -->
-            <ul class="repository-item mdl-list">
-                <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
+            <% for (Repository repository : repositories) { %>
+                <ul class="repository-item mdl-list">
+                    <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
+                        <span class="mdl-list__item-primary-content">
+                          <i class="fa fa-github fa-5x" aria-hidden="true"></i>
 
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
+                            <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                                <div class="mdl-card__supporting-text">
+                                    <h4><%=repository.getName()%></h4>
+                                    <!-- Description (if any) -->
+                                </div>
+                                <div class="mdl-card__actions">
+                                    <a href="dashboard.jsp" class="mdl-button">use this repository</a>
+                                </div>
                             </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
 
-                    </span>
-                </li>
-            </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>            <ul class="repository-item mdl-list">
-            <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
-                    <span class="mdl-list__item-primary-content">
-                      <i class="fa fa-github fa-5x" aria-hidden="true"></i>
-
-                        <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-                            <div class="mdl-card__supporting-text">
-                                <h4>Repository</h4>
-                                eventually description
-                            </div>
-                            <div class="mdl-card__actions">
-                                <a href="dashboard.html" class="mdl-button">use this repository</a>
-                            </div>
-                        </div>
-
-                    </span>
-            </li>
-        </ul>
+                        </span>
+                    </li>
+                </ul>
+            <% } %>
             <!-- END REPO EXAMPLES-->
 
 
