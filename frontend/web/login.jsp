@@ -1,5 +1,4 @@
-<%@ page import="java.io.PrintWriter" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,15 +34,11 @@
             </div>
         </form>
 
-        <%
-            PrintWriter writer = response.getWriter();
-            ArrayList<String> posts=(ArrayList<String>) request.getAttribute("posts");
-            for (String post: posts) {%>
-
-                <%=("<li>" + post + "</li>")%>
-        <%}%>
-
-
+        <ul>
+            <c:forEach items="${posts}" var="post">
+                    <li>${post}</li>
+            </c:forEach>
+        </ul>
     </div>
 </div>
 
