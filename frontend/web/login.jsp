@@ -1,3 +1,5 @@
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,8 +33,18 @@
                     Login con GitHub
                 </a>
             </div>
-    </div>
+        </form>
 
+        <%
+            PrintWriter writer = response.getWriter();
+            ArrayList<String> posts=(ArrayList<String>) request.getAttribute("posts");
+            for (String post: posts) {%>
+
+                <%=("<li>" + post + "</li>")%>
+        <%}%>
+
+
+    </div>
 </div>
 
 </body>
