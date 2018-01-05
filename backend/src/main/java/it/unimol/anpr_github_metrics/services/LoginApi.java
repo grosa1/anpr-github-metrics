@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.config.OAuthConfigManager;
 import it.unimol.anpr_github_metrics.github.Authenticator;
+import it.unimol.anpr_github_metrics.config.OAuthParms;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,61 +14,51 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-@Path("/login")
+
+@Path("/")
 public class LoginApi {
 
-    public static final String ON_LOGIN_REDIRECT_URI = "http://www.unimol.it";
-
     @GET
-    @Path("/getLoginCode")
+    @Path("/getAccessToken")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(@QueryParam("code") String code, @QueryParam("state") String state, @Context HttpServletRequest request) {
 
         String token;
-        HttpResponse<String> res = null;
-        OAuthConfigManager prefs = OAuthConfigManager.getInstance();
+        HttpResponse<String> accessTokenResponse = null;
         try {
-            res = Unirest.post("https://github.com/login/oauth/access_token")
-                    .field("client_id", prefs.getValue(OAuthConfigManager.KEY_CLIENT_ID))
-                    .field("client_secret", prefs.getValue(OAuthConfigManager.KEY_CLIENT_SECRET))
+            accessTokenResponse = Unirest.post("https://github.com/login/oauth/access_token")
+                    .field("client_id", OAuthParms.CLIENT_ID)
+                    .field("client_secret", OAuthParms.CLIENT_SECRET)
                     .field("code", code)
-                    .field("redirect_uri", prefs.getValue(OAuthConfigManager.KEY_REDIRECT_URI))
+                    .field("redirect_uri", OAuthParms.REDIRECT_URI)
                     .field("state", state)
                     .asString();
 
-            if(res.getBody().contains("error")) {
+            if(accessTokenResponse.getBody().contains("error")) {
                 throw new ForbiddenException();
             }
 
-            Map<String, String> map = getQueryMap(res.getBody());
+            Map<String, String> map = getQueryMap(accessTokenResponse.getBody());
             token = map.get("access_token");
 
             //TODO check
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
 
             Github github = Authenticator.getInstance().authenticate(token).getGitHub();
             session.setAttribute("token", token);
             session.setAttribute("github", github);
 
-            URI uri = new URI(ON_LOGIN_REDIRECT_URI);
-            return Response.seeOther(uri).status(Response.Status.OK).build();
+            //TODO controllo su sessione
+            return Response.status(Response.Status.OK).build();
 
         } catch (UnirestException e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         } catch (ForbiddenException e) {
-            System.out.println(res.getBody().toString());
+            System.out.println(accessTokenResponse.getBody().toString());
             return Response.status(Response.Status.FORBIDDEN).build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        } catch (MissingConfValueException e) {
-            System.out.println("Invalid value in properties file");
-            return  Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 

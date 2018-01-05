@@ -13,32 +13,39 @@
 </head>
 <body>
 
+<c:if test="${not empty error}">
+    <script>alert(${error});
+    </script></c:if>
+
 <div class="demo-container mdl-grid">
 
     <div class="demo-content mdl-color--white mdl-shadow--6dp content mdl-color-text--grey-800 mdl-cell mdl-cell--6-col">
 
         <div class="mdl-card__title mdl-color--light-blue mdl-color-text--white">
-            <h2 class="mdl-card__title-text">Login</h2>
+            <h2 class="mdl-card__title-text">ZEUS login</h2>
         </div>
 
         <form class="mdl-cell mdl-cell--12-col cell_con">
-
+<h3>${error}</h3>
             <div id="github">
                 <i class="fa fa-github fa-5x" aria-hidden="true"></i>
             </div>
             <div class="mdl-card__actions" id="login">
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                   href="http://github.com/login/oauth/authorize?client_id=1211d954012cf73c2e2b&redirect_uri=http://www.unimol.it&state=dsfasgadfhsdghadf">
+
+                    href=${request} >
+
+                <%--href="http://github.com/login/oauth/authorize?client_id=1211d954012cf73c2e2b&redirect_uri=http://www.unimol.it&state=dsfasgadfhsdghadf">--%>
                     Login con GitHub
                 </a>
             </div>
         </form>
 
-        <ul>
-            <c:forEach items="${posts}" var="post">
-                    <li>${post}</li>
-            </c:forEach>
-        </ul>
+        <%--<ul>--%>
+            <%--<c:forEach items="${posts}" var="post">--%>
+                <%--<li>${post}</li>--%>
+            <%--</c:forEach>--%>
+        <%--</ul>--%>
     </div>
 </div>
 

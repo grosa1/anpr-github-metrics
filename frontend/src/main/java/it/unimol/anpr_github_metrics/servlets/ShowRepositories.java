@@ -5,7 +5,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.configuration.ConfigurationManager;
-import it.unimol.anpr_github_metrics.servlets.basic.GetOnlyForcedLoggedServlet;
+import it.unimol.anpr_github_metrics.servlets.basic.HttpGetServlet;
 import it.unimol.anpr_github_metrics.servlets.basic.ServletUtils;
 import it.unimol.anpr_github_metrics.session.SessionHandler;
 
@@ -19,7 +19,7 @@ import java.io.IOException;
  * @author Simone Scalabrino.
  */
 @WebServlet(name="/ShowRepositories")
-public class ShowRepositories extends GetOnlyForcedLoggedServlet {
+public class ShowRepositories extends HttpGetServlet {
 
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionHandler handler = SessionHandler.getInstance(request.getSession());

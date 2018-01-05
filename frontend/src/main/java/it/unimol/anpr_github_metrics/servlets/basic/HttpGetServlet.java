@@ -10,7 +10,7 @@ import java.rmi.ServerException;
 /**
  * @author Simone Scalabrino.
  */
-public abstract class GetOnlyForcedLoggedServlet extends HttpServlet {
+public abstract class HttpGetServlet extends HttpServlet {
     @Override
     protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Method POST not allowed here.");
