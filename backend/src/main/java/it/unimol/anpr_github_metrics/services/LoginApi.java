@@ -21,44 +21,61 @@ import java.util.Map;
 public class LoginApi {
 
     @GET
-    @Path("/getAccessToken")
+    @Path("/set-token")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(@QueryParam("code") String code, @QueryParam("state") String state, @Context HttpServletRequest request) {
 
-        String token;
-        HttpResponse<String> accessTokenResponse = null;
-        try {
-            accessTokenResponse = Unirest.post("https://github.com/login/oauth/access_token")
-                    .field("client_id", OAuthParms.CLIENT_ID)
-                    .field("client_secret", OAuthParms.CLIENT_SECRET)
-                    .field("code", code)
-                    .field("redirect_uri", OAuthParms.REDIRECT_URI)
-                    .field("state", state)
-                    .asString();
+//        if (request.getSession().getAttribute("token") == null) {
+            String token;
+            HttpResponse<String> accessTokenResponse = null;
+            try {
+                accessTokenResponse = Unirest.post("https://github.com/login/oauth/access_token")
+                        .field("client_id", OAuthParms.CLIENT_ID)
+                        .field("client_secret", OAuthParms.CLIENT_SECRET)
+                        .field("code", code)
+                        .field("redirect_uri", OAuthParms.REDIRECT_URI)
+                        .field("state", state)
+                        .asString();
 
-            if(accessTokenResponse.getBody().contains("error")) {
-                throw new ForbiddenException();
+                if (accessTokenResponse.getBody().contains("error")) {
+                    throw new ForbiddenException();
+                }
+
+                Map<String, String> map = getQueryMap(accessTokenResponse.getBody());
+                token = map.get("access_token");
+
+                //TODO check
+                HttpSession session = request.getSession(true);
+
+                Github github = Authenticator.getInstance().authenticate(token).getGitHub();
+                session.setAttribute("token", token);
+                session.setAttribute("github", github);
+
+                //TODO controllo su sessione
+                return Response.status(Response.Status.OK).build();
+
+            } catch (UnirestException e) {
+                e.printStackTrace();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            } catch (ForbiddenException e) {
+                System.out.println(accessTokenResponse.getBody().toString());
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
+//        } else {
+//            return Response.status(Response.Status.OK).build();
+//        }
+    }
 
-            Map<String, String> map = getQueryMap(accessTokenResponse.getBody());
-            token = map.get("access_token");
-
-            //TODO check
-            HttpSession session = request.getSession(true);
-
-            Github github = Authenticator.getInstance().authenticate(token).getGitHub();
-            session.setAttribute("token", token);
-            session.setAttribute("github", github);
-
-            //TODO controllo su sessione
+    //TODO: verificare se l'utente è lo stesso
+    @GET
+    @Path("/get-login-status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLoginStatus(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if ((session.getAttribute("token") != null) && (session.getAttribute("gothub") != null)){
             return Response.status(Response.Status.OK).build();
-
-        } catch (UnirestException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        } catch (ForbiddenException e) {
-            System.out.println(accessTokenResponse.getBody().toString());
-            return Response.status(Response.Status.FORBIDDEN).build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
 

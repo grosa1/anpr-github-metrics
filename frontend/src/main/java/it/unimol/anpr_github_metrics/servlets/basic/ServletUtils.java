@@ -33,7 +33,7 @@ public class ServletUtils {
         SessionHandler handler = SessionHandler.getInstance(request.getSession());
 
         if (!handler.isLoggedIn()) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("/zeus/login");
             return false;
         }
 

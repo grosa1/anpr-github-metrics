@@ -902,8 +902,6 @@ public class AnalyticsApi {
         }
     }
 
-
-
     public boolean checkSession(HttpSession session) {
         Object githubAttribute = session.getAttribute("github");
         return (githubAttribute != null && githubAttribute instanceof Github);

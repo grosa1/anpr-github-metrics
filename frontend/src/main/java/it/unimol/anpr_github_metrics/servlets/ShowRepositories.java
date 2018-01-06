@@ -14,11 +14,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author Simone Scalabrino.
  */
-@WebServlet(name="/ShowRepositories")
+@WebServlet("/showRepositories")
 public class ShowRepositories extends HttpGetServlet {
 
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,7 +34,13 @@ public class ShowRepositories extends HttpGetServlet {
                             .asObject(Repository[].class);
 
             handler.setRepositories(unirestResponse.getBody());
-            response.sendRedirect("repositories.jsp");
+            PrintWriter out = response.getWriter();
+            response.setContentType("text/html;charset=UTF-8");
+            out.print(unirestResponse.getBody());
+            out.close();
+
+
+            // response.sendRedirect("repositories.jsp");
         } catch (UnirestException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Problem with backend.");
         }

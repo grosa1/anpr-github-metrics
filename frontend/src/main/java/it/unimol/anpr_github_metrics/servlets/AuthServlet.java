@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -31,23 +32,28 @@ public class AuthServlet extends HttpGetServlet {
 
         int responseCode = conn.getResponseCode();
 
-        switch (responseCode) {
-            case 200:
-                response.sendRedirect("/zeus/dashboard");
-                break;
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=UTF-8");
+        out.print(conn.getResponseCode());
+        out.close();
 
-            case 403:
-                System.out.println("403");
-                response.sendRedirect("/zeus/login");
-
-                break;
-
-            case 500:
-                System.out.println("500");
-                response.sendRedirect("/zeus/login");
-
-                break;
-        }
+//        switch (responseCode) {
+//            case 200:
+//                response.sendRedirect("/zeus/dashboard");
+//                break;
+//
+//            case 403:
+//                System.out.println("403");
+//                response.sendRedirect("/zeus/login");
+//
+//                break;
+//
+//            case 500:
+//                System.out.println("500");
+//                response.sendRedirect("/zeus/login");
+//
+//                break;
+//        }
     }
 }
 
