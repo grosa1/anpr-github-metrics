@@ -8,9 +8,12 @@ import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
  * Authenticates a GitHub user
  * @author Simone Scalabrino.
  */
+
+//TODO: gestire cache
 public class Authenticator {
     public static final String TEST = "d34794572238fff111575134a1c13bc3c403e6fa";
     private Github github;
+    private String token;
     private static boolean cachingEnabled;
 
 
@@ -56,12 +59,17 @@ public class Authenticator {
      */
     public Authenticator authenticate(String oauth) {
         Github realGithub = new RtGithub(oauth);
+        this.token = oauth;
         if (cachingEnabled)
             this.github = new GithubProxy(realGithub);
         else
             this.github = realGithub;
 
         return this;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 
     /**

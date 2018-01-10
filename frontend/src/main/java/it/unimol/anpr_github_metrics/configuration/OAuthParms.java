@@ -1,4 +1,4 @@
-package it.unimol.anpr_github_metrics.config;
+package it.unimol.anpr_github_metrics.configuration;
 
 public class OAuthParms {
 

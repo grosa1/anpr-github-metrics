@@ -229,7 +229,7 @@
         <script>
 
             var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "url", false);
+            xhttp.open("GET", "apiUrl", false);
             xhttp.setRequestHeader("repoName", "repository.name");
             xhttp.send();
             var response = JSON.parse(xhttp.responseText);

@@ -1,3 +1,4 @@
+<%@ page import="it.unimol.anpr_github_metrics.configuration.OAuthParms" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,9 @@
             <div class="mdl-card__actions" id="login">
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
 
-                    href=${request} >
+                    href=<%="http://github.com/login/oauth/authorize?client_id=" + OAuthParms.CLIENT_ID
+                + "&redirect_uri=" + OAuthParms.REDIRECT_URI
+                + "&state=" + OAuthParms.STATE%> >
 
                 <%--href="http://github.com/login/oauth/authorize?client_id=1211d954012cf73c2e2b&redirect_uri=http://www.unimol.it&state=dsfasgadfhsdghadf">--%>
                     Login con GitHub

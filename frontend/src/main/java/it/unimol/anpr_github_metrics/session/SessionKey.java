@@ -5,6 +5,5 @@ package it.unimol.anpr_github_metrics.session;
  */
 public enum SessionKey {
     GITHUB_TOKEN,
-    LOGGED_USER,
-    MY_REPOSITORIES
+    LOGGED_USERNAME,
 }

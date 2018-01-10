@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * @author Stefano Dalla Palma
@@ -74,7 +73,7 @@ public class JSONConverter {
         // A Json object representing only the name and url of the repository
         JSONObject lightRepo = new JSONObject();
         lightRepo.put("name", issue.getRepository().getName());
-        lightRepo.put("url", issue.getRepository().getUrl());
+        lightRepo.put("url", issue.getRepository().getApiUrl());
 
         json.put("repository", lightRepo);
 
@@ -101,7 +100,7 @@ public class JSONConverter {
         JSONObject json = new JSONObject();
 
         json.put("name", repo.getName());
-        json.put("url", repo.getUrl());
+        json.put("url", repo.getApiUrl());
 
         JSONArray issues = new JSONArray();
         repo.getIssues().forEach(issue -> issues.put(issueToJSONObject(issue)));

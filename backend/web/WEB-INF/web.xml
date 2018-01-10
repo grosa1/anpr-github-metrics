@@ -12,6 +12,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Zeus</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <apiUrl-pattern>/*</apiUrl-pattern>
     </servlet-mapping>
 </web-app>
