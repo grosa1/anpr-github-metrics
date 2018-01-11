@@ -88,13 +88,11 @@
             </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey">
-            <a class="mdl-navigation__link" href="dashboard.html"><i
-                    class="mdl-color-text--blue-grey-400 material-icons" role="presentation"></i>Dashboard</a>
-            <a class="mdl-navigation__link" href="tickets.html"><i class="mdl-color-text--blue-grey-400 material-icons"
+            <a class="mdl-navigation__link" href="tickets.jsp"><i class="mdl-color-text--blue-grey-400 material-icons"
                                                                    role="presentation"></i>Tickets</a>
-            <a class="mdl-navigation__link" href="settings.html"><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                                    role="presentation"></i>Settings</a>
-            <a class="mdl-navigation__link" href="repositories.html"><i
+            <%--<a class="mdl-navigation__link" href="settings.jsp"><i class="mdl-color-text--blue-grey-400 material-icons"--%>
+                                                                    <%--role="presentation"></i>Settings</a>--%>
+            <a class="mdl-navigation__link" href="${pageContext}/repos"><i
                     class="mdl-color-text--blue-grey-400 material-icons" role="presentation"></i>Repositories</a>
             <div class="mdl-layout-spacer"></div>
             <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"

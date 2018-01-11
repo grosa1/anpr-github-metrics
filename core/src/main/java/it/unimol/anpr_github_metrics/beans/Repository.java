@@ -13,6 +13,9 @@ public class Repository {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("full_name")
+    @Expose
+    private String fullname;
     @SerializedName("url")
     @Expose
     private String apiUrl; //GITHUB API URL
@@ -116,6 +119,14 @@ public class Repository {
 
     public void setContributors(Collection<User> contributors) {
         this.contributors = contributors;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String serialize() {

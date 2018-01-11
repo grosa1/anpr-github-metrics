@@ -74,7 +74,7 @@
 
                             <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
                                 <div class="mdl-card__supporting-text">
-                                    <h4>${repo.name}</h4>
+                                    <h4>${repo.fullname}</h4>
                                     <c:choose>
                                         <c:when test="${empty repo.description}">
                                             Nessuna descrizione.
