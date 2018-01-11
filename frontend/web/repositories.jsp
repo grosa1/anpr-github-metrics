@@ -1,3 +1,4 @@
+<%@ page import="com.google.gson.Gson" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ page import="it.unimol.anpr_github_metrics.jsp.JSPUtils" %>--%>
 <%--<%@ page import="it.unimol.anpr_github_metrics.session.SessionKey" %>--%>
@@ -5,13 +6,13 @@
 <%--<%@ page import="it.unimol.anpr_github_metrics.session.SessionHandler" %>--%>
 
 <%--<%--%>
-    <%--JSPUtils utils = JSPUtils.getInstance();--%>
+<%--JSPUtils utils = JSPUtils.getInstance();--%>
 
-    <%--if (!utils.requireUnlessRedirect(request, response, SessionKey.MY_REPOSITORIES, "RepoServlet")) {--%>
-        <%--return;--%>
-    <%--}--%>
+<%--if (!utils.requireUnlessRedirect(request, response, SessionKey.MY_REPOSITORIES, "ReposServlet")) {--%>
+<%--return;--%>
+<%--}--%>
 
-    <%--Repository[] repositories = SessionHandler.getInstance(request.getSession()).getRepositories();--%>
+<%--Repository[] repositories = SessionHandler.getInstance(request.getSession()).getRepositories();--%>
 <%--%>--%>
 <!doctype html>
 <html lang="en">
@@ -57,16 +58,16 @@
                 <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-                <a class="mdl-menu__item" href="https://github.com/intersimone999/anpr-github-metrics" target="_blank" id="view-source">Informazioni su anpr-unimol</a>
+                <a class="mdl-menu__item" href="https://github.com/intersimone999/anpr-github-metrics" target="_blank"
+                   id="view-source">Informazioni su anpr-unimol</a>
             </ul>
         </div>
     </header>
     <main class="mdl-layout__content mdl-color--grey-100">
 
-        <div class="demo-container mdl-grid">
-
-            <c:forEach items="${repos}" var="repo">
-            <ul class="repository-item mdl-list">
+        <c:forEach items="${repos}" var="repo">
+            <div class="demo-container mdl-grid">
+                <ul class="repository-item mdl-list">
                     <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
                         <span class="mdl-list__item-primary-content">
                           <i class="fa fa-github fa-5x" aria-hidden="true"></i>
@@ -83,17 +84,17 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <div class="mdl-card__actions">
-                                    <a href="dashboard.jsp" class="mdl-button">Seleziona</a>
-                                </div>
+                                <form action="${pageContext.request.contextPath}/dashboard" method="post" class="mdl-card__actions">
+                                    <input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>
+                                    <input type="submit" name="submit" value="Seleziona" class="mdl-button"/>
+                                </form>
                             </div>
 
                         </span>
                     </li>
                 </ul>
-            </c:forEach>
-
-        </div>
+            </div>
+        </c:forEach>
 
     </main>
 </div>

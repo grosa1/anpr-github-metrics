@@ -61,7 +61,7 @@
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     <header class="demo-header mdl-layout__header mdl-color--primary mdl-color-text--white">
         <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title">Home</span>
+            <span class="mdl-layout-title">Home ${repo.name}</span>
             <div class="mdl-layout-spacer"></div>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
                 <i class="material-icons">more_vert</i>
@@ -73,10 +73,10 @@
     </header>
     <div class="demo-drawer mdl-layout__drawer mdl-color--cyan mdl-color-text--white">
         <header class="demo-drawer-header">
-            <img src=" " class="demo-avatar">
-            <span>Hi Name User</span>
+            <img src="${user.avatarUrl}" class="demo-avatar">
+            <span>${user.login}</span>
             <div class="demo-avatar-dropdown">
-                <span>hello@example.com</span>
+                <span>${user.email}</span>
                 <div class="mdl-layout-spacer"></div>
                 <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                     <i class="material-icons" role="presentation">arrow_drop_down</i>

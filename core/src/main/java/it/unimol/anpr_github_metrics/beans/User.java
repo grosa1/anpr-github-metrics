@@ -1,11 +1,29 @@
 package it.unimol.anpr_github_metrics.beans;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author Simone Scalabrino.
  */
 public class User {
+
+    @SerializedName("login")
+    @Expose
     private String login;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("avatar_url")
+    @Expose
+    private String avatarUrl;
+    @SerializedName("url")
+    @Expose
     private String url;
+    @SerializedName("email")
+    @Expose
+    private Object email;
 
     public String getLogin() {
         return login;
@@ -23,19 +41,31 @@ public class User {
         this.url = url;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof User) {
-            User user = (User) o;
-
-            return this.login.equals(user.login);
-        }
-
-        return false;
+    public Integer getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return this.login.hashCode();
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Object getEmail() {
+        return email;
+    }
+
+    public void setEmail(Object email) {
+        this.email = email;
+    }
+
+    public String serialize() {
+        return new Gson().toJson(this);
     }
 }

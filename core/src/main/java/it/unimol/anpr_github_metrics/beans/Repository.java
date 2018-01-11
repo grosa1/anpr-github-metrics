@@ -1,5 +1,6 @@
 package it.unimol.anpr_github_metrics.beans;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,12 +22,12 @@ public class Repository {
     @SerializedName("description")
     @Expose
     private String description;
-    @SerializedName("pushed_at")
+    @SerializedName("createdAt")
     @Expose
-    private String pushed_at;
-    @SerializedName("updated_at")
+    private String createdAt;
+    @SerializedName("updatedAt")
     @Expose
-    private String updated_at;
+    private String updatedAt;
     @SerializedName("fork")
     @Expose
     private boolean isFork;
@@ -77,20 +78,20 @@ public class Repository {
         this.description = description;
     }
 
-    public String getPushed_at() {
-        return pushed_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPushed_at(String pushed_at) {
-        this.pushed_at = pushed_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public boolean isFork() {
@@ -115,5 +116,9 @@ public class Repository {
 
     public void setContributors(Collection<User> contributors) {
         this.contributors = contributors;
+    }
+
+    public String serialize() {
+        return new Gson().toJson(this);
     }
 }

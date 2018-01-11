@@ -1,5 +1,7 @@
 package it.unimol.anpr_github_metrics.servlets.basic;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
