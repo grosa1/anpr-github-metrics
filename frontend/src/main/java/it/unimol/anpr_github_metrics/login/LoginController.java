@@ -12,19 +12,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class LoginController extends HttpPostServlet {
+@WebServlet("/login")
+public class LoginController extends HttpGetServlet {
 
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionHandler session = SessionHandler.getInstance(request.getSession(true));
 
             if (session.isLoggedIn()) {
-                response.sendRedirect(request.getContextPath() + "/repos");
+                if(session.isSet(SessionHandler.GITHUB_REPO)) {
+                    response.sendRedirect(request.getContextPath() + "/dashboard");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/repos");
+                }
             } else {
-                Unirest.get("http://github.com/login/oauth/authorize")
-                        .queryString("client_id", OAuthParms.CLIENT_ID)
-                        .queryString("redirect_uri", OAuthParms.REDIRECT_URI)
-                        .queryString("state", OAuthParms.STATE);
+                request.setAttribute("client_id", OAuthParms.CLIENT_ID);
+                request.setAttribute("redirect_uri", OAuthParms.REDIRECT_URI);
+                request.setAttribute("state", OAuthParms.STATE);
+
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         }
     }

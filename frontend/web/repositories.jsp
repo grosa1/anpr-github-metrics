@@ -8,7 +8,7 @@
 <%--<%--%>
 <%--JSPUtils utils = JSPUtils.getInstance();--%>
 
-<%--if (!utils.requireUnlessRedirect(request, response, SessionKey.MY_REPOSITORIES, "ReposServlet")) {--%>
+<%--if (!utils.requireUnlessRedirect(request, response, SessionKey.MY_REPOSITORIES, "ReposController")) {--%>
 <%--return;--%>
 <%--}--%>
 

@@ -28,16 +28,18 @@
             <div class="mdl-card__actions" id="login">
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
 
-                        <c:choose>
-                            <c:when test="${empty sessionScope.token}">
-                                href=<%="http://github.com/login/oauth/authorize?client_id=" + OAuthParms.CLIENT_ID
-                                    + "&redirect_uri=" + OAuthParms.REDIRECT_URI
-                                    + "&state=" + OAuthParms.STATE%> >
-                            </c:when>
-                            <c:otherwise>
-                                href="${pageContext.request.contextPath}/repos" >
-                            </c:otherwise>
-                        </c:choose>
+                   href="http://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}">
+
+                        <%--<c:choose>--%>
+                            <%--<c:when test="${empty sessionScope.token}">--%>
+                                <%--href=<%="http://github.com/login/oauth/authorize?client_id=" + OAuthParms.CLIENT_ID--%>
+                                    <%--+ "&redirect_uri=" + OAuthParms.REDIRECT_URI--%>
+                                    <%--+ "&state=" + OAuthParms.STATE%> >--%>
+                            <%--</c:when>--%>
+                            <%--<c:otherwise>--%>
+                                <%--href="${pageContext.request.contextPath}/repos" >--%>
+                            <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
 
                     Login con GitHub
                 <%--href="http://github.com/login/oauth/authorize?client_id=1211d954012cf73c2e2b&redirect_uri=http://www.unimol.it&state=dsfasgadfhsdghadf">--%>

@@ -17,7 +17,7 @@ import java.io.PrintWriter;
  * @author Simone Scalabrino.
  */
 @WebServlet("/repos")
-public class ReposServlet extends HttpGetServlet {
+public class ReposController extends HttpGetServlet {
 
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionHandler handler = SessionHandler.getInstance(request.getSession());
@@ -31,6 +31,7 @@ public class ReposServlet extends HttpGetServlet {
             }
 
             request.getRequestDispatcher("repositories.jsp").forward(request, response);
+            //TODO aggiungere errore nessuna repo
 
         } catch (UnirestException e) {
             PrintWriter out = response.getWriter();

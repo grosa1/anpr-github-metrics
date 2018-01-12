@@ -9,10 +9,10 @@ import javax.servlet.http.HttpSession;
  * @author Simone Scalabrino.
  */
 public class SessionHandler {
-    public static final String GITHUB_TOKEN_KEY = "token";
-    public static final String GITHUB_REPO_KEY = "repo";
-    public static final String USER_KEY = "user";
-    public static final String TIME_KEY = "time";
+    public static final String GITHUB_TOKEN = "token";
+    public static final String GITHUB_REPO = "repo";
+    public static final String USER = "user";
+    public static final String TIME = "time";
 
     private HttpSession session;
 
@@ -25,7 +25,7 @@ public class SessionHandler {
     }
 
     public boolean isLoggedIn() {
-        if (this.isSet(GITHUB_TOKEN_KEY)) {
+        if (this.isSet(GITHUB_TOKEN)) {
             return true;
         }
 
@@ -33,35 +33,35 @@ public class SessionHandler {
     }
 
     public void setToken(String value) {
-        this.session.setAttribute(GITHUB_TOKEN_KEY, value);
+        this.session.setAttribute(GITHUB_TOKEN, value);
     }
 
     public void setUser(User value) {
-        this.session.setAttribute(USER_KEY, value);
+        this.session.setAttribute(USER, value);
     }
 
     public void setRepo(Repository value) {
-        this.session.setAttribute(GITHUB_REPO_KEY, value);
+        this.session.setAttribute(GITHUB_REPO, value);
     }
 
     public void setSessionDuration(String value) {
-        this.session.setAttribute(TIME_KEY, value);
+        this.session.setAttribute(TIME, value);
     }
 
     public String getToken() {
-        return (String) this.session.getAttribute(GITHUB_TOKEN_KEY);
+        return (String) this.session.getAttribute(GITHUB_TOKEN);
     }
 
     public User getUser() {
-        return (User) this.session.getAttribute(USER_KEY);
+        return (User) this.session.getAttribute(USER);
     }
 
     public Repository getRepo() {
-        return (Repository) this.session.getAttribute(GITHUB_REPO_KEY);
+        return (Repository) this.session.getAttribute(GITHUB_REPO);
     }
 
     public Long getSessionDuration() {
-        return (Long) this.session.getAttribute(TIME_KEY);
+        return (Long) this.session.getAttribute(TIME);
     }
 
     public boolean isSet(String field) {

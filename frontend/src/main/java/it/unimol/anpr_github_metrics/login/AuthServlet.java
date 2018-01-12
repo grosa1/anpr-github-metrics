@@ -1,6 +1,7 @@
 package it.unimol.anpr_github_metrics.login;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.unimol.anpr_github_metrics.beans.User;
 import it.unimol.anpr_github_metrics.servlets.basic.HttpGetServlet;
 import it.unimol.anpr_github_metrics.remote.GithubWrapper;
 import it.unimol.anpr_github_metrics.session.SessionHandler;
@@ -24,8 +25,11 @@ public class AuthServlet extends HttpGetServlet {
 
         try {
             String token = new GithubWrapper().getOAuthToken(code, state);
-            if (token != null) {
+            User user = new GithubWrapper().getUser(session.getToken());
+
+            if (token != null && user != null) {
                 session.setToken(token);
+                session.setUser(user);
                 response.sendRedirect(request.getContextPath() + "/repos");
 
 //                PrintWriter out = response.getWriter();
