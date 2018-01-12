@@ -14,31 +14,20 @@ import java.io.IOException;
 
 @WebServlet("/dashboard")
 public class DashboardController extends HttpGetServlet {
+
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionHandler session = SessionHandler.getInstance(request.getSession());
         User user = session.getUser();
         Repository repo = session.getRepo();
 
-//        Page pageId = (Page) request.getAttribute("page");
-//
-//        switch(pageId) {
-//            case HOME:
-//                break;
-//
-//            case REPOSITORIES:
-//                break;
-//
-//            case ISSUES:
-//                break;
-//
-//            case OPENED_ISSUES:
-//                break;
-//
-//            case CLOSED_ISSUES:
-//                break;
-//
-//                default:
-                    request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-//        }
+        String pageId = (String) request.getAttribute("page");
+
+        if (pageId != null) {
+            request.setAttribute("page", "main.jsp");
+            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Requested page not found.");
+
+        }
     }
 }

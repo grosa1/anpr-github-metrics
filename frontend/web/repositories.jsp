@@ -65,7 +65,10 @@
     </header>
     <main class="mdl-layout__content mdl-color--grey-100">
 
+        <c:set var = "index" value = "${0}"/>
+
         <c:forEach items="${repos}" var="repo">
+            <%--<c:out value = "${index = index + 1}"/>--%>
             <div class="demo-container mdl-grid">
                 <ul class="repository-item mdl-list">
                     <li class="mdl-list__item mdl-list__item--six-line mdl-color--cyan">
@@ -74,7 +77,7 @@
 
                             <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
                                 <div class="mdl-card__supporting-text">
-                                    <h4>${repo.fullname}</h4>
+                                    <h4>${index = index + 1}. ${repo.fullname}</h4>
                                     <c:choose>
                                         <c:when test="${empty repo.description}">
                                             Nessuna descrizione.
@@ -84,7 +87,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <form action="${pageContext.request.contextPath}/dashboard" method="post" class="mdl-card__actions">
+                                <form action="${pageContext.request.contextPath}/setRepo" method="GET" class="mdl-card__actions">
                                     <input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>
                                     <input type="submit" name="submit" value="Seleziona" class="mdl-button"/>
                                 </form>

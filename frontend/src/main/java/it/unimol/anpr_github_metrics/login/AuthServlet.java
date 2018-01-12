@@ -25,7 +25,7 @@ public class AuthServlet extends HttpGetServlet {
 
         try {
             String token = new GithubWrapper().getOAuthToken(code, state);
-            User user = new GithubWrapper().getUser(session.getToken());
+            User user = new GithubWrapper().getUser(token);
 
             if (token != null && user != null) {
                 session.setToken(token);
@@ -38,11 +38,11 @@ public class AuthServlet extends HttpGetServlet {
 //                out.close();
 
             } else {
-                response.sendRedirect("login.jsp");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request data.");
             }
 
         } catch (UnirestException e) {
-            response.sendRedirect("login.jsp");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Request error.");
         }
     }
 }
