@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import it.unimol.anpr_github_metrics.beans.Issue;
+import it.unimol.anpr_github_metrics.beans.IssueTest;
 import it.unimol.anpr_github_metrics.beans.Repository;
 import it.unimol.anpr_github_metrics.beans.User;
 import it.unimol.anpr_github_metrics.configuration.OAuthParms;
@@ -71,6 +73,25 @@ public class GithubWrapper {
         }
 
         return reposArray;
+    }
+
+    public IssueTest[] getRepoIssues(String token, String repoFullName) throws UnirestException {
+        IssueTest[] issuesArray = null;
+
+        try {
+            HttpResponse<String> res = Unirest.get("https://api.github.com/repos/" + repoFullName + "/issues")
+                    .queryString("access_token", token)
+                    .asString();
+
+            if(res.getStatus() == 200) {
+                Gson jsonParser = new GsonBuilder().create();
+                issuesArray = jsonParser.fromJson(res.getBody(), IssueTest[].class);
+            }
+
+        } catch (JSONException e) {
+        }
+
+        return issuesArray;
     }
 
     public Map<String, String> getQueryMap(String query) {

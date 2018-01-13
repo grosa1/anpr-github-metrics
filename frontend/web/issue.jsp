@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="context" value="${pageContext.request.contextPath}" />
+
 <!doctype html>
 <!--
   Material Design Lite
@@ -91,21 +94,26 @@
                         <span class="visuallyhidden">Accounts</span>
                     </button>
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                        <li class="mdl-menu__item">logout</li>
+                        <li>
+                            <a class="mdl-menu__item" href="${context}/logout">logout </a>
+                        </li>
                     </ul>
                 </div>
             </header>
-            <nav class="demo-navigation mdl-navigation mdl-color--blue-grey mdl-color-text--white">
-                <a class="mdl-navigation__link" href="dashboard.html">
+            <nav class="demo-navigation mdl-navigation mdl-color--blue-grey">
+                <a class="mdl-navigation__link" href="${context}/dashboard">
                     <i class="mdl-color-text--white material-icons" role="presentation"></i>Dashboard</a>
 
-                <a class="mdl-navigation__link" href="settings.html">
-                    <i class="mdl-color-text--white material-icons" role="presentation"></i>Settings</a>
-                <a class="mdl-navigation__link" href="repositories.html">
+                <a class="mdl-navigation__link" href="${context}/dashboard?page=tickets.jsp">
+                    <i class="mdl-color-text--white material-icons" role="presentation"></i>Tickets</a>
+
+                <a class="mdl-navigation__link" href="${context}/repos">
                     <i class="mdl-color-text--white material-icons" role="presentation"></i>Repositories</a>
+
                 <div class="mdl-layout-spacer"></div>
+
                 <a class="mdl-navigation__link" href="">
-                    <i class="mdl-color-text--white material-icons" role="presentation">help_outline</i>
+                    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>
                     <span class="visuallyhidden">Help</span>
                 </a>
             </nav>

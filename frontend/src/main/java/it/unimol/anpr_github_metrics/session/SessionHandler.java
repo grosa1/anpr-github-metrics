@@ -32,6 +32,14 @@ public class SessionHandler {
         return false;
     }
 
+    public void invalidateRepo() {
+        this.session.removeAttribute(GITHUB_REPO);
+    }
+
+    public void logout() {
+        this.session.invalidate();
+    }
+
     public void setToken(String value) {
         this.session.setAttribute(GITHUB_TOKEN, value);
     }

@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(ServletPath.AUTHORIZE)
 public class AuthServlet extends HttpGetServlet {
@@ -19,7 +20,7 @@ public class AuthServlet extends HttpGetServlet {
     @Override
     public void run(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SessionHandler session = SessionHandler.getInstance(request.getSession(true));
+        SessionHandler handler = SessionHandler.getInstance(request.getSession(true));
 
         String code = request.getParameter("code");
         String state = request.getParameter("state");
@@ -29,13 +30,13 @@ public class AuthServlet extends HttpGetServlet {
             User user = new GithubWrapper().getUser(token);
 
             if (token != null && user != null) {
-                session.setToken(token);
-                session.setUser(user);
+                handler.setToken(token);
+                handler.setUser(user);
                 response.sendRedirect(request.getContextPath() + ServletPath.REPOSITORIES);
 
 //                PrintWriter out = response.getWriter();
 //                response.setContentType("text/html;charset=UTF-8");
-//                out.print(token);
+//                out.print(handler.getUser().getLogin());
 //                out.close();
 
             } else {

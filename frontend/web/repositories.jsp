@@ -1,4 +1,3 @@
-<%@ page import="com.google.gson.Gson" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@ page import="it.unimol.anpr_github_metrics.jsp.JSPUtils" %>--%>
 <%--<%@ page import="it.unimol.anpr_github_metrics.session.SessionKey" %>--%>
@@ -66,7 +65,6 @@
     <main class="mdl-layout__content mdl-color--grey-100">
 
         <c:set var = "index" value = "${0}"/>
-
         <c:forEach items="${repos}" var="repo">
             <%--<c:out value = "${index = index + 1}"/>--%>
             <div class="demo-container mdl-grid">
@@ -91,10 +89,6 @@
                                         <input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>
                                     <input type="submit" name="submit" value="Seleziona" class="mdl-button"/>
                                 </form>
-                                <%--<form action="${pageContext.request.contextPath}/set-repo" method="GET" class="mdl-card__actions">--%>
-                                    <%--<input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>--%>
-                                    <%--<input type="submit" name="submit" value="Seleziona" class="mdl-button"/>--%>
-                                <%--</form>--%>
                             </div>
 
                         </span>

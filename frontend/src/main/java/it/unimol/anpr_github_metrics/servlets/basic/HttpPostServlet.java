@@ -13,7 +13,7 @@ import java.rmi.ServerException;
 /**
  * @author Simone Scalabrino.
  */
-public abstract class HttpPostServlet extends HttpServlet {
+public abstract class HttpPostServlet extends BaseServlet {
     @Override
     protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Method GET not allowed here.");

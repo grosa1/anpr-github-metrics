@@ -45,9 +45,8 @@
 
                 </a>
             </div>
-            <c:if test="${not empty msg}" ><h3>${msg}</h3></c:if>
         </form>
-
+        <c:if test="${not empty msg}" ><h4 style="text-align: center">${msg}</h4></c:if>
     </div>
 </div>
 
