@@ -2,6 +2,7 @@ package it.unimol.anpr_github_metrics.repositories;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.beans.Repository;
+import it.unimol.anpr_github_metrics.configuration.ServletPath;
 import it.unimol.anpr_github_metrics.servlets.basic.HttpGetServlet;
 import it.unimol.anpr_github_metrics.remote.GithubWrapper;
 import it.unimol.anpr_github_metrics.session.SessionHandler;
@@ -16,7 +17,7 @@ import java.io.PrintWriter;
 /**
  * @author Simone Scalabrino.
  */
-@WebServlet("/repos")
+@WebServlet(ServletPath.REPOSITORIES)
 public class ReposController extends HttpGetServlet {
 
     protected void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

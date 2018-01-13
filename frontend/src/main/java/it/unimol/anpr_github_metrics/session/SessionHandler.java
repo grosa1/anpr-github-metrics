@@ -25,7 +25,7 @@ public class SessionHandler {
     }
 
     public boolean isLoggedIn() {
-        if (this.isSet(GITHUB_TOKEN)) {
+        if (this.isSet(GITHUB_TOKEN) && this.isSet(USER)) {
             return true;
         }
 

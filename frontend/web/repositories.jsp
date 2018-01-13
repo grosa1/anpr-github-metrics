@@ -87,10 +87,14 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-                                <form action="${pageContext.request.contextPath}/setRepo" method="GET" class="mdl-card__actions">
-                                    <input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>
+                                <form action="${pageContext.request.contextPath}/set-repo" method="GET" class="mdl-card__actions">
+                                        <input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>
                                     <input type="submit" name="submit" value="Seleziona" class="mdl-button"/>
                                 </form>
+                                <%--<form action="${pageContext.request.contextPath}/set-repo" method="GET" class="mdl-card__actions">--%>
+                                    <%--<input hidden="true" name="repo_json" value="<c:out value="${repo.serialize()}"/>"/>--%>
+                                    <%--<input type="submit" name="submit" value="Seleziona" class="mdl-button"/>--%>
+                                <%--</form>--%>
                             </div>
 
                         </span>

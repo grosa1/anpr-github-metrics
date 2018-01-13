@@ -2,6 +2,7 @@ package it.unimol.anpr_github_metrics.login;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import it.unimol.anpr_github_metrics.beans.User;
+import it.unimol.anpr_github_metrics.configuration.ServletPath;
 import it.unimol.anpr_github_metrics.servlets.basic.HttpGetServlet;
 import it.unimol.anpr_github_metrics.remote.GithubWrapper;
 import it.unimol.anpr_github_metrics.session.SessionHandler;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/auth")
+@WebServlet(ServletPath.AUTHORIZE)
 public class AuthServlet extends HttpGetServlet {
 
     @Override
@@ -30,7 +31,7 @@ public class AuthServlet extends HttpGetServlet {
             if (token != null && user != null) {
                 session.setToken(token);
                 session.setUser(user);
-                response.sendRedirect(request.getContextPath() + "/repos");
+                response.sendRedirect(request.getContextPath() + ServletPath.REPOSITORIES);
 
 //                PrintWriter out = response.getWriter();
 //                response.setContentType("text/html;charset=UTF-8");

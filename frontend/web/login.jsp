@@ -16,7 +16,6 @@
 <div class="demo-container mdl-grid">
 
     <div class="demo-content mdl-color--white mdl-shadow--6dp content mdl-color-text--grey-800 mdl-cell mdl-cell--6-col">
-
         <div class="mdl-card__title mdl-color--light-blue mdl-color-text--white">
             <h2 class="mdl-card__title-text">ZEUS login</h2>
         </div>
@@ -46,6 +45,7 @@
 
                 </a>
             </div>
+            <c:if test="${not empty msg}" ><h3>${msg}</h3></c:if>
         </form>
 
     </div>
