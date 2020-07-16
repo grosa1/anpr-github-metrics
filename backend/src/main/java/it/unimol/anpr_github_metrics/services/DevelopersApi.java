@@ -31,6 +31,13 @@ public class DevelopersApi {
     private static final String TEST_TOKEN = "07b473e47b26872b479d2952d6a64aea8b3f037b";
 
     @GET
+    @Path("/healthcheck")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response healthcheck(@Context HttpServletRequest request) {
+        return Response.status(Response.Status.OK).entity("it works").build();
+    }
+
+    @GET
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response testLogin(@Context HttpServletRequest request) {
