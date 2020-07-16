@@ -2,18 +2,12 @@ package it.unimol.anpr_github_metrics.services;
 
 import com.jcabi.github.Github;
 import com.jcabi.github.RtGithub;
-import com.jcabi.http.response.JsonResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.HttpRequest;
 import it.unimol.anpr_github_metrics.github.Authenticator;
-import org.apache.http.HttpResponse;
 import org.json.JSONObject;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,7 +22,7 @@ import java.io.IOException;
 @Path("/dev")
 public class DevelopersApi {
 
-    private static final String TEST_TOKEN = "07b473e47b26872b479d2952d6a64aea8b3f037b";
+    private static final String TEST_TOKEN = Authenticator.TEST;
 
     @GET
     @Path("/healthcheck")
@@ -46,9 +40,7 @@ public class DevelopersApi {
             Github github = new RtGithub(TEST_TOKEN);
 
             if (!github.users().self().login().equals("")) {
-                JSONObject jsonRes = Unirest.get("https://api.github.com/user").queryString("access_token",TEST_TOKEN).asJson().getBody().getObject();
-                String username = jsonRes.getString("login");
-                return Response.status(Response.Status.OK).entity(username).build();
+                return Response.status(Response.Status.OK).entity(this.getUsername(TEST_TOKEN)).build();
             }
 
         } catch (IOException e) {

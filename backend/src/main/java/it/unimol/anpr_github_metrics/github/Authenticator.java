@@ -11,7 +11,7 @@ import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
 
 //TODO: gestire cache
 public class Authenticator {
-    public static final String TEST = "d34794572238fff111575134a1c13bc3c403e6fa";
+    public static final String TEST = "88fb84222da601030cc138a8d6b8aa179418ed18";
     private Github github;
     private String token;
     private static boolean cachingEnabled;
