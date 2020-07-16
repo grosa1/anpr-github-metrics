@@ -1,8 +1,8 @@
-FROM glassfish:4.1
+FROM oracle/glassfish
+MAINTAINER Simone Scalabrino<simone.scalabrino@unimol.it>
 
-COPY target/backend-1.0-SNAPSHOT.war /backend.war
-COPY start.sh /
+COPY target/backend-1.0-SNAPSHOT.war glassfish5/glassfish/domains/domain1/autodeploy
 
-EXPOSE 8080
-
-ENTRYPOINT ["/start.sh"]
+EXPOSE 8080:8080
+EXPOSE 8181:8181
+EXPOSE 4848:4848

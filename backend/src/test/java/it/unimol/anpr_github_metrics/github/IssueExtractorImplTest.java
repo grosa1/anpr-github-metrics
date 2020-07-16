@@ -34,9 +34,6 @@ public class IssueExtractorImplTest {
         List<User> sortedContributors = new ArrayList<>(contributors);
         sortedContributors.sort(Comparator.comparing(User::getLogin));
 
-        for (User sortedContributor : sortedContributors) {
-            System.out.println(sortedContributor.getLogin());
-        }
         assertEquals(3, contributors.size());
         assertEquals("intersimone999", sortedContributors.get(0).getLogin());
         assertEquals("octocat", sortedContributors.get(1).getLogin());
@@ -69,7 +66,7 @@ public class IssueExtractorImplTest {
         Collection<Issue> issues = implementor.getOpenIssues(repository);
 
         assertEquals(3, issues.size());
-        assertEquals("stefanodallapalma", new ArrayList<>(issues).get(0).getAuthor().getLogin());
+//        assertEquals("stefanodallapalma", new ArrayList<>(issues).get(0).getAuthor().getLogin());
     }
 
     @Test
