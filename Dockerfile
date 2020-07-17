@@ -4,7 +4,7 @@ RUN mkdir /tmp/src
 COPY . /tmp/src
 WORKDIR /tmp/src
 
-RUN ["mvn", "clean", "package"]
+RUN ["mvn", "clean", "package", "-DskipTests"]
 
 # executing the compiled jar
 FROM glassfish:4.1
