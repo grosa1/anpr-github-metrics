@@ -8,12 +8,11 @@ import it.unimol.anpr_github_metrics.github.AuthenticatorTest;
 import it.unimol.anpr_github_metrics.github.IssueExtractorFactory;
 import org.junit.Before;
 import org.junit.Test;
-import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class IssuesAnalyticsTest {
     public static final Github NullGithub = null;
