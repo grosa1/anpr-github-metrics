@@ -25,7 +25,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: report
-        path: backend/target/site/cobertura
+        path: backend/target/site/
      
   pmd-cpd:
     runs-on: ubuntu-latest
@@ -42,10 +42,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: report
-        path: backend/target/site/pmd.html
-        retention-days: 1
-    - name: Upload CPD report
-      uses: actions/upload-artifact@v1
-      with:
-        name: report
-        path: backend/target/site/cpd.html
+        path: backend/target/site/

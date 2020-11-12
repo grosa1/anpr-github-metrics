@@ -38,4 +38,3 @@ jobs:
       with:
         name: app
         path: backend/target/backend-1.0-SNAPSHOT.war
-        retention-days: 1
