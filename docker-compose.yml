@@ -1,0 +1,7 @@
+version : '2.1'
+
+services:
+  zetmus-be:
+      build: ""
+      ports:
+          - 9092:8080
