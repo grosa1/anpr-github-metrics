@@ -11,13 +11,18 @@ import it.unimol.anpr_github_metrics.github.proxies.GithubProxy;
 
 //TODO: gestire cache
 public class Authenticator {
-    public static final String TEST = "88fb84222da601030cc138a8d6b8aa179418ed18";
+    public static String TEST = "GITHUB_TOKEN_PLACEHOLDER";
     private Github github;
     private String token;
     private static boolean cachingEnabled;
 
 
     static {
+        String token = System.getenv("GITHUB_API_TOKEN");
+        if (token != null && !token.isEmpty()) {
+            TEST = token;
+        }
+
         cachingEnabled = true;
     }
 

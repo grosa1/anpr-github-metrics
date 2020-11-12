@@ -47,6 +47,9 @@ public class IssueExtractorImplTest {
         repository.setName("grosa1/Spoon-Knife");
 
         Collection<Issue> issues = implementor.getFixedIssues(repository);
+        for (Issue issue : issues) {
+            System.out.println("issue_id: #" + issue.getNumber());
+        }
 
         assertEquals(4, issues.size());
     }

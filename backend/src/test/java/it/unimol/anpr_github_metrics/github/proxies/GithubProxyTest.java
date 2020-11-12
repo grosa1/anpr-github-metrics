@@ -29,7 +29,6 @@ public class GithubProxyTest {
     }
 
     @Test
-    @Ignore
     public void testCommitProxies() {
         Github github = Authenticator.getInstance().authenticate(AuthenticatorTest.TOKEN).getGitHub();
         Repos repos = github.repos();
